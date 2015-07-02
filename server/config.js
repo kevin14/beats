@@ -4,5 +4,4 @@ var config = {
     s3bucket: "straightouttacompton"
 };
 
-
 module.exports = config;
