@@ -7,8 +7,11 @@ var bodyParser = require('body-parser');
 var autoprefixer = require('autoprefixer-stylus');
 var stylus = require("stylus");
 
+var mongoose = require("mongoose");
+
 var routes = require('./routes/index');
 var upload = require('./routes/upload');
+var share = require('./routes/share');
 
 var config = require('./config');
 
@@ -44,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/upload', upload);
+app.use('/share', share);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -76,7 +80,16 @@ app.use(function(err, req, res, next) {
   });
 });
 
-console.log("listening on: http://localhost:" + port);
-app.listen(port);
+
+mongoose.connect('mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'oh no, connection error:'));
+db.once('open', function callback () {
+  console.log('database connected');
+  console.log("listening on: http://localhost:" + port);
+  app.listen(port);
+
+
+});
 
 module.exports = app;

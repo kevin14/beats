@@ -1,4 +1,5 @@
 var uid;
+var city = "compton";
 
 $(document).ready(function(){
   drawBS(); // draw a stupid gradient
@@ -49,12 +50,33 @@ function upload_file(blob, signed_request, url){
     xhr.onload = function() {
         if (xhr.status === 200) {
             $(".image").html(url);
+
+            saveToDb(uid, url, city);
         }
     };
     xhr.onerror = function() {
         alert("Could not upload file.");
     };
     xhr.send(blob);
+}
+
+function saveToDb(uid, url, city) {
+    $.ajax({
+      url: "/upload/save",
+      method: "POST",
+      data: {
+        id: uid,
+        url: url,
+        city: city
+      },
+      success: function(data){
+        $(".deep").attr("href", "/share/"+data).html("share link");
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+
 }
 
 

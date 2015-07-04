@@ -3,8 +3,33 @@ var router = express.Router();
 var aws = require('aws-sdk');
 var config = require('../config');
 
+var mongoose = require("mongoose");
+var model = require("../model");
+
 router.get("/", function(req, res) {
     res.send("hi");
+});
+
+router.post("/save", function(req, res) {
+    // id
+    // image url
+    // city
+    var id = req.body.id;
+    var url = req.body.url;
+    var city = req.body.city;
+
+    console.log("saving " + id + " to " + city + " and " + url);
+
+    var upload = new model.Uploads({
+      file_id: id,
+      url: url,
+      city: city
+    });
+
+    upload.save(function(){
+      res.send(id);
+    });
+
 });
 
 router.get('/sign_s3', function(req, res){
