@@ -81,7 +81,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-mongoose.connect('mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta');
+mongoose.connect(config.mongoURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'oh no, connection error:'));
 db.once('open', function callback () {
