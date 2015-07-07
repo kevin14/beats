@@ -1,5 +1,8 @@
 {
+  "name": "Compton",
   "dependencies": {
-    "BigVideo.js": "~1.1.5"
+    	"jquery": "1.11.3",
+	"BigVideo.js": "~1.1.5",
+	"imagesloaded": "*"
   }
 }
