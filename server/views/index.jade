@@ -1,19 +1,44 @@
 extends layout
 
 block content
+  img#beats-logo(src="/img/beats-logo.png")
   #top
+    #city
+      img(src="/img/straight-logo.png")
+      input(type="text")
     #intro-video
     #editor
-      input#city(type="text")
+      a#down
+        img(src="/img/arrow-down.png")
+      
       #editor-type-images
+        .type-red
         .type-img.img1
-        .type-img.img1
-        .type-img.img1
-        .type-img.img1
-        .type-img.img1
+        .type-img.img2
+        .type-img.img3
+        .type-img.img4
+        .type-img.img5
   
   #bottom
-    div Grid of images
+    ul
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
+      li 
+        img(src="/img/grid.jpg")
   
   script(src="/js/bower_components/jquery/dist/jquery.min.js")
   script(src="/js/bower_components/imagesloaded/imagesloaded.pkgd.min.js")

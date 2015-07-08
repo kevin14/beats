@@ -6,27 +6,127 @@ html, body
 #big-video-wrap
   display: none
 
+
+#beats-logo
+  position fixed
+  bottom 10px
+  left 10px
+  width 45px
+  z-index 999
+
 #top
+  position relative
   background #eee
   width 100%
+
 
   #intro-video
     width 100%
     height 100%
-
-  .type-img
     display none
-    background-repeat no-repeat
-    background-position center center
-    background-attachment fixed
-    -webkit-background-size cover
-    -moz-background-size cover
-    -o-background-size cover
-    background-size cover
 
+
+  #city
+    position absolute
+    top 0px
+    left 0px
+    z-index 999
+    width 400px
+    height 429px
+
+    img
+      position absolute
+      width 400px
+      height 429px
+
+    input
+      position absolute
+      top 325px
+      left: 2px
+      background none
+      color #fff
+      width 100%
+      border none
+      font-size 52px
+      padding 10px 0px
+      outline none
+      text-align center
+
+
+  #editor
+    width 100%
+    height 100%
+    display none
+
+    #down
+      position absolute
+      bottom 20px
+      right 20px
+
+      img
+        width 25px
+
+    #editor-type-images
+        background-color #000
+        background-image url(/img/bg-black.jpg)
+        background-repeat no-repeat
+        background-position top center
+        background-attachment fixed
+        -webkit-background-size cover
+        -moz-background-size cover
+        -o-background-size cover
+        background-size cover
+        width 100%
+        height 100%
+
+        .type-img
+
+          width 100%
+          height 100%
+          background-repeat no-repeat
+          background-position center center
+          background-attachment fixed
+          -webkit-background-size cover
+          -moz-background-size cover
+          -o-background-size cover
+          background-size cover
+
+        .type-red
+          display none
+          width 100%
+          height 100%
+          background-color #f00
+
+
+        .img1
+          display none
+          background-image url(/img/bg1.jpg)
+
+        .img2
+          display none
+          background-image url(/img/bg2.jpg)
+
+        .img3
+          display none
+          background-image url(/img/bg3.jpg)
+
+        .img4
+          display none
+          background-image url(/img/bg4.jpg)
+
+        .img5
+          display none
+          background-image url(/img/bg5.jpg)
 #bottom
   background #000
 
-  div
-    height 700px
-    color #fff
+  ul
+    list-style none
+    margin 0px
+    padding 0px
+
+    li
+      float left
+      img
+        max-width 100%
+        max-height 100%
