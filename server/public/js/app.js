@@ -14,6 +14,11 @@ function initIntro() {
   BV = new $.BigVideo({container: $('#intro-video')});
   BV.init();
   BV.show('http://vjs.zencdn.net/v/oceans.mp4',{doLoop:false});
+  BV.getPlayer().volume(0);
+  BV.getPlayer().on('durationchange',function(){
+    $('#big-video-wrap').show();
+  });
+
   BV.getPlayer().on("ended", function () {
     showEditor();
   });
@@ -21,6 +26,11 @@ function initIntro() {
 
 function showEditor() {
   console.log("editor");
+
+  jQuery("#city").on('keydown', function() {
+      // cycle bg
+      // trigger sound
+  });
 }
 
 function resizeMe() {
