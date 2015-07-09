@@ -1,0 +1,13 @@
+extends layout
+
+block head
+  != css("editor")
+
+block content
+  #editor
+    canvas(id="myCanvas", width="200", height="100")
+
+  != js("jquery/dist/jquery")
+  != js("lodash/lodash")
+  != js("fabric/dist/fabric")
+  != js("editor")

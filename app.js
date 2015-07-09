@@ -5,7 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var autoprefixer = require('autoprefixer-stylus');
-var stylus = require("stylus");
+var stylus = require('stylus');
+var connectAssets = require('connect-assets');
 
 var mongoose = require("mongoose");
 
@@ -29,7 +30,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Use connect-assets asset pipeline
+// @see https://github.com/adunkman/connect-assets
+// NOTE This can and should replace stylus middleware
+app.use(connectAssets({
+  helperContext: app.locals,
+  paths: ['assets/js', 'assets/css', 'public/js/bower_components']
+}));
 
+// TODO replace with connect-assets pipeline
 app.use(stylus.middleware({
   src: path.join(__dirname, 'public'),
   compile: function(str, path) {
