@@ -5,9 +5,11 @@ block head
 
 block content
   #editor
-    canvas(id="canvas", width="800", height="800")
+    canvas(id="canvas", width="863", height="863")
+    img.hidden#sample-logo(src="/img/editor/sample-logo.png")
+    img.hidden#sample-photo(src="/img/editor/sample-photo.jpg")
 
-      != js("jquery/dist/jquery")
-      != js("lodash/lodash")
-      != js("fabric/dist/fabric")
-      != js("editor")
+  != js("jquery/dist/jquery")
+  != js("lodash/lodash")
+  != js("fabric/dist/fabric")
+  != js("editor")

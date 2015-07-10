@@ -1,20 +1,30 @@
-canvas = new fabric.Canvas('canvas')
+class Editor
 
-do ->
-  circle = new fabric.Circle
-    radius: 20
-    fill: 'green'
-    left: 100
-    top: 100
-    selectable: true
-  tri = new fabric.Triangle
-    width: 20
-    height: 30
-    fill: 'blue'
-    left: 50
-    top: 50
-    selectable: true
-  canvas.add circle, tri
+  constructor: ->
+    @canvas = new fabric.Canvas 'canvas'
 
-  canvas.selection = false
-  canvas.renderAll()
+    selectableOpts =
+      selectable: true
+      hasRotatingPoint: false
+      lockRotation: true
+      lockScalingFlip: true
+      lockUniScaling: true
+      selectionColor: 'white'
+      cornerColor: 'white'
+      borderColor: 'white'
+      borderWidth: 3
+      transparentCorners: false
+      padding: 10
+
+    @photo = new fabric.Image document.getElementById('sample-photo'), selectableOpts
+    @photo.set
+      left: 0
+      top: 0
+      width: @canvas.width
+      height: @canvas.height
+    @logo = new fabric.Image document.getElementById('sample-logo'), selectableOpts
+
+    @canvas.add @photo, @logo
+
+
+Editor._instance = new Editor()
