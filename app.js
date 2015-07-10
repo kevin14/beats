@@ -97,19 +97,15 @@ require('express-livereload')(app, {
   exts: ['html', 'jade', 'styl', 'css', 'scss', 'sass', 'js', 'coffee', 'jpg', 'png', 'json']
 });
 
-/*
 mongoose.connect(config.mongoURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'oh no, connection error:'));
 db.once('open', function callback () {
   console.log('database connected');
   console.log("listening on: http://localhost:" + port);
-  */
 
   app.listen(port);
-
-
-//});
+});
 
 
 module.exports = app;

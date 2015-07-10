@@ -31,6 +31,7 @@ function initIntro() {
 }
 
 function showEditor() {
+  $("#bottom").show();
   $("#editor").fadeIn();
   $("#bottom").show();
   console.log("editor");
