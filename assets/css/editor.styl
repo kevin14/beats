@@ -1,15 +1,43 @@
 // Meme editor styles
 
+*
+  sizing border-box
+
 body
   background url(/img/bg-black.jpg)
+  font-family 'knockout48', Impact, sans-serif
 
 .hidden
   display none
 
-#editor
+.editor
+  width 869px
+  margin 0 auto
   padding-top 20px
 
   .canvas-container
     display block
     margin 0 auto
     border 5px solid white
+
+  .editor-controls
+    margin-top 20px
+    text-align center
+    
+    input[type=range]
+      display block
+      width 100%
+    
+    label, input[type=radio]
+      display inline
+    
+    input[type=radio]
+      margin-left 25px
+
+    label
+      font-size 40px
+      color white
+      text-transform uppercase
+      
+    input:checked + label
+      color red
