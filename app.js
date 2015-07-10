@@ -35,7 +35,8 @@ app.use(cookieParser());
 // NOTE This can and should replace stylus middleware
 app.use(connectAssets({
   helperContext: app.locals,
-  paths: ['assets/js', 'assets/css', 'public/js/bower_components']
+  paths: ['assets/js', 'assets/css', 'public/js/bower_components'],
+  fingerprinting: false
 }));
 
 // TODO replace with connect-assets pipeline
@@ -89,6 +90,13 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+// Livereload, will NOT run on production
+require('express-livereload')(app, {
+  watchDir: __dirname,
+  exts: ['html', 'jade', 'styl', 'css', 'scss', 'sass', 'js', 'coffee', 'jpg', 'png', 'json']
+});
+
 /*
 mongoose.connect(config.mongoURL);
 var db = mongoose.connection;
@@ -102,5 +110,6 @@ db.once('open', function callback () {
 
 
 //});
+
 
 module.exports = app;
