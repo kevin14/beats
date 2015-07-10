@@ -8,6 +8,7 @@ class Editor
       contrast: 0.25
 
     @canvas = new fabric.Canvas $canvas.get(0)
+    @canvas.selection = false
 
     commonOptions =
       originX: 'center'
@@ -36,6 +37,7 @@ class Editor
       @canvas.add @photo
       @fixOrderingOnLoad()
       @photo.on 'selected', => @setParameter('photo', true)
+      @setParameter('photo', true)
 
     fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
       @logo = img
