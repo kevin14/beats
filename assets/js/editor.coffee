@@ -3,7 +3,7 @@ class Editor
   constructor: ($canvas, $controls) ->
     @values =
       logo: 0
-      image: 0.5
+      photo: 0.5
       grain: 1
       contrast: 0.25
 
@@ -25,49 +25,54 @@ class Editor
       padding: 10
 
     fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
-      img.set commonOptions
       @photo = img
+      @photo.set commonOptions
       @photo.set
         left: @canvas.width/2
         top: @canvas.height/2
         width: @canvas.width
         height: @canvas.height
-      @photo.filters.push new fabric.Image.filters.Contrast(contrast: @values.contrast)
+      @photo.filters.push new ContrastFilter(contrast: @values.contrast)
       @photo.applyFilters =>@canvas.renderAll()
       @canvas.add @photo
+      @canvas.sendToBack @photo
+      @photo.on 'selected', => @setParameter('photo', true)
 
     fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
-      img.set commonOptions
       @logo = img
+      @logo.set commonOptions
       @logo.set
         left: @canvas.width/2
         top: @canvas.height - @logo.height/2 - 40
       @canvas.add @logo
+      @canvas.bringToFront @logo
+      @logo.on 'selected', => @setParameter('logo', true)
 
     self = @
-    $controls.find('input[type=radio]').change ->
+    @controlsRadios = $controls.find('input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
 
-    $controls.find('input[type=range]').change ->
+    @controlsRange = $controls.find('input[type=range]').change ->
       self.setValue.call self, parseFloat($(this).val())
-
-    @range = $controls.find('input[type=range]')
 
     # $controls.find('input[type=radio]').first().click()
 
-  setParameter: (parameterId) ->
+  setParameter: (parameterId, programmatic = false) ->
     # console.log "Setting parameter to", parameterId
+    if programmatic and @parameter != parameterId
+      $("#control-#{parameterId}").click()
     @parameter = parameterId
-    @range.val @values[@parameter]
-    switch @parameter
-      when 'image' then @canvas.setActiveObject @photo
-      when 'logo' then @canvas.setActiveObject @logo
-      else @canvas.discardActiveObject()
+    @controlsRange.val @values[@parameter]
+    unless programmatic
+      switch @parameter
+        when 'photo' then @canvas.setActiveObject @photo
+        when 'logo' then @canvas.setActiveObject @logo
+        else @canvas.discardActiveObject()
 
   setValue: (value) ->
     @values[@parameter] = value
     switch @parameter
-      when 'image'
+      when 'photo'
         @photo.scale(2 * value)
       when 'logo'
         @logo.scale(2 * value)
@@ -82,7 +87,7 @@ class Editor
     #   console.log parameter, "is", value
 
 
-fabric.Image.filters.Contrast = fabric.util.createClass fabric.Image.filters.BaseFilter,
+ContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
   type: 'Contrast'
 
   initialize: (options)->
@@ -101,7 +106,7 @@ fabric.Image.filters.Contrast = fabric.util.createClass fabric.Image.filters.Bas
   toObject: ->
     extend @callSuper('toObject'), contrast: @contrast
 
-fabric.Image.filters.Contrast.fromObject = (o)->new fabric.Image.filters.Contrast(o)
+ContrastFilter.fromObject = (o)->new ContrastFilter(o)
 
 
 do ->
