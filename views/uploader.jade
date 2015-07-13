@@ -1,20 +1,21 @@
 extends layout
 
+block head
+  != css("all")
+
 block content
   #uploader
 
       canvas(id="myCanvas", width="200", height="100", style="border:1px solid #d3d3d3;")
       br
       br
-        
-      <button id="get">Save Canvas To S3</button>
+      button(id="get") Save Canvas To S3
       br
       br
-        
       .image
       a.deep
-  
-  script(src="//code.jquery.com/jquery-1.11.3.min.js")
+
+  != js("jquery/dist/jquery")
   script(src='/js/s3upload.js')
   script(src='/js/canvas-to-blob.js')
   script(src='/js/main.js')

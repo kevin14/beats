@@ -1,8 +1,10 @@
 doctype html
 html
   head
+    != LRScript
     title= title
+    link(rel="stylesheet", href="/font/knockout-48.css")
     link(rel='stylesheet', href='/css/style.css')
+    block head
   body
     block content
-    
