@@ -1,5 +1,23 @@
-extends layout
+doctype html
+html
+  head
+    != LRScript
+    title Straight Outta #{location}
 
-block content
-  h1 share page
-  img(src="#{url}")
+    meta(property="og:image", content="#{url}")  
+    meta(property="og:image[0][url]", content="#{url}")
+    meta(property="og:image[0][user_generated]", content="true")
+    meta(property="og:title", content="Straight Outta #{location}")
+    meta(property="og:url", content="#{baseUrl}/share/#{id}")
+    meta(property="og:description", content="Description")
+    meta(property="og:site_name", content="Straight Outta Compton")
+      
+    meta(name="twitter:card", content="photo")
+    meta(name="twitter:site" content="@straightouttacompton")
+    meta(name="twitter:creator" content="@straightouttacompton")
+      
+
+  block content
+    img(src="#{url}")
+    
+  

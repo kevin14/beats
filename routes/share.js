@@ -18,8 +18,12 @@ router.get("/:id", function(req, res) {
         console.log(err);
       }
 
+      //TEMP
+      var location = "Portland";
+
+
       if(upload) {
-          res.render("share", {url: upload.url});
+          res.render("share", {id: id, url: upload.url, baseUrl: config.baseUrl, location: location});
       }
       //console.log(upload);
       //var url = upload.url;

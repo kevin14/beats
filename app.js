@@ -8,6 +8,8 @@ var autoprefixer = require('autoprefixer-stylus');
 var stylus = require('stylus');
 var connectAssets = require('connect-assets');
 
+var rupture = require("rupture");
+
 var mongoose = require("mongoose");
 
 var routes = require('./routes/index');
@@ -44,6 +46,7 @@ app.use(stylus.middleware({
   src: path.join(__dirname, 'public'),
   compile: function(str, path) {
     return stylus(str)
+      .use(rupture())
       .use(autoprefixer())   // autoprefixer
       .set('filename', path) // @import
       .set('compress', true) // compress

@@ -7,8 +7,10 @@ $(document).ready(function(){
   resizeMe();
   $(window).on("resize", resizeMe);
 
-  initIntro();
-  //showEditor();
+
+
+  //initIntro();
+  showEditor();
 });
 
 function initIntro() {
@@ -40,6 +42,7 @@ function showEditor() {
     //resizeMe();
     $("#city input").prop('disabled', false);
     $("#city input").focus();
+    $("#city input").inputfit();
   //});
 
 
@@ -85,17 +88,5 @@ function resizeMe() {
         left: WW * 0.5 - $("#city").width() * 0.5,
         top: WH * 0.5 - $("#city").height() * 0.5
     });
-
-    if(WW > 1000) {
-        $("#bottom ul li").width(WW/3).height(WW/3);
-    }
-
-    if(WW < 1000 && WW > 500) {
-        $("#bottom ul li").width(WW/2).height(WW/2);
-    }
-
-    if(WW <= 500) {
-        $("#bottom ul li").width(WW).height(WW);
-    }
 
 }
