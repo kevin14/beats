@@ -5,6 +5,7 @@
     "BigVideo.js": "~1.1.5",
     "imagesloaded": "*",
     "lodash": "~3.10.0",
-    "fabric": "~1.5.0"
+    "fabric": "~1.5.0",
+    "featherlight": "*"
   }
 }

@@ -21,28 +21,18 @@ block content
   
   #bottom
     ul
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
-      li
-        img(src="/img/grid.jpg")
+      each post in posts
+        li
+          img(src="#{post.photo}")
+          .over
+            h3 #{post.title}
+            p #{post.text}
+        
 
   script(src="/js/bower_components/jquery/dist/jquery.min.js")
   script(src="/js/bower_components/imagesloaded/imagesloaded.pkgd.min.js")
   script(src="/js/bower_components/video.js/dist/video-js/video.js")
   script(src="/js/bower_components/BigVideo.js/lib/bigvideo.js")
+  script(src="/js/bower_components/featherlight/release/featherlight.min.js")
   script(src="/js/jquery.inputfit.js")
   script(src='/js/app.js')
