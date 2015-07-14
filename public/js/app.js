@@ -9,8 +9,8 @@ $(document).ready(function(){
 
 
 
-  //initIntro();
-  showEditor();
+  initIntro();
+  //showEditor();
 });
 
 function initIntro() {
