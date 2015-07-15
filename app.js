@@ -8,6 +8,8 @@ var autoprefixer = require('autoprefixer-stylus');
 var stylus = require('stylus');
 var connectAssets = require('connect-assets');
 
+var auth = require('http-auth');
+
 var rupture = require("rupture");
 
 var mongoose = require("mongoose");
@@ -61,10 +63,21 @@ app.use(stylus.middleware({
 //app.use(require('stylus').autoprefixer().middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+var basic = auth.basic({
+        realm: "Secret Place.",
+    }, function (username, password, callback) { // Custom authentication method.
+        callback(username === "north" && password === "kingdom");
+    }
+);
+
+var authMiddleware = auth.connect(basic);
+
+
 app.use('/', routes);
 app.use('/upload', upload);
 app.use('/share', share);
-app.use('/admin', admin);
+app.use('/admin', authMiddleware, admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
