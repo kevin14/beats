@@ -2,7 +2,7 @@
 
 *
   box-sizing border-box
-  -webkit-user-select none
+  // -webkit-user-select none
 
 canvas-size = 863
 
@@ -16,7 +16,7 @@ body
 .editor
   width (canvas-size + 10)px
   margin 0 auto
-  
+
   .button
     cursor pointer
     display inline-block
@@ -34,9 +34,13 @@ body
   .canvas-container
     display block
     margin 50px auto
-  
+    position relative
+
     canvas
-      border 5px solid white
+      // border 5px solid white
+      position absolute
+      left 0
+      top 0
 
   .editor-controls
     text-align center
@@ -51,7 +55,7 @@ body
 
     input[type=radio]
       margin-left 25px
-      
+
     input[type=file]
       display none
 
@@ -62,6 +66,6 @@ body
 
     input:checked + label
       color red
-      
+
   .editor-types
     margin 20px 0
