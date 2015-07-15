@@ -24,6 +24,10 @@ block content
         input#control-contrast(type="radio", name="group", value="contrast")
         label(for="control-contrast") Contrast
 
+      form
+        //- input#upload-button(type="button", value="Upload Photo")
+        input#upload-file(type="file", accept="image/*")
+
 
   != js("jquery/dist/jquery")
   != js("lodash/lodash")

@@ -1,5 +1,20 @@
 class Editor
 
+  commonOptions =
+    originX: 'center'
+    originY: 'center'
+    selectable: true
+    hasRotatingPoint: false
+    lockRotation: true
+    lockScalingFlip: true
+    lockUniScaling: true
+    selectionColor: 'white'
+    cornerColor: 'white'
+    borderColor: 'white'
+    borderWidth: 3
+    transparentCorners: false
+    padding: 10
+
   constructor: ($canvas, $controls) ->
     @values =
       logo: 0
@@ -9,21 +24,6 @@ class Editor
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
-
-    commonOptions =
-      originX: 'center'
-      originY: 'center'
-      selectable: true
-      hasRotatingPoint: false
-      lockRotation: true
-      lockScalingFlip: true
-      lockUniScaling: true
-      selectionColor: 'white'
-      cornerColor: 'white'
-      borderColor: 'white'
-      borderWidth: 3
-      transparentCorners: false
-      padding: 10
 
     fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
       @photo = img
@@ -58,6 +58,10 @@ class Editor
       @fixOrderingOnLoad()
 
     self = @
+
+    $controls.find('input[type=file]').change ->
+      self.setPhoto.call self, this.files[0]
+
     @controlsRadios = $controls.find('input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
 
@@ -94,7 +98,7 @@ class Editor
         @logo?.scale(2 * value)
       when 'contrast'
         @photo?.filters[0].contrast = value
-        @photo?.applyFilters =>@canvas.renderAll()
+        @photo?.applyFilters => @canvas.renderAll()
       when 'grain'
         @grain?.set opacity: value
     @canvas.renderAll()
@@ -103,6 +107,36 @@ class Editor
   # applyValues: ->
     # for parameter, value of @values
     #   console.log parameter, "is", value
+
+  setPhoto: (fileDescriptor) ->
+    # console.log "Setting photo"
+    # console.dir fileDescriptor
+    reader = new FileReader()
+    reader.onload = =>
+      img = new Image()
+      img.src = reader.result
+
+      @canvas.remove @photo if @photo?
+
+      @photo = new fabric.Image img
+      aspect = @photo.width/@photo.height
+      @photo.set(commonOptions).set
+        left: @canvas.width/2
+        top: @canvas.height/2
+        width: @canvas.width
+        height: @canvas.height
+      if aspect > 1
+        @photo.width = @canvas.width * aspect
+      else
+        @photo.height = @canvas.height / aspect
+      @photo.filters.push new ContrastFilter(contrast: @values.contrast)
+      @photo.applyFilters =>@canvas.renderAll()
+      @canvas.add @photo
+      @fixOrderingOnLoad()
+      @photo.on 'selected', => @setParameter('photo', true)
+      @setParameter('photo', true)
+    reader.readAsDataURL fileDescriptor
+
 
 
 ContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
