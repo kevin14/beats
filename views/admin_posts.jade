@@ -1,0 +1,36 @@
+extends admin_layout
+
+block content
+  h1 Compton admin
+  p Page #{page} of #{count}
+  each post in posts
+    li
+      h3
+        |#{post.city}&nbsp;&nbsp;
+        a.delete(href="/admin/posts/delete/#{post.id}") Delete
+      img(width="100", src="#{post.url}")
+        
+        
+        
+  script(src="/js/bower_components/jquery/dist/jquery.min.js")
+  script.
+    $(document).ready(function(){
+      $(".delete").click(function(e){
+        e.preventDefault();
+        
+        var url = $(this).attr("href");
+        var myDiv = $(this).parent().parent();
+        
+        $.ajax({
+          url: url,
+          success: function(data){
+            console.log('success');
+            myDiv.slideUp();
+          }
+        });
+      });
+    
+    
+    
+    });
+      
