@@ -1,8 +1,10 @@
 // Meme editor styles
 
 *
-  sizing border-box
+  box-sizing border-box
   -webkit-user-select none
+
+canvas-size = 863
 
 body
   background url(/img/bg-black.jpg)
@@ -12,13 +14,29 @@ body
   display none
 
 .editor
-  width 869px
+  width (canvas-size + 10)px
   margin 0 auto
+  
+  .button
+    cursor pointer
+    display inline-block
+    background url(/img/button-bg.jpg) 100% 100%
+    width (320/2)px
+    height (115/2)px
+    font-size 24px
+    line-height 0
+    padding-top (@height/2)
+    text-align center
+    border-radius 4px
+    color white
+    text-transform uppercase
 
   .canvas-container
     display block
     margin 50px auto
-    border 5px solid white
+  
+    canvas
+      border 5px solid white
 
   .editor-controls
     text-align center
@@ -33,6 +51,9 @@ body
 
     input[type=radio]
       margin-left 25px
+      
+    input[type=file]
+      display none
 
     label
       font-size 40px

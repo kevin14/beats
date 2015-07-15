@@ -163,3 +163,4 @@ ContrastFilter.fromObject = (o)->new ContrastFilter(o)
 
 do ->
   Editor._instance = new Editor $('#canvas'), $('.editor-controls')
+  $("#upload-button").click -> $("#upload-file").click()
