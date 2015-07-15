@@ -9,8 +9,9 @@ $(document).ready(function(){
 
 
 
-  initIntro();
-  //showEditor();
+  //initIntro();
+  showEditor();
+
 });
 
 function initIntro() {
@@ -33,28 +34,35 @@ function initIntro() {
 }
 
 function showEditor() {
+  $("#beats-logo").fadeIn(500);
   $("#bottom").show();
   $("#editor").fadeIn();
   $("#bottom").show();
-  console.log("editor");
+
+  $("#beats-logo-white").hide();
+
+
   resizeMe();
-  //$("#editor").fadeIn(1000, function(){
-    //resizeMe();
-    $("#city input").prop('disabled', false);
-    $("#city input").focus();
-    $("#city input").inputfit();
-  //});
+  $("#city input").prop('disabled', false);
+  $("#city input").focus();
+  $("#city input").inputfit();
 
 
+
+  $("#buttons a img").hover(function(){
+    $(this).attr('src', $(this).attr('src').replace(/\.png/, '-over.png') );
+  }, function(){
+    $(this).attr('src', $(this).attr('src').replace(/\-over.png/, '.png') );
+  });
+
+
+  enableActionButtons();
 
 
   $("#city input").on('keydown', function(e) {
     hideAll();
-    if(e.which == 8 || e.which == 46) {
-        /*$(".type-red").stop().css({opacity: 0}).show().animate({opacity: 0.3}, function(){
-          $(this).hide();
-        });*/
 
+    if(e.which == 8 || e.which == 46) {
         $(".type-red").css({opacity: 0}).show().css({opacity: 0.3}).fadeOut(300);
     } else {
         $(".img"+currentBG).stop().fadeIn(300, function(){
@@ -66,6 +74,34 @@ function showEditor() {
           currentBG = 1;
         }
     }
+  });
+
+  $("#city input").on('keyup', function(e) {
+    var myInput = $(this);
+
+    if(myInput.val().length > 0) {
+      $("#buttons").show();
+    } else {
+      $("#buttons").hide();
+    }
+  });
+
+}
+
+function enableActionButtons() {
+  $("#btn-download").click(function(e){
+    e.preventDefault();
+    alert("download image");
+  });
+
+  $("#btn-share").click(function(e){
+    e.preventDefault();
+    $.featherlight($(".share").html(), {});
+  });
+
+  $("#btn-addphoto").click(function(e){
+    e.preventDefault();
+    alert("add photo");
   });
 }
 
@@ -84,7 +120,7 @@ function resizeMe() {
     $("#top").width(WW).height(WH);
 
 
-    $("#city").css({
+    $("#city-holder").css({
         left: WW * 0.5 - $("#city").width() * 0.5,
         top: WH * 0.5 - $("#city").height() * 0.5
     });

@@ -16,6 +16,7 @@ html, body
   left 20px
   width 45px
   z-index 999
+  display none
 
 #top
   position relative
@@ -27,32 +28,50 @@ html, body
     height 100%
     display none
 
-
-  #city
+  #city-holder
     position absolute
     top 0px
     left 0px
     z-index 999
     width 400px
-    height 429px
-    +at(1)
-      width 200px
-      height 229px
+    text-align center
 
-    img
-      position absolute
+    #city
+      position relative
+      margin 0 auto
+      width 320px
+      height 343px
+      text-align center
+      +at(1)
+        width 200px
+        height 229px
+
+    #logo
       width 100%
+
+    #lower
+      padding-top 20px
+
+      #beats-logo-white
+        width 45px
+
+      #buttons
+        display none
+
+      #buttons-hide
+        display none
 
     input
       font-family: "knockout48", serif;
       position absolute
-      top 307px
-      bottom 2px
+      left 0px
+      bottom -2px
       background none
       color #fff
       width 100%
       border none
       font-size 92px
+      line-height 92px
       outline none
       text-align center
       text-transform uppercase
@@ -157,18 +176,23 @@ html, body
         /* ...and now for the proper property */
         transition:.5s;
 
+        font-family "knockout48"
+
 
         h3
-          font-family "knockout48"
+          font-size 32px
+          letter-spacing 1px
           color red
           text-transform uppercase
-          padding 20px
+          padding 40px 40px 20px 40px
           margin 0px
 
         p
+          letter-spacing 1px
           color #fff
-          font-family "Helvetica Neue", "Arial", sans-serif;
-          padding 0px 20px 20px 20px
+          font-size 18px
+          line-height 22px
+          padding 0px 40px 40px 40px
           margin 0px
 
       img
@@ -190,3 +214,7 @@ html, body
       &:hover
         .over
           opacity 1
+
+.share
+  display none
+  background #fff

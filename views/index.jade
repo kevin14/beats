@@ -3,9 +3,27 @@ extends layout
 block content
   img#beats-logo(src="/img/beats-logo.png")
   #top
-    #city
-      img(src="/img/straight-logo.png")
-      input(type="text")
+    #city-holder
+      #city
+        img#logo(src="/img/straight-logo.png")
+        input(type="text")
+          
+      #lower
+        img#beats-logo-white(src="/img/beats-logo-white.png")
+          
+        #buttons
+          a#btn-download(href="#")
+            img(src="/img/btn-download.png", height="45")
+          a#btn-share(href="#")
+            img(src="/img/btn-share.png", height="45")
+          a#btn-addphoto(href="#")
+            img(src="/img/btn-addphoto.png", height="45")
+        #buttons-hide
+          img(src="/img/btn-download-over.png", height="45")
+          img(src="/img/btn-share-over.png", height="45")
+          img(src="/img/btn-addphoto-over.png", height="45")
+          
+              
     #intro-video
     #editor
       a#down
@@ -27,7 +45,10 @@ block content
           .over
             h3 #{post.title}
             p #{post.text}
-        
+            
+  .share
+    a(href="#") twitter
+    a(href="#") facebook  
 
   script(src="/js/bower_components/jquery/dist/jquery.min.js")
   script(src="/js/bower_components/imagesloaded/imagesloaded.pkgd.min.js")
