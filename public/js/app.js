@@ -18,22 +18,46 @@ function initIntro() {
   $("#bottom").hide();
   $("#intro-video").show();
   $("#city input").prop('disabled', true);
-  BV = new $.BigVideo({container: $('#intro-video')});
-  BV.init();
-  BV.show('/video/2chains_1.mp4',{doLoop:false});
-  BV.getPlayer().volume(0);
-  BV.getPlayer().on('durationchange',function(){
-    $('#big-video-wrap').show();
-  });
+  var mySlide = 1;
 
-  BV.getPlayer().on("ended", function () {
-    $("#intro-video").hide();
-    showEditor();
+  var city = $(".slide"+mySlide).data("city");
+  $("#city input").val(city);
+
+  $('#slides').slick({
+    dots: false,
+    autoplay: true,
+    arrows: false,
+    draggable: false,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    cssEase: 'linear'
+  }).on('beforeChange', function(event, slick, currentSlide, nextSlide){
+
+    mySlide++;
+
+    var city = $(".slide"+mySlide).data("city");
+    $("#city input").val(city);
+
+    if(mySlide == 3+1) {
+      //console.log("pause");
+      introDone();
+      $("#slides").slick("unslick");
+      //$("#slides").slick("slickPause");
+    }
 
   });
+  //introDone();
+
+}
+
+function introDone() {
+  $("#intro-video").hide();
+  showEditor();
 }
 
 function showEditor() {
+  console.log("show editor");
   $("#beats-logo").fadeIn(500);
   $("#bottom").show();
   $("#editor").fadeIn();
@@ -64,6 +88,7 @@ function showEditor() {
 
     if(e.which == 8 || e.which == 46) {
         $(".type-red").css({opacity: 0}).show().css({opacity: 0.3}).fadeOut(300);
+
     } else {
         $(".img"+currentBG).stop().fadeIn(300, function(){
           $(this).fadeOut(2000);
