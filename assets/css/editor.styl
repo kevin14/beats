@@ -4,17 +4,19 @@
   box-sizing border-box
   // -webkit-user-select none
 
-canvas-size = 863
+$base-letter-spacing = 0.05em
+$canvas-size = 863
 
 body
   background url(/img/bg-black.jpg)
-  font-family 'knockout48', Impact, sans-serif
+  font-family 'knockout', Impact, sans-serif
+  letter-spacing $base-letter-spacing
 
 .hidden
   display none
 
 .editor
-  width (canvas-size + 10)px
+  width ($canvas-size + 10px)
   margin 0 auto
 
   .button
@@ -24,6 +26,7 @@ body
     width (320/2)px
     height (115/2)px
     font-size 24px
+    letter-spacing 0.05em
     line-height 0
     padding-top (@height/2)
     text-align center
@@ -34,13 +37,13 @@ body
   .canvas-container
     display block
     margin 50px auto
-    position relative
 
     canvas
+      // box-sizing content-box
+      // border-style solid
+      // border-color white
+      // border-width 5px
       // border 5px solid white
-      position absolute
-      left 0
-      top 0
 
   .editor-controls
     text-align center
@@ -60,7 +63,8 @@ body
       display none
 
     label
-      font-size 40px
+      font-size 20px
+      letter-spacing 1px
       color white
       text-transform uppercase
 

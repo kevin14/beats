@@ -1,6 +1,6 @@
 class Editor
 
-  commonOptions =
+  SELECTABLE_OPTIONS =
     originX: 'center'
     originY: 'center'
     selectable: true
@@ -27,7 +27,7 @@ class Editor
 
     fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
       @photo = img
-      @photo.set(commonOptions).set
+      @photo.set(SELECTABLE_OPTIONS).set
         selectable: false
         left: @canvas.width/2
         top: @canvas.height/2
@@ -42,7 +42,7 @@ class Editor
 
     fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
       @logo = img
-      @logo.set(commonOptions).set
+      @logo.set(SELECTABLE_OPTIONS).set
         left: @canvas.width/2
         top: @canvas.height - @logo.height/2 - 40
       @canvas.add @logo
@@ -123,7 +123,7 @@ class Editor
 
       @photo = new fabric.Image img
       aspect = @photo.width/@photo.height
-      @photo.set(commonOptions).set
+      @photo.set(SELECTABLE_OPTIONS).set
         selectable: false
         left: @canvas.width/2
         top: @canvas.height/2
