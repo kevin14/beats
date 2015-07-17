@@ -26,22 +26,20 @@ class Editor
     @canvas.selection = false
     @canvas.backgroundColor = 'black'
 
-    fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
-      @photo = img
-      @photo.set(SELECTABLE_OPTIONS).set
-        # selectable: false
-        left: @canvas.width/2
-        top: @canvas.height/2
-        width: @canvas.width
-        height: @canvas.height
-        # originX: 'center'
-        # originY: 'center'
-      @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-      @photo.applyFilters =>@canvas.renderAll()
-      @canvas.add @photo
-      @fixOrderingOnLoad()
-      @photo.on 'selected', => @setParameter('photo', true)
-      @setParameter('photo', true)
+    # fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
+    #   @photo = img
+    #   @photo.set(SELECTABLE_OPTIONS).set
+    #     left: @canvas.width/2
+    #     top: @canvas.height/2
+    #     width: @canvas.width
+    #     height: @canvas.height
+    #     padding: 0
+    #   @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
+    #   @photo.applyFilters =>@canvas.renderAll()
+    #   @canvas.add @photo
+    #   @fixOrderingOnLoad()
+    #   @photo.on 'selected', => @setParameter('photo', true)
+    #   @setParameter('photo', true)
 
     fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
       @logo = img
@@ -64,6 +62,9 @@ class Editor
     #   @fixOrderingOnLoad()
 
     self = @
+
+    # @canvas.on 'object:moving', (e)=>
+    #   @constrainPhotoMove() if @photo? && e.target == @photo
 
     $controls.find('.download').click => @downloadLocal()
 
@@ -116,7 +117,8 @@ class Editor
     @controlsRange.val @values[@parameter]
     unless programmatic
       switch @parameter
-        # when 'photo' then @canvas.setActiveObject @photo
+        when 'photo'
+          if @photo? then @canvas.setActiveObject @photo
         when 'logo' then @canvas.setActiveObject @logo
         else @canvas.discardActiveObject()
 
@@ -133,11 +135,6 @@ class Editor
       # when 'grain'
       #   @grain?.set opacity: value
     @canvas.renderAll()
-    # @applyValues()
-
-  # applyValues: ->
-    # for parameter, value of @values
-    #   console.log parameter, "is", value
 
   setPhoto: (fileDescriptor) ->
     # console.log "Setting photo"
@@ -149,30 +146,57 @@ class Editor
 
       if @photo?
         @photo.off 'selected'
+        @photo.off 'moving'
         @canvas.remove @photo
 
       @photo = new fabric.Image img
       aspect = @photo.width/@photo.height
       @photo.set(SELECTABLE_OPTIONS).set
         # selectable: false
-        left: @canvas.width/2
-        top: @canvas.height/2
+        originX: 'left'
+        originY: 'top'
         width: @canvas.width
         height: @canvas.height
-      if aspect > 1
+        padding: 0
+      isWide = aspect > 1
+      if isWide
         @photo.width = @canvas.width * aspect
       else
         @photo.height = @canvas.height / aspect
-      # @photo.filters.push new fabric.Image.filters.Grayscale()
       @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
       @photo.applyFilters =>@canvas.renderAll()
       @canvas.add @photo
+      @photo.center()
       @fixOrderingOnLoad()
-      @photo.on 'selected', => @setParameter('photo', true)
+      @photo.on 'selected', =>@setParameter('photo', true)
+      @photo.on 'moving', =>@constrainPhotoMove()
       @setParameter('photo', true)
     reader.readAsDataURL fileDescriptor
 
+  constrainPhotoMove: ->
+    @photo.setCoords()
+    p = @photo.getBoundingRect()
+    # pw = p.width
+    # ph = p.height
+    # cw = @canvas.width
+    # ch = @canvas.height
+    @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left))
+    @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top))
+    # if pw > cw
+    #   l = p.left
+    #   r = l + pw
+    #   if r < cw || l > 0
+    #     @photo.setLeft Math.min(0, Math.max(cw-pw, l))
+    # else
+    #   @photo.setLeft 0
 
+    # if ph > ch
+    #   t = p.top
+    #   b = p.top + p.height
+    #   if b > ch || t < 0
+    #     @photo.setTop Math.min(0, Math.max(ch-ph, t))
+    # else
+    #   @photo.setTop 0
 
 GrayscaleContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
   type: 'Contrast'

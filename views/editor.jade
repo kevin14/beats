@@ -5,7 +5,8 @@ block head
 
 block content
   .editor
-    canvas#canvas(width="863", height="863")
+    .canvas-outer
+      canvas#canvas(width="863", height="863")
     //- img.hidden#sample-logo(src="/img/editor/sample-logo.png")
     //- img.hidden#sample-photo(src="/img/editor/sample-photo.jpg")
 
@@ -18,8 +19,10 @@ block content
         input#control-logo(type="radio", name="group", value="logo")
         label(for="control-logo") Logo
 
-        input#control-grain(type="radio", name="group", value="grain")
-        label(for="control-grain") Grain
+        input#control-invert(type="radio", name="group", value="invert")
+        label(for="control-invert") Logo Color
+        //- input#control-grain(type="radio", name="group", value="grain")
+        //- label(for="control-grain") Grain
 
         input#control-contrast(type="radio", name="group", value="contrast")
         label(for="control-contrast") Contrast

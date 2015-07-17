@@ -14,10 +14,6 @@ class Uploader
     @allTasks
 
   saveImage: ->
-    # url = "/upload/sign_s3?s3_object_name=#{@filename}&s3_object_type=#{@filetype}"
-    # $.get url, (signdata, status)=>
-    #   console.dir signdata
-    #   @uploadToS3 signdata.signed_request, signdata.url
     uploader = new S3Upload
       s3_object_name: @filename
       s3_sign_put_url: '/upload/sign_s3'
