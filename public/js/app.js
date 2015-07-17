@@ -9,8 +9,8 @@ $(document).ready(function(){
 
 
 
-  initIntro();
-  //showEditor();
+  //initIntro();
+  showEditor();
 
 });
 
@@ -109,6 +109,17 @@ function showEditor() {
     } else {
       $("#buttons").hide();
     }
+  });
+
+
+  $(".video-link").click(function(e){
+    e.preventDefault();
+
+    var videoId = $(this).data("video");
+    var html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+    $.featherlight(html, {});
+
+
   });
 
 }

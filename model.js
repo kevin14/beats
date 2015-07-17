@@ -13,10 +13,11 @@ exports.Uploads = uploads;
 
 
 var postsSchema = mongoose.Schema({
-    photo : String,
-    type  : String,
-    title : String,
-    text  : String,
+    photo         : String,
+    type          : String,
+    title         : String,
+    text          : String,
+    videoId       : String,
     'created_at'  : { type: Date, default: Date.now }
 });
 

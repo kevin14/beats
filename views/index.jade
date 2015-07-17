@@ -42,13 +42,24 @@ block content
         .type-img.img5
   
   #bottom
-    ul
+    ul.cf
       each post in posts
         li
-          img(src="#{post.photo}")
-          .over
-            h3 #{post.title}
-            p #{post.text}
+          if post.type == "video"
+            a.video-link(href="#", data-video="#{post.videoId}")
+              img.bg-img(src="#{post.photo}")
+              .over
+                .over-inner
+                  .over-cell.video
+                    img.play(src="/img/play.png")
+                    h3 #{post.title}
+          else
+            img.bg-img(src="#{post.photo}")
+            .over
+              .over-inner
+                .over-cell
+                  h3 #{post.title}
+                  p #{post.text}
             
   .share
     a(href="#") twitter

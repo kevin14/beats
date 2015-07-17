@@ -206,6 +206,17 @@ html, body
         font-family "knockout48"
 
 
+
+        .over-inner
+          display table
+          width 100%
+          height 100%
+
+          .over-cell
+            display table-cell
+            vertical-align middle
+
+
         h3
           font-size 32px
           letter-spacing 1px
@@ -222,7 +233,20 @@ html, body
           padding 0px 40px 40px 40px
           margin 0px
 
-      img
+      .video
+        text-align center
+        color #fff
+
+        .play
+          width 50px
+
+        h3
+          font-size 18px
+          color #fff
+          padding 10px 0px 0px 0px
+          margin 0px
+
+      .bg-img
         width 100%
         display block
 
@@ -245,3 +269,14 @@ html, body
 .share
   display none
   background #fff
+
+
+.cf:before, .cf:after
+  content " "
+  display table
+
+.cf:after
+  clear both
+
+.cf
+  *zoom: 1
