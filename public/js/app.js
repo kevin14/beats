@@ -9,8 +9,8 @@ $(document).ready(function(){
 
 
 
-  //initIntro();
-  showEditor();
+  initIntro();
+  //showEditor();
 
 });
 
@@ -157,8 +157,8 @@ function resizeMe() {
 
 
     $("#city-holder").css({
-        left: WW * 0.5 - $("#city").width() * 0.5,
-        top: WH * 0.5 - $("#city").height() * 0.5
+        left: WW * 0.5 - $("#city-holder").width() * 0.5,
+        top: WH * 0.5 - $("#city-holder").height() * 0.5
     });
 
 }
