@@ -1,8 +1,6 @@
 class Editor
 
   SELECTABLE_OPTIONS =
-    originX: 'center'
-    originY: 'center'
     selectable: true
     hasRotatingPoint: false
     lockRotation: true
@@ -26,45 +24,17 @@ class Editor
     @canvas.selection = false
     @canvas.backgroundColor = 'black'
 
-    # fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
-    #   @photo = img
-    #   @photo.set(SELECTABLE_OPTIONS).set
-    #     left: @canvas.width/2
-    #     top: @canvas.height/2
-    #     width: @canvas.width
-    #     height: @canvas.height
-    #     padding: 0
-    #   @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-    #   @photo.applyFilters =>@canvas.renderAll()
-    #   @canvas.add @photo
-    #   @fixOrderingOnLoad()
-    #   @photo.on 'selected', => @setParameter('photo', true)
-    #   @setParameter('photo', true)
-
     fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
       @logo = img
       @logo.set(SELECTABLE_OPTIONS).set
-        left: @canvas.width/2
-        top: @canvas.height - @logo.height/2 - 40
+        left: @canvas.width/2 - @logo.width/2
+        top: @canvas.height - @logo.height - 40
       @canvas.add @logo
       @fixOrderingOnLoad()
-      @logo.on 'selected', => @setParameter('logo', true)
-
-    # fabric.Image.fromURL '/img/editor/grain.png', (img)=>
-    #   @grain = img
-    #   @grain.set
-    #     originX: 'center'
-    #     originY: 'center'
-    #     left: @canvas.width/2
-    #     top: @canvas.height/2
-    #     selectable: false
-    #   @canvas.add @grain
-    #   @fixOrderingOnLoad()
+      @logo.on 'selected', =>@setParameter('logo', true)
+      @logo.on 'moving', =>@constrainLogoMove()
 
     self = @
-
-    # @canvas.on 'object:moving', (e)=>
-    #   @constrainPhotoMove() if @photo? && e.target == @photo
 
     $controls.find('.download').click => @downloadLocal()
 
@@ -127,8 +97,10 @@ class Editor
     switch @parameter
       when 'photo'
         @photo?.scale(2 * value)
+        @constrainPhotoMove()
       when 'logo'
         @logo?.scale(2 * value)
+        @constrainLogoMove()
       when 'contrast'
         @photo?.filters[0]?.contrast = value
         @photo?.applyFilters => @canvas.renderAll()
@@ -137,8 +109,6 @@ class Editor
     @canvas.renderAll()
 
   setPhoto: (fileDescriptor) ->
-    # console.log "Setting photo"
-    # console.dir fileDescriptor
     reader = new FileReader()
     reader.onload = =>
       img = new Image()
@@ -158,8 +128,7 @@ class Editor
         width: @canvas.width
         height: @canvas.height
         padding: 0
-      isWide = aspect > 1
-      if isWide
+      if aspect > 1
         @photo.width = @canvas.width * aspect
       else
         @photo.height = @canvas.height / aspect
@@ -176,27 +145,20 @@ class Editor
   constrainPhotoMove: ->
     @photo.setCoords()
     p = @photo.getBoundingRect()
-    # pw = p.width
-    # ph = p.height
-    # cw = @canvas.width
-    # ch = @canvas.height
     @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left))
     @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top))
-    # if pw > cw
-    #   l = p.left
-    #   r = l + pw
-    #   if r < cw || l > 0
-    #     @photo.setLeft Math.min(0, Math.max(cw-pw, l))
-    # else
-    #   @photo.setLeft 0
 
-    # if ph > ch
-    #   t = p.top
-    #   b = p.top + p.height
-    #   if b > ch || t < 0
-    #     @photo.setTop Math.min(0, Math.max(ch-ph, t))
-    # else
-    #   @photo.setTop 0
+  constrainLogoMove: ->
+    @logo.setCoords()
+    l = @logo.getBoundingRect()
+    l.width -= @logo.padding*2
+    l.height -= @logo.padding*2
+    # l.left -= l.width/2
+    # l.top -= l.height/2
+    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left))# + l.width/2
+    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top))# + l.height/2
+
+# /class Editor
 
 GrayscaleContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
   type: 'Contrast'
