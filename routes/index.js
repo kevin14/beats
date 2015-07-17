@@ -20,8 +20,4 @@ router.get('/editor', function(req, res, next) {
   res.render('editor', { title: 'COMPTON' });
 });
 
-router.get('/uploader', function(req, res, next) {
-  res.render('uploader', { title: 'COMPTON' });
-});
-
 module.exports = router;

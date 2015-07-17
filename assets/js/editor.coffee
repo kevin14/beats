@@ -54,16 +54,20 @@ class Editor
       @grain.set
         originX: 'center'
         originY: 'center'
+        left: @canvas.width/2
+        top: @canvas.height/2
         selectable: false
       @canvas.add @grain
       @fixOrderingOnLoad()
 
     self = @
 
+    $controls.find('.download').click => @downloadLocal()
+
+    $controls.find('.share').click => @upload()
+
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
-
-    $controls.find('.download').click => @download()
 
     @controlsRadios = $controls.find('input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
@@ -78,12 +82,20 @@ class Editor
     @canvas.discardActiveObject()
     # capture as deferred
     deferred = $.Deferred()
-    onBlobReady = (blob)=>deferred.resolve(blob)
-    @canvas.lowerCanvasEl.toBlob(onBlobReady, type, quality)
+    onBlobReady = (blob)=>deferred.resolve blob
+    @canvas.lowerCanvasEl.toBlob onBlobReady, type, quality
     deferred
 
-  download: ->
-    @captureImageDeferred().then (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
+  downloadLocal: ->
+    @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
+
+  upload: ->
+    # TODO disable further editing
+    @captureImageDeferred().done (blob)->
+      uploader = new Uploader(blob, "Brooklyn")
+      uploader.start().done (shareUrl)->
+        console.log "OK done!"
+        $('<a>').attr(href: shareUrl).text("Share this link.").appendTo('body')
 
   fixOrderingOnLoad: ->
     # console.log "reorder"
