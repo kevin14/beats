@@ -24,15 +24,18 @@ class Editor
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
+    @canvas.backgroundColor = 'black'
 
     fabric.Image.fromURL '/img/editor/sample-photo.jpg', (img)=>
       @photo = img
       @photo.set(SELECTABLE_OPTIONS).set
-        selectable: false
+        # selectable: false
         left: @canvas.width/2
         top: @canvas.height/2
         width: @canvas.width
         height: @canvas.height
+        # originX: 'center'
+        # originY: 'center'
       @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
       @photo.applyFilters =>@canvas.renderAll()
       @canvas.add @photo
@@ -49,16 +52,16 @@ class Editor
       @fixOrderingOnLoad()
       @logo.on 'selected', => @setParameter('logo', true)
 
-    fabric.Image.fromURL '/img/editor/grain.png', (img)=>
-      @grain = img
-      @grain.set
-        originX: 'center'
-        originY: 'center'
-        left: @canvas.width/2
-        top: @canvas.height/2
-        selectable: false
-      @canvas.add @grain
-      @fixOrderingOnLoad()
+    # fabric.Image.fromURL '/img/editor/grain.png', (img)=>
+    #   @grain = img
+    #   @grain.set
+    #     originX: 'center'
+    #     originY: 'center'
+    #     left: @canvas.width/2
+    #     top: @canvas.height/2
+    #     selectable: false
+    #   @canvas.add @grain
+    #   @fixOrderingOnLoad()
 
     self = @
 
@@ -99,9 +102,10 @@ class Editor
 
   fixOrderingOnLoad: ->
     # console.log "reorder"
+    @canvas.discardActiveObject()
     if @photo? then @canvas.bringToFront @photo
     if @logo? then @canvas.bringToFront @logo
-    if @grain? then @canvas.bringToFront @grain
+    # if @grain? then @canvas.bringToFront @grain
 
 
   setParameter: (parameterId, programmatic = false) ->
@@ -112,7 +116,7 @@ class Editor
     @controlsRange.val @values[@parameter]
     unless programmatic
       switch @parameter
-        when 'photo' then @canvas.setActiveObject @photo
+        # when 'photo' then @canvas.setActiveObject @photo
         when 'logo' then @canvas.setActiveObject @logo
         else @canvas.discardActiveObject()
 
@@ -126,8 +130,8 @@ class Editor
       when 'contrast'
         @photo?.filters[0]?.contrast = value
         @photo?.applyFilters => @canvas.renderAll()
-      when 'grain'
-        @grain?.set opacity: value
+      # when 'grain'
+      #   @grain?.set opacity: value
     @canvas.renderAll()
     # @applyValues()
 
@@ -150,7 +154,7 @@ class Editor
       @photo = new fabric.Image img
       aspect = @photo.width/@photo.height
       @photo.set(SELECTABLE_OPTIONS).set
-        selectable: false
+        # selectable: false
         left: @canvas.width/2
         top: @canvas.height/2
         width: @canvas.width
