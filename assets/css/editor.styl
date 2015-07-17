@@ -2,10 +2,10 @@
 
 *
   box-sizing border-box
-  // -webkit-user-select none
 
 $base-letter-spacing = 0.05em
-$canvas-size = 863
+$canvas-size = 863px
+$canvas-border = 5px
 
 body
   background url(/img/bg-black.jpg)
@@ -16,8 +16,11 @@ body
   display none
 
 .editor
-  width ($canvas-size + 10px)
-  margin 0 auto
+  user-select none
+  -webkit-user-select none
+
+  width ($canvas-size + $canvas-border * 2)
+  margin 50px auto
 
   .button
     cursor pointer
@@ -33,10 +36,13 @@ body
     border-radius 4px
     color white
     text-transform uppercase
+    &:hover
+      opacity 0.9
+    &:active
+      opacity 0.5
 
   .canvas-container
-    display block
-    margin 50px auto
+    margin 0 auto
 
     canvas
       // box-sizing content-box
@@ -46,6 +52,7 @@ body
       // border 5px solid white
 
   .editor-controls
+    margin-top 50px
     text-align center
 
     input[type=range]
@@ -70,6 +77,9 @@ body
 
     input:checked + label
       color red
+
+    .button
+      margin 0 10px
 
   .editor-types
     margin 20px 0

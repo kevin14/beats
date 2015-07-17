@@ -63,6 +63,8 @@ class Editor
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
 
+    $controls.find('.download').click => @download()
+
     @controlsRadios = $controls.find('input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
 
@@ -71,8 +73,20 @@ class Editor
 
     # $controls.find('input[type=radio]').first().click()
 
+  captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
+    # prepare canvas for capture
+    @canvas.discardActiveObject()
+    # capture as deferred
+    deferred = $.Deferred()
+    onBlobReady = (blob)=>deferred.resolve(blob)
+    @canvas.lowerCanvasEl.toBlob(onBlobReady, type, quality)
+    deferred
+
+  download: ->
+    @captureImageDeferred().then (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
+
   fixOrderingOnLoad: ->
-    console.log "reorder"
+    # console.log "reorder"
     if @photo? then @canvas.bringToFront @photo
     if @logo? then @canvas.bringToFront @logo
     if @grain? then @canvas.bringToFront @grain
@@ -175,4 +189,4 @@ GrayscaleContrastFilter.fromObject = (o)->new GrayscaleContrastFilter(o)
 
 do ->
   Editor._instance = new Editor $('#canvas'), $('.editor-controls')
-  $("#upload-button").click -> $("#upload-file").click()
+  $(".upload.button").click -> $("input[type=file]").click()

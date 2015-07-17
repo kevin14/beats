@@ -24,13 +24,11 @@ block content
         input#control-contrast(type="radio", name="group", value="contrast")
         label(for="control-contrast") Contrast
 
-      form
-        //- input#upload-button(type="button", value="Upload Photo")
-        input#upload-file(type="file", accept="image/*")
-        .button#upload-button Add Photo
-
+      form.editor-actions
+        .button.download Download
+        .button.share Share
+        input#action-upload(type="file", accept="image/*")
+        .button.upload Add Photo
 
   != js("jquery/dist/jquery")
-  != js("lodash/lodash")
-  != js("fabric/dist/fabric")
-  != js("editor")
+  != js("editor-deps")
