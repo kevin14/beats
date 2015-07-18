@@ -1,7 +1,10 @@
 class Uploader
   constructor: (blob, city = "Compton")->
+    toTitleCase = (str)->
+      str.replace /\w\S*/g, (txt) -> (txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+
     @blob = blob
-    @city = city
+    @city = toTitleCase(city)
     @guid = @getGuid()
     @filetype = 'image/jpg'
     @filename = "#{@guid}.jpg"

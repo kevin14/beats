@@ -38,6 +38,8 @@ class Editor
     @canvas.selection = false
     @canvas.backgroundColor = 'black'
 
+    @cityText = ""
+
     self = @
 
     $controls.find('.download').click => @downloadLocal()
@@ -94,8 +96,8 @@ class Editor
 
     # keep capitalized
     # TODO better way to do this as well as avoid newline input?
-    @logoText.on 'changed', (e)->
-      @text = @text.toUpperCase().replace(/\n/, ' ')
+    @logoText.on 'changed', =>
+      @cityText = @logoText.text = @logoText.text.toUpperCase().replace(/\n/, ' ')
       @canvas.renderAll()
 
     # forcibly keep selected
@@ -143,6 +145,19 @@ class Editor
       @logo.on 'selected', =>@setParameter('logo', true)
       @logo.on 'moving', =>@constrainLogoMove()
 
+    # Watermark beats logo
+    @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
+      originX: 'center'
+      originY: 'bottom'
+      scaleX: 0.5
+      scaleY: 0.5
+      selectable: false
+      evented: false
+    @watermark.set
+      left: @canvas.width/2
+      top: @canvas.height - 5
+
+
   setMode: (newMode)->
     oldMode = @mode
     return if oldMode == newMode
@@ -168,8 +183,8 @@ class Editor
   upload: ->
     # TODO disable further editing
     @setMode 'done'
-    @captureImageDeferred().done (blob)->
-      uploader = new Uploader(blob, "Brooklyn")
+    @captureImageDeferred().done (blob)=>
+      uploader = new Uploader(blob, @cityText)
       uploader.start().done (shareUrl)->
         console.log "OK done!"
         $('<a>').attr(href: shareUrl).text("Share this link.").appendTo('body')
@@ -179,6 +194,7 @@ class Editor
     @canvas.discardActiveObject()
     if @photo? then @canvas.sendToBack @photo
     if @logo? then @canvas.bringToFront @logo
+    if @watermark? then @canvas.bringToFront @watermark
     # if @grain? then @canvas.bringToFront @grain
 
 
