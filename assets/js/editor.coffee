@@ -13,6 +13,17 @@ class Editor
     transparentCorners: false
     padding: 10
 
+  NO_CONTROLS_OPTIONS =
+    hasBorders: false
+    hasControls: false
+    hasRotatingPoint: false
+    lockMovementX: true
+    lockMovementY: true
+    lockRotation: true
+    lockScalingX: true
+    lockScalingY: true
+
+
   constructor: ($canvas, $controls) ->
     @values =
       logo: 0
@@ -24,15 +35,7 @@ class Editor
     @canvas.selection = false
     @canvas.backgroundColor = 'black'
 
-    fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
-      @logo = img
-      @logo.set(SELECTABLE_OPTIONS).set
-        left: @canvas.width/2 - @logo.width/2
-        top: @canvas.height - @logo.height - 40
-      @canvas.add @logo
-      @fixOrderingOnLoad()
-      @logo.on 'selected', =>@setParameter('logo', true)
-      @logo.on 'moving', =>@constrainLogoMove()
+    # @beatsLogo ..... SET evented: false!!!
 
     self = @
 
@@ -49,7 +52,87 @@ class Editor
     @controlsRange = $controls.find('input[type=range]').change ->
       self.setValue.call self, parseFloat($(this).val())
 
-    # $controls.find('input[type=radio]').first().click()
+    @initializeTextMode()
+
+
+  initializeTextMode: ->
+    console.log "Entering city entry Phase"
+
+    grimePattern = new fabric.Pattern
+      source: document.getElementById('img-pattern-grime')
+      repeat: 'repeat'
+
+    @logoFrame = new fabric.Image document.getElementById('img-logo-frame'),
+      left: 0
+      top: 0
+      scaleX: 0.5
+      scaleY: 0.5
+      selectable: false
+      evented: false
+
+    @logoText = new fabric.IText "",
+      originX: 'center'
+      fill: grimePattern
+      left: (12 + 768/2)/2
+      top: 594/2 - 16
+      width: 750/2
+      height: 80
+      lineHeight: 1
+      fontSize: 254/2
+      textAlign: 'center'
+      fontFamily: 'knockout'
+      editable: true
+      cursorWidth: 5
+      cursorColor: '#ed1c24'
+      hoverCursor: 'text'
+      selectionColor: 'rgba(255,255,255,0.75)'
+    @logoText.set NO_CONTROLS_OPTIONS
+
+    @canvas.add @logoFrame
+    @canvas.add @logoText
+
+    # keep capitalized
+    # TODO better way to do this as well as avoid newline input?
+    @logoText.on 'changed', (e)->
+      @text = @text.toUpperCase().replace(/\n/, ' ')
+      @canvas.renderAll()
+
+    # forcibly keep selected
+    # @logoText.on 'editing:exited', =>
+    @canvas.on 'selection:cleared', =>
+      @canvas.setActiveObject(@logoText)
+      @logoText.enterEditing()
+
+    @canvas.setActiveObject @logoText
+    @logoText.enterEditing()
+
+  initializePhotoMode: ->
+    console.log "Entering photo phase"
+    fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
+      @logo = img
+      @logo.set(SELECTABLE_OPTIONS).set
+        left: @canvas.width/2 - @logo.width/2
+        top: @canvas.height - @logo.height - 40
+      @canvas.add @logo
+      @fixOrderingOnLoad()
+      @logo.on 'selected', =>@setParameter('logo', true)
+      @logo.on 'moving', =>@constrainLogoMove()
+
+  setMode: (newMode)->
+    oldMode = @mode
+    return if oldMode == newMode
+    if oldMode == 'text'
+      @canvas.off 'selection:cleared'
+      @logoText.off 'editing:exited'
+      @logoText.off 'changed'
+      @logoText.exitEditing()
+      @canvas.discardActiveObject()
+      @logoText.set
+        editable: false
+        evented: false
+    if newMode == 'photo'
+      @initializePhotoMode()
+    @mode = newMode
 
   captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
     # prepare canvas for capture
@@ -65,6 +148,7 @@ class Editor
 
   upload: ->
     # TODO disable further editing
+    @setMode 'done'
     @captureImageDeferred().done (blob)->
       uploader = new Uploader(blob, "Brooklyn")
       uploader.start().done (shareUrl)->
@@ -109,6 +193,7 @@ class Editor
     @canvas.renderAll()
 
   setPhoto: (fileDescriptor) ->
+    @setMode 'photo'
     reader = new FileReader()
     reader.onload = =>
       img = new Image()
@@ -135,6 +220,7 @@ class Editor
       @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
       @photo.applyFilters =>@canvas.renderAll()
       @canvas.add @photo
+      @canvas.sendToBack @photo
       @photo.center()
       @fixOrderingOnLoad()
       @photo.on 'selected', =>@setParameter('photo', true)
