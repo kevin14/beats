@@ -29,7 +29,8 @@ function initIntro() {
     arrows: false,
     draggable: false,
     infinite: true,
-    speed: 500,
+    speed: 300,
+    autoplaySpeed: 750,
     fade: true,
     cssEase: 'linear'
   }).on('beforeChange', function(event, slick, currentSlide, nextSlide){
@@ -39,7 +40,7 @@ function initIntro() {
     var city = $(".slide"+mySlide).data("city");
     $("#city input").val(city);
 
-    if(mySlide == 3+1) {
+    if(mySlide == $(".slide").length+1) {
       //console.log("pause");
       introDone();
       $("#slides").slick("unslick");
