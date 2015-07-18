@@ -6,6 +6,8 @@ class Editor
     lockRotation: true
     lockScalingFlip: true
     lockUniScaling: true
+    lockMovementX: false
+    lockMovementY: false
     selectionColor: 'white'
     cornerColor: 'white'
     borderColor: 'white'
@@ -30,12 +32,11 @@ class Editor
       photo: 0.5
       grain: 1
       contrast: 0.25
+      invert: 1
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
     @canvas.backgroundColor = 'black'
-
-    # @beatsLogo ..... SET evented: false!!!
 
     self = @
 
@@ -52,7 +53,7 @@ class Editor
     @controlsRange = $controls.find('input[type=range]').change ->
       self.setValue.call self, parseFloat($(this).val())
 
-    @initializeTextMode()
+    @setMode 'text'
 
 
   initializeTextMode: ->
@@ -63,8 +64,8 @@ class Editor
       repeat: 'repeat'
 
     @logoFrame = new fabric.Image document.getElementById('img-logo-frame'),
-      left: 0
-      top: 0
+      left: @canvas.width/2 - 768/4
+      top: @canvas.height - 824/2 - 40
       scaleX: 0.5
       scaleY: 0.5
       selectable: false
@@ -73,8 +74,8 @@ class Editor
     @logoText = new fabric.IText "",
       originX: 'center'
       fill: grimePattern
-      left: (12 + 768/2)/2
-      top: 594/2 - 16
+      left: (12 + 768/2)/2 + @logoFrame.left
+      top: 594/2 - 16 + @logoFrame.top
       width: 750/2
       height: 80
       lineHeight: 1
@@ -85,7 +86,7 @@ class Editor
       cursorWidth: 5
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
-      selectionColor: 'rgba(255,255,255,0.75)'
+      selectionColor: 'rgba(255,255,255,0.85)'
     @logoText.set NO_CONTROLS_OPTIONS
 
     @canvas.add @logoFrame
@@ -108,30 +109,48 @@ class Editor
 
   initializePhotoMode: ->
     console.log "Entering photo phase"
-    fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
+    # fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
+    #   @logo = img
+    #   @logo.set(SELECTABLE_OPTIONS).set
+    #     left: @canvas.width/2 - @logo.width/2
+    #     top: @canvas.height - @logo.height - 40
+    #   @canvas.add @logo
+    #   @fixOrderingOnLoad()
+    console.log "Baking text image"
+
+    # Unbind events and deselect text object
+    @canvas.off 'selection:cleared'
+    @logoText.off 'editing:exited'
+    @logoText.off 'changed'
+    @logoText.exitEditing()
+    @canvas.discardActiveObject()
+
+    # Make group out of logo text and frame
+    @canvas.remove @logoText
+    @canvas.remove @logoFrame
+    logoGroup = new fabric.Group [@logoText, @logoFrame], SELECTABLE_OPTIONS
+
+    # Bake as an image
+    logoGroup.cloneAsImage (img)=>
       @logo = img
       @logo.set(SELECTABLE_OPTIONS).set
         left: @canvas.width/2 - @logo.width/2
         top: @canvas.height - @logo.height - 40
       @canvas.add @logo
-      @fixOrderingOnLoad()
+      # @fixOrderingOnLoad()
+
+      # Setup select & move event handlers
       @logo.on 'selected', =>@setParameter('logo', true)
       @logo.on 'moving', =>@constrainLogoMove()
 
   setMode: (newMode)->
     oldMode = @mode
     return if oldMode == newMode
-    if oldMode == 'text'
-      @canvas.off 'selection:cleared'
-      @logoText.off 'editing:exited'
-      @logoText.off 'changed'
-      @logoText.exitEditing()
-      @canvas.discardActiveObject()
-      @logoText.set
-        editable: false
-        evented: false
-    if newMode == 'photo'
-      @initializePhotoMode()
+    # switch oldMode
+    #   when 'text' then @bakeLogoText()
+    switch newMode
+      when 'text' then @initializeTextMode()
+      when 'photo' then @initializePhotoMode()
     @mode = newMode
 
   captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
@@ -158,7 +177,7 @@ class Editor
   fixOrderingOnLoad: ->
     # console.log "reorder"
     @canvas.discardActiveObject()
-    if @photo? then @canvas.bringToFront @photo
+    if @photo? then @canvas.sendToBack @photo
     if @logo? then @canvas.bringToFront @logo
     # if @grain? then @canvas.bringToFront @grain
 
@@ -188,6 +207,13 @@ class Editor
       when 'contrast'
         @photo?.filters[0]?.contrast = value
         @photo?.applyFilters => @canvas.renderAll()
+      when 'invert'
+        if value > 0.5
+          @logo.filters = []
+          @logo.applyFilters()
+        else if @logo.filters.length == 0
+          @logo.filters = [new fabric.Image.filters.Invert()]
+          @logo.applyFilters => @canvas.renderAll()
       # when 'grain'
       #   @grain?.set opacity: value
     @canvas.renderAll()
