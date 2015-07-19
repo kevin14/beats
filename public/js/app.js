@@ -2,12 +2,9 @@ var WW, WH; // window height / width
 var BV; // big video initIntro
 var currentBG = 1;
 
-
 $(document).ready(function(){
   resizeMe();
   $(window).on("resize", resizeMe);
-
-
 
   initIntro();
   //showEditor();
@@ -43,7 +40,9 @@ function initIntro() {
     if(mySlide == $(".slide").length+1) {
       //console.log("pause");
       introDone();
-      $("#slides").slick("unslick");
+      $("#city input").val("New Orleans");
+
+      //$("#slides").slick("unslick");
       //$("#slides").slick("slickPause");
     }
 
@@ -54,7 +53,9 @@ function initIntro() {
 
 function introDone() {
   $("#intro-video").hide();
-  showEditor();
+  //showEditor();
+
+  location.href="/editor";
 }
 
 function showEditor() {
@@ -133,7 +134,7 @@ function enableActionButtons() {
 
   $("#btn-share").click(function(e){
     e.preventDefault();
-    $.featherlight($(".share").html(), {});
+    $.featherlight($(".shareWindow").html(), {});
   });
 
   $("#btn-addphoto").click(function(e){

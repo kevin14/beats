@@ -17,7 +17,12 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/editor', function(req, res, next) {
-  res.render('editor', { title: 'COMPTON' });
+
+  model.Posts.find({}).sort({created_at: -1}).exec(function(err, results) {
+    if(!err && results) {
+      res.render('editor', { title: 'COMPTON', posts: results });
+    }
+  });
 });
 
 module.exports = router;

@@ -25,6 +25,8 @@ class Editor
     lockScalingX: true
     lockScalingY: true
 
+  # for the changing backgrounds
+  currentBG = 1
 
   constructor: ($canvas, $controls) ->
     @values =
@@ -36,7 +38,7 @@ class Editor
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
-    @canvas.backgroundColor = 'black'
+    # @canvas.backgroundColor = 'black'
 
     @cityText = ""
 
@@ -96,9 +98,11 @@ class Editor
 
     # keep capitalized
     # TODO better way to do this as well as avoid newline input?
-    @logoText.on 'changed', =>
+    @logoText.on 'changed', (e) =>
+      # console.log(e)
       @cityText = @logoText.text = @logoText.text.toUpperCase().replace(/\n/, ' ')
       @canvas.renderAll()
+      #changeBackground()
 
     # forcibly keep selected
     # @logoText.on 'editing:exited', =>
@@ -108,6 +112,31 @@ class Editor
 
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
+
+
+
+  changeBackground = ->
+    hideAll()
+    #if e.which == 8 or e.which == 46
+    #  $('.type-red').css(opacity: 0).show().css(opacity: 0.3).fadeOut 300
+    #else
+    console.log("current bg: " + currentBG)
+    $('.img' + currentBG).stop().fadeIn 300, ->
+      $(this).fadeOut 2000
+      return
+    currentBG++
+    if currentBG > $('.type-img').length
+      currentBG = 1
+    return
+
+  hideAll = ->
+    $('.type-red').hide()
+    ti = $('.type-img').length
+    x = 1
+    while x <= ti
+      $('.img' + x).hide()
+      x++
+    return
 
   initializePhotoMode: ->
     console.log "Entering photo phase"
