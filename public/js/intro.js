@@ -43,7 +43,7 @@ function enableTimer() {
 
     }
 
-  }, 750)
+  }, 500);
 
 }
 
@@ -59,52 +59,6 @@ function initIntro() {
   });
 
   return;
-
-
-
-
-
-
-
-  /*
-  $('#slides').slick({
-    dots: false,
-    autoplay: true,
-    arrows: false,
-    draggable: false,
-    infinite: true,
-    speed: 300,
-    autoplaySpeed: 750,
-    fade: true,
-    cssEase: 'linear'
-  }).on('beforeChange', function(event, slick, currentSlide, nextSlide){
-
-    mySlide++;
-
-    var city = $(".slide"+mySlide).data("city");
-    $("#city input").val(city);
-
-    if(mySlide == $(".slide").length+1) {
-      //console.log("pause");
-      introDone();
-      $("#city input").val("New Orleans");
-
-      //$("#slides").slick("unslick");
-      //$("#slides").slick("slickPause");
-    }
-
-  });*/
-
-
-  //introDone();
-
-}
-
-function introDone() {
-  $("#intro-video").hide();
-  //showEditor();
-
-  location.href="/editor";
 }
 
 function resizeMe() {
