@@ -53,7 +53,7 @@ function initIntro() {
   var city = $(".slide"+mySlide).data("city");
   $("#city input").val(city);
 
-  $("#top").fadeIn(500, function(){
+  $("#top").fadeIn(250, function(){
     enableTimer();
 
   });
