@@ -32,18 +32,18 @@ var myTimer;
 function enableTimer() {
   myTimer = setInterval(function(){
 
-    if(mySlide >= 6) {
+    if(mySlide >= 5) {
       clearInterval(myTimer);
       location.href="/editor";
     } else {
-      $(".slide"+mySlide).fadeOut(100);
+      $(".slide"+mySlide).fadeOut(200);
       mySlide++;
       var city = $(".slide"+mySlide).data("city");
       $("#city input").val(city);
 
     }
 
-  }, 500);
+  }, 550);
 
 }
 
@@ -53,7 +53,7 @@ function initIntro() {
   var city = $(".slide"+mySlide).data("city");
   $("#city input").val(city);
 
-  $("#top").fadeIn(250, function(){
+  $("#top").fadeIn(500, function(){
     enableTimer();
 
   });
