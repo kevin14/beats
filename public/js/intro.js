@@ -36,7 +36,7 @@ function enableTimer() {
       clearInterval(myTimer);
       location.href="/editor";
     } else {
-      $(".slide"+mySlide).fadeOut(300);
+      $(".slide"+mySlide).fadeOut(100);
       mySlide++;
       var city = $(".slide"+mySlide).data("city");
       $("#city input").val(city);
