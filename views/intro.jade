@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  img#beats-logo(src="/img/beats-logo.png")
+  img#loader(src="/img/loader.gif")
+    
+  #top
+    #city-holder
+      #city
+        img#logo(src="/img/straight-logo.png")
+        input(type="text")
+          
+      #lower
+        img#beats-logo-white(src="/img/beats-logo-white.png")
+              
+    #intro-video
+      #slides
+        .slide.slide1(data-city="Chicago")
+        .slide.slide2(data-city="Brooklyn")
+        .slide.slide3(data-city="Oakland")
+        .slide.slide4(data-city="Boston")
+        .slide.slide5(data-city="Los Angeles")
+        .slide.slide6(data-city="New Orleans")
+      
+
+  script(src="/js/bower_components/jquery/dist/jquery.min.js")
+  script(src="/js/bower_components/imagesloaded/imagesloaded.pkgd.min.js")
+  script(src='/js/intro.js')
