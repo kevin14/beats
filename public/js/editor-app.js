@@ -83,21 +83,27 @@ function playAudio() {
 
   switch(currentSound) {
     case 1:
+      mySound6.stop();
       mySound1.play();
       break;
     case 2:
+      mySound1.stop();
       mySound2.play();
       break;
     case 3:
+      mySound2.stop();
       mySound3.play();
       break;
     case 4:
+      mySound3.stop();
       mySound4.play();
       break;
     case 5:
+      mySound4.stop();
       mySound5.play();
       break;
     case 6:
+      mySound5.stop();
       mySound6.play();
       break;
   }
