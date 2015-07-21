@@ -5,7 +5,7 @@
 
 $base-letter-spacing = 0.05em
 $canvas-size = 863px
-$canvas-border = 0px
+$canvas-border = 5px
 
 html, body
   background #000
@@ -103,7 +103,8 @@ html, body
   position relative
 
   width ($canvas-size + $canvas-border * 2)
-  margin 0px auto
+  margin 0 auto
+  padding-bottom 50px
 
   .button
     cursor pointer
@@ -128,16 +129,14 @@ html, body
     width: ($canvas-size + $canvas-border*2)
     height: @width
     padding: $canvas-border
-    //background-color: white
     margin: 0 auto
 
-
   .editor-controls
-    margin-bottom 50px
     text-align center
+    margin 20px auto
 
     .editor-image-controls
-      //display none
+      display block
 
     input[type=range]
       display block
@@ -247,3 +246,21 @@ html, body
 
   .editor-types
     margin 20px 0
+
+// Change UI depending on state
+.editor
+  &.mode-intro
+    .editor-controlsstw
+      display none
+  &.mode-text
+    .editor-image-controls
+      display none
+  &.mode-photo
+    .canvas-outer
+      background white
+  &.mode-done
+    .canvas-outer
+      background white
+    .editor-image-controls
+      display none
+

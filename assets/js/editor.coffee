@@ -38,7 +38,6 @@ class Editor
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
-    # @canvas.backgroundColor = 'black'
 
     @cityText = ""
 
@@ -59,6 +58,7 @@ class Editor
 
     @setMode 'text'
 
+  #region EDITOR MODES
 
   initializeTextMode: ->
     console.log "Entering city entry Phase"
@@ -114,30 +114,6 @@ class Editor
     @logoText.enterEditing()
 
 
-
-  changeBackground = ->
-    hideAll()
-    #if e.which == 8 or e.which == 46
-    #  $('.type-red').css(opacity: 0).show().css(opacity: 0.3).fadeOut 300
-    #else
-    console.log("current bg: " + currentBG)
-    $('.img' + currentBG).stop().fadeIn 300, ->
-      $(this).fadeOut 2000
-      return
-    currentBG++
-    if currentBG > $('.type-img').length
-      currentBG = 1
-    return
-
-  hideAll = ->
-    $('.type-red').hide()
-    ti = $('.type-img').length
-    x = 1
-    while x <= ti
-      $('.img' + x).hide()
-      x++
-    return
-
   initializePhotoMode: ->
     console.log "Entering photo phase"
     # fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
@@ -148,6 +124,8 @@ class Editor
     #   @canvas.add @logo
     #   @fixOrderingOnLoad()
     console.log "Baking text image"
+
+    @canvas.backgroundColor = 'black'
 
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
@@ -186,16 +164,32 @@ class Editor
       left: @canvas.width/2
       top: @canvas.height - 5
 
+  fixOrderingOnLoad: ->
+    @canvas.discardActiveObject()
+    if @photo? then @canvas.sendToBack @photo
+    if @logo? then @canvas.bringToFront @logo
+    if @watermark? then @canvas.bringToFront @watermark
+
+  finalizeForDoneMode: ->
+    @logoText?.exitEditing()
+    @canvas.discardActiveObject()
+    for obj in [@photo, @logo, @logoText]
+      obj?.set(selectable: false, evented: false, editable: false)
 
   setMode: (newMode)->
     oldMode = @mode
     return if oldMode == newMode
+    console.log "editor.mode = #{newMode}"
+    $('.editor').removeClass("mode-#{oldMode}").addClass("mode-#{newMode}")
     # switch oldMode
     #   when 'text' then @bakeLogoText()
     switch newMode
       when 'text' then @initializeTextMode()
       when 'photo' then @initializePhotoMode()
+      when 'done' then @finalizeForDoneMode()
     @mode = newMode
+
+  #region EXPORTING AND SHARING
 
   captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
     # prepare canvas for capture
@@ -207,6 +201,7 @@ class Editor
     deferred
 
   downloadLocal: ->
+    @setMode 'done'
     @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
 
   upload: ->
@@ -218,50 +213,7 @@ class Editor
         console.log "OK done!"
         $('<a>').attr(href: shareUrl).text("Share this link.").appendTo('body')
 
-  fixOrderingOnLoad: ->
-    # console.log "reorder"
-    @canvas.discardActiveObject()
-    if @photo? then @canvas.sendToBack @photo
-    if @logo? then @canvas.bringToFront @logo
-    if @watermark? then @canvas.bringToFront @watermark
-    # if @grain? then @canvas.bringToFront @grain
-
-
-  setParameter: (parameterId, programmatic = false) ->
-    # console.log "Setting parameter to", parameterId
-    if programmatic and @parameter != parameterId
-      $("#control-#{parameterId}").click()
-    @parameter = parameterId
-    @controlsRange.val @values[@parameter]
-    unless programmatic
-      switch @parameter
-        when 'photo'
-          if @photo? then @canvas.setActiveObject @photo
-        when 'logo' then @canvas.setActiveObject @logo
-        else @canvas.discardActiveObject()
-
-  setValue: (value) ->
-    @values[@parameter] = value
-    switch @parameter
-      when 'photo'
-        @photo?.scale(2 * value)
-        @constrainPhotoMove()
-      when 'logo'
-        @logo?.scale(2 * value)
-        @constrainLogoMove()
-      when 'contrast'
-        @photo?.filters[0]?.contrast = value
-        @photo?.applyFilters => @canvas.renderAll()
-      when 'invert'
-        if value > 0.5
-          @logo.filters = []
-          @logo.applyFilters()
-        else if @logo.filters.length == 0
-          @logo.filters = [new fabric.Image.filters.Invert()]
-          @logo.applyFilters => @canvas.renderAll()
-      # when 'grain'
-      #   @grain?.set opacity: value
-    @canvas.renderAll()
+  #region PHOTO EDITING
 
   setPhoto: (fileDescriptor) ->
     @setMode 'photo'
@@ -299,6 +251,42 @@ class Editor
       @setParameter('photo', true)
     reader.readAsDataURL fileDescriptor
 
+  setParameter: (parameterId, programmatic = false) ->
+    # console.log "Setting parameter to", parameterId
+    if programmatic and @parameter != parameterId
+      $("#control-#{parameterId}").click()
+    @parameter = parameterId
+    @controlsRange.val @values[@parameter]
+    unless programmatic
+      switch @parameter
+        when 'photo'
+          if @photo? then @canvas.setActiveObject @photo
+        when 'logo' then @canvas.setActiveObject @logo
+        else @canvas.discardActiveObject()
+
+  setValue: (value) ->
+    @values[@parameter] = value
+    switch @parameter
+      when 'photo'
+        @photo?.scale(2 * value)
+        @constrainPhotoMove()
+      when 'logo'
+        @logo?.scale(2 * value)
+        @constrainLogoMove()
+      when 'contrast'
+        @photo?.filters[0]?.contrast = value
+        @photo?.applyFilters => @canvas.renderAll()
+      when 'invert'
+        if value > 0.5
+          @logo.filters = []
+          @logo.applyFilters()
+        else if @logo.filters.length == 0
+          @logo.filters = [new fabric.Image.filters.Invert()]
+          @logo.applyFilters => @canvas.renderAll()
+      # when 'grain'
+      #   @grain?.set opacity: value
+    @canvas.renderAll()
+
   constrainPhotoMove: ->
     @photo.setCoords()
     p = @photo.getBoundingRect()
@@ -314,6 +302,31 @@ class Editor
     # l.top -= l.height/2
     @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left))# + l.width/2
     @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top))# + l.height/2
+
+  #region TYPING EFFECTS
+
+  changeBackground = ->
+    hideAll()
+    #if e.which == 8 or e.which == 46
+    #  $('.type-red').css(opacity: 0).show().css(opacity: 0.3).fadeOut 300
+    #else
+    console.log("current bg: " + currentBG)
+    $('.img' + currentBG).stop().fadeIn 300, ->
+      $(this).fadeOut 2000
+      return
+    currentBG++
+    if currentBG > $('.type-img').length
+      currentBG = 1
+    return
+
+  hideAll = ->
+    $('.type-red').hide()
+    ti = $('.type-img').length
+    x = 1
+    while x <= ti
+      $('.img' + x).hide()
+      x++
+    return
 
 # /class Editor
 
