@@ -1,9 +1,45 @@
 var WW, WH; // window height / width
 var currentBG = 1;
 
+var currentSound = 1;
+var numSounds = 6;
+var mySound1,
+    mySound2,
+    mySound3,
+    mySound4,
+    mySound5,
+    mySound6;
+
 $(document).ready(function(){
   editorFunctions();
+  initSounds();
 });
+
+function initSounds() {
+  mySound1 = new buzz.sound( "/audio/compton4_01", {
+    formats: [ "mp3" ]
+  });
+
+  mySound2 = new buzz.sound( "/audio/compton5_01", {
+    formats: [ "mp3" ]
+  });
+
+  mySound3 = new buzz.sound( "/audio/compton6_01", {
+    formats: [ "mp3" ]
+  });
+
+  mySound4 = new buzz.sound( "/audio/compton7_01", {
+    formats: [ "mp3" ]
+  });
+
+  mySound5 = new buzz.sound( "/audio/compton8_01", {
+    formats: [ "mp3" ]
+  });
+
+  mySound6 = new buzz.sound( "/audio/compton9_01", {
+    formats: [ "mp3" ]
+  });
+}
 
 function editorFunctions() {
 
@@ -11,7 +47,8 @@ function editorFunctions() {
     e.preventDefault();
 
     var videoId = $(this).data("video");
-    var html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+    var html = '<div class="video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe></div>';
+    //html = "hey";
     $.featherlight(html, {});
 
   });
@@ -32,10 +69,50 @@ function editorFunctions() {
         if(currentBG > $( ".type-img" ).length) {
           currentBG = 1;
         }
+
+        playAudio();
     }
+
+
   });
 
 
+}
+
+function playAudio() {
+
+  switch(currentSound) {
+    case 1:
+      mySound6.stop();
+      mySound1.play();
+      break;
+    case 2:
+      mySound1.stop();
+      mySound2.play();
+      break;
+    case 3:
+      mySound2.stop();
+      mySound3.play();
+      break;
+    case 4:
+      mySound3.stop();
+      mySound4.play();
+      break;
+    case 5:
+      mySound4.stop();
+      mySound5.play();
+      break;
+    case 6:
+      mySound5.stop();
+      mySound6.play();
+      break;
+  }
+
+  currentSound++;
+
+  if(currentSound >= numSounds) {
+    currentSound = 1;
+  }
 }
 
 

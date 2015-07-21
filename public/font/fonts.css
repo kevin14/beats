@@ -15,7 +15,31 @@
 
 }
 
+@font-face {
+    font-family: 'knockout48_featherweight';
+    src: url('knockout-48-webfont.eot');
+    src: url('knockout-48-webfont.eot?#iefix') format('embedded-opentype'),
+         url('knockout-48-webfont.woff2') format('woff2'),
+         url('knockout-48-webfont.woff') format('woff'),
+         url('knockout-48-webfont.ttf') format('truetype'),
+         url('knockout-48-webfont.svg#knockout48_featherweight') format('svg');
+    font-weight: normal;
+    font-style: normal;
 
+}
+
+@font-face {
+    font-family: 'knockout46_flyweight';
+    src: url('knockout-46-webfont.eot');
+    src: url('knockout-46-webfont.eot?#iefix') format('embedded-opentype'),
+         url('knockout-46-webfont.woff2') format('woff2'),
+         url('knockout-46-webfont.woff') format('woff'),
+         url('knockout-46-webfont.ttf') format('truetype'),
+         url('knockout-46-webfont.svg#knockout46_flyweight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
 
 
 @font-face {
