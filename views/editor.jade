@@ -40,13 +40,19 @@ block content
       form.editor-actions
         .button.download
           img(src="/img/btn-download.png", height="45")
-        .button.share
+        .button.share(data-featherlight="#share-popup")
           img(src="/img/btn-share.png", height="45")
         input#action-upload(type="file", accept="image/*")
         .button.upload
           img(src="/img/btn-addphoto.png", height="45")
-            
-  
+
+    #share-popup.popup
+      a.close
+      a.button.twitter
+        img(src="/img/btn-twitter.png", height="58")
+      a.button.facebook
+        img(src="/img/btn-facebook.png", height="58")
+
   img#beats-logo(src="/img/beats-logo.png")
   a#sound-toggle.on(href="#") Sound On
   
@@ -86,6 +92,5 @@ block content
   != js("jquery/dist/jquery")
   script(src="/js/fabric-custom/fabric.js")
   != js("editor-deps")
-  script(src="/js/bower_components/featherlight/release/featherlight.min.js")
   script(src="/js/buzz.min.js")
   script(src="/js/editor-app.js")
