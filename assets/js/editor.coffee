@@ -255,13 +255,32 @@ class Editor
     @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
 
   upload: ->
-    # TODO disable further editing
+    return if @permalink? #only run this once
     @setMode 'done'
     @captureImageDeferred().done (blob)=>
       uploader = new Uploader(blob, @cityText)
-      uploader.start().done (shareUrl)->
-        console.log "OK done!"
-        $('<a>').attr(href: shareUrl).text("Share this link.").appendTo('body')
+      uploader.start().done (shareUrl)=>
+        console.log "Ready to share!", shareUrl
+        @permalink = window.location.origin + shareUrl
+        $popup = $('.featherlight .share-popup').addClass('ready')
+
+        encodedData = (src) =>
+          cityText = @cityText
+          (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
+
+        $twitter = $popup.find 'a.twitter'
+        td = encodedData $twitter
+        url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
+        $twitter.attr(href: url)
+
+        # Override href to open in new window
+        $popup.find('a').click (e)->
+          e.preventDefault()
+          $this = $(this)
+          w = $this.data('popwidth')
+          h = $this.data('popheight')
+          window.open $(this).attr('href'), "share", "width=#{w},height=#{h},centerscreen=true"
+
 
   #region PHOTO EDITING
 

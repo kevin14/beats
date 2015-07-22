@@ -248,5 +248,9 @@ html, body
   background-image url(/img/bg-white.jpg)
   background-size cover
   padding 128px 0
+  &:not(.ready) .button
+    cursor wait
+    opacity 0.25
+    pointer-events none
   .button
     margin 0 10px

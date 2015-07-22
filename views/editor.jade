@@ -46,11 +46,11 @@ block content
         .button.upload
           img(src="/img/btn-addphoto.png", height="45")
 
-    #share-popup.popup
+    #share-popup.share-popup.popup
       a.close
-      a.button.twitter
+      a.button.twitter(href="#", target="share", data-text="Straight Outta {CITY}", data-hashtags="soc,beats", data-popwidth="550", data-popheight="420")
         img(src="/img/btn-twitter.png", height="58")
-      a.button.facebook
+      a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
         img(src="/img/btn-facebook.png", height="58")
 
   img#beats-logo(src="/img/beats-logo.png")
