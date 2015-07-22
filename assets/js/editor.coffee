@@ -40,8 +40,11 @@ class Editor
     @canvas.selection = false
 
     @cityText = ""
+    @controls = $controls
 
     self = @
+
+    # Hook up editor control events
 
     $controls.find('.download').click => @downloadLocal()
 
@@ -50,11 +53,15 @@ class Editor
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
 
-    @controlsRadios = $controls.find('input[type=radio]').change ->
+    $controls.find('form.editor-invert-control').change ->
+      self.setValue.call self, parseInt(this['invert'].value)
+
+    @controlsRadios = $controls.find('.editor-types input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
 
     @controlsRange = $controls.find('input[type=range]').change ->
       self.setValue.call self, parseFloat($(this).val())
+
 
     @setMode 'text'
 
@@ -255,6 +262,7 @@ class Editor
     # console.log "Setting parameter to", parameterId
     if programmatic and @parameter != parameterId
       $("#control-#{parameterId}").click()
+    @controls.removeClass().addClass('editor-controls').addClass(parameterId)
     @parameter = parameterId
     @controlsRange.val @values[@parameter]
     unless programmatic
@@ -277,7 +285,7 @@ class Editor
         @photo?.filters[0]?.contrast = value
         @photo?.applyFilters => @canvas.renderAll()
       when 'invert'
-        if value > 0.5
+        if value <= 0
           @logo.filters = []
           @logo.applyFilters()
         else if @logo.filters.length == 0

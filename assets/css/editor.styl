@@ -137,6 +137,16 @@ html, body
 
     .editor-image-controls
       display block
+    
+    .editor-invert-control
+      margin 0 auto
+      display inline-block
+      border 2px solid white
+      padding 10px
+      input[type=radio]
+        display none
+      label
+        margin 0 10px
 
     input[type=range]
       display block
@@ -237,6 +247,7 @@ html, body
       letter-spacing 2px
       color white
       text-transform uppercase
+      cursor pointer
 
     input:checked + label
       color red
@@ -264,3 +275,12 @@ html, body
     .editor-image-controls
       display none
 
+  // toggle invert control
+  .editor-controls
+    .editor-invert-control
+      display none
+    &.invert
+      .editor-invert-control
+        display inline-block
+      .editor-range-control
+        display none
