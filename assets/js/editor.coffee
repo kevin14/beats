@@ -386,5 +386,7 @@ GrayscaleContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilte
 GrayscaleContrastFilter.fromObject = (o)->new GrayscaleContrastFilter(o)
 
 
-do ->
+# Wait for all images to be loaded - this way we can create canvas images from <img> in document, knowing they exist
+# To behave better, we should instead execute this after a certain set of required images are loaded
+$(window).load ->
   Editor._instance = new Editor $('#canvas'), $('.editor-controls')
