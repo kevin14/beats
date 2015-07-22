@@ -3,7 +3,9 @@ extends layout
 block head
   != css("all")
 
+
 block content
+
 
   .editor
     .canvas-outer
@@ -11,8 +13,6 @@ block content
       img.hidden#img-logo-frame(src="/img/editor/logo-frame-2x.png")
       img.hidden#img-pattern-grime(src="/img/editor/pattern-grime.jpg")
       img.hidden#img-beats-watermark(src="/img/editor/beats-watermark-2x.png")
-    //- img.hidden#sample-logo(src="/img/editor/sample-logo.png")
-    //- img.hidden#sample-photo(src="/img/editor/sample-photo.jpg")
 
     .editor-controls
       .editor-image-controls
@@ -81,11 +81,11 @@ block content
                 .over-cell
                   h3 #{post.title}
                   p #{post.text}
-    
-    
+
+
   != js("jquery/dist/jquery")
+  script(src="/js/fabric-custom/fabric.js")
   != js("editor-deps")
   script(src="/js/bower_components/featherlight/release/featherlight.min.js")
   script(src="/js/buzz.min.js")
   script(src="/js/editor-app.js")
-    

@@ -107,6 +107,7 @@ class Editor
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
       selectionColor: 'rgba(255,255,255,0.85)'
+      cursorHeightPercent: 0.7
     @logoText.set NO_CONTROLS_OPTIONS
 
     @canvas.add @logoFrame
