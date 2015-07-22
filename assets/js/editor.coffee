@@ -254,9 +254,12 @@ class Editor
       @photo = new fabric.Image img
       aspect = @photo.width/@photo.height
       @photo.set(SELECTABLE_OPTIONS).set
-        # selectable: false
         originX: 'left'
         originY: 'top'
+        hasBorders: false
+        hasControls: false
+        lockScalingX: true
+        lockScalingY: true
         width: @canvas.width
         height: @canvas.height
         padding: 0
@@ -293,7 +296,7 @@ class Editor
     @values[@parameter] = value
     switch @parameter
       when 'photo'
-        @photo?.scale(2 * value)
+        @photo?.scale(value + 1)
         @constrainPhotoMove()
       when 'logo'
         @logo?.scale(2 * value)
