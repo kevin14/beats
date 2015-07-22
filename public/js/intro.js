@@ -36,10 +36,13 @@ function enableTimer() {
       clearInterval(myTimer);
       location.href="/editor";
     } else {
-      $(".slide"+mySlide).fadeOut(200);
-      mySlide++;
-      var city = $(".slide"+mySlide).data("city");
-      $("#city input").val(city);
+      $(".slide"+mySlide).fadeOut(100, function(){
+        $("#city input").val("");
+        mySlide++;
+        var city = $(".slide"+mySlide).data("city");
+        $("#city input").val(city);
+      });
+
 
     }
 

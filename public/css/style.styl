@@ -22,14 +22,30 @@ html, body
   height 16px
   z-index 999
 
+
+#sound-toggle
+  position fixed
+  z-index 9999
+  top 25px
+  right 15px
+  color #fff
+  text-decoration none
+  text-transform uppercase
+  font-size 22px
+  letter-spacing 2px
+
+  &:hover
+    color #f00
+
+
 #big-video-wrap
   display: none
 
 
 #beats-logo
   position fixed
-  top 20px
-  left 20px
+  top 15px
+  left 15px
   width 35px
   z-index 999
   display none
@@ -223,7 +239,13 @@ html, body
         left 0px
         width 100%
         height 100%
-        background url(/img/black.png)
+        background-image url(/img/black.png)
+        background-repeat no-repeat
+        background-position top center
+        -webkit-background-size cover
+        -moz-background-size cover
+        -o-background-size cover
+        background-size cover
 
         -o-transition:.5s;
         -ms-transition:.5s;
@@ -305,6 +327,17 @@ html, body
   width 90%
   padding 0px !important
   border 0px !important
+  overflow inherit !important
+
+.featherlight-close-icon
+  right -20px !important
+  top -20px !important
+  color #fff !important
+  background none !important
+
+  &:hover
+    color #f00 !important
+
 
 .video-container {
     position: relative;

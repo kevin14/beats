@@ -1,6 +1,8 @@
 var WW, WH; // window height / width
 var currentBG = 1;
 
+var soundOn = true;
+
 var currentSound = 1;
 var numSounds = 6;
 var mySound1,
@@ -16,6 +18,21 @@ $(document).ready(function(){
 });
 
 function initSounds() {
+  $("#sound-toggle").click(function(e){
+    e.preventDefault();
+    if($(this).hasClass("on")) {
+      $(this).removeClass("on");
+      $(this).html("Sound Off");
+      soundOn = false;
+    } else {
+      $(this).addClass("on");
+      $(this).html("Sound On");
+      soundOn = true;
+    }
+
+
+  });
+
   mySound1 = new buzz.sound( "/audio/compton4_01", {
     formats: [ "mp3" ]
   });
@@ -70,7 +87,8 @@ function editorFunctions() {
           currentBG = 1;
         }
 
-        playAudio();
+        if(soundOn)
+          playAudio();
     }
 
 
