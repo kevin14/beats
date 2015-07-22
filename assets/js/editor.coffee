@@ -108,7 +108,7 @@ class Editor
     @logoText = new fabric.IText "",
       originX: 'center'
       fill: grimePattern
-      left: (6 + 768/2)/2 + @logoFrame.left
+      left: 750/4 + 4 + @logoFrame.left
       top: 594/2 - 16 + @logoFrame.top
       height: 80
       lineHeight: 0.4
@@ -123,11 +123,13 @@ class Editor
     @logoText.set
       selectionColor: 'transparent'
       textAlign: 'stretch'
-      width: 750/2 - 12
-      fixedLineWidth: 750/2 - 12
+      width: 750/2 - 8
+      fixedLineWidth: 750/2 - 8
       multiline: false
       capitalize: true
       cursorHeightPercent: 0.7
+      cursorDeltaX: 0
+      cursorDeltaY: -5
       maxLength: 25
 
 

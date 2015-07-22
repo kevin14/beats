@@ -19768,6 +19768,8 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      * @type Number
      */
     cursorHeightPercent: 1,
+    cursorDeltaX: 0,
+    cursorDeltaY: 0,
 
     /**
      * Color of default cursor (when not overwritten by character style)
@@ -20174,12 +20176,22 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
       ctx.fillStyle = this.getCurrentCharColor(lineIndex, charIndex);
       ctx.globalAlpha = this.__isMousedown ? 1 : this._currentCursorOpacity;
 
+      if (this.fixedLineWidth > 0) {
+        boundaries.left = 0;
+        leftOffset = 0;
+        if (this.text.length <= 0) {
+          leftOffset = -this.fixedLineWidth/2;
+        }
+        else {
+          leftOffset = this.fixedLineWidth/2;
+        }
+      }
+
       ctx.fillRect(
-        boundaries.left + leftOffset,
-        boundaries.top + boundaries.topOffset + (1-this.cursorHeightPercent)/2 * charHeight,
+        boundaries.left + leftOffset + this.cursorDeltaX,
+        boundaries.top + boundaries.topOffset + (1-this.cursorHeightPercent)/2 * charHeight + this.cursorDeltaY,
         this.cursorWidth / this.scaleX,
-        //charHeight
-        this.cursorHeightPercent * charHeight
+        this.cursorHeightPercent * charHeight / this.scaleY
       );
 
     },

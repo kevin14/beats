@@ -9202,7 +9202,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                 imageData = this.hermiteFastResize(canvasEl, oW, oH, dW, dH);
             }
             if (this.resizeType === "bilinear") {
-                imageData = this.bilinearFiltering(canvimageasEl, oW, oH, dW, dH);
+                imageData = this.bilinearFiltering(canvasEl, oW, oH, dW, dH);
             }
             if (this.resizeType === "lanczos") {
                 imageData = this.lanczosResize(canvasEl, oW, oH, dW, dH);
@@ -9756,6 +9756,8 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
         editingBorderColor: "rgba(102,153,255,0.25)",
         cursorWidth: 2,
         cursorHeightPercent: 1,
+        cursorDeltaX: 0,
+        cursorDeltaY: 0,
         cursorColor: "#333",
         cursorDelay: 1e3,
         cursorDuration: 600,
@@ -9957,7 +9959,16 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             var cursorLocation = this.get2DCursorLocation(), lineIndex = cursorLocation.lineIndex, charIndex = cursorLocation.charIndex, charHeight = this.getCurrentCharFontSize(lineIndex, charIndex), leftOffset = lineIndex === 0 && charIndex === 0 ? this._getCachedLineOffset(lineIndex) : boundaries.leftOffset;
             ctx.fillStyle = this.getCurrentCharColor(lineIndex, charIndex);
             ctx.globalAlpha = this.__isMousedown ? 1 : this._currentCursorOpacity;
-            ctx.fillRect(boundaries.left + leftOffset, boundaries.top + boundaries.topOffset + (1 - this.cursorHeightPercent) / 2 * charHeight, this.cursorWidth / this.scaleX, this.cursorHeightPercent * charHeight);
+            if (this.fixedLineWidth > 0) {
+                boundaries.left = 0;
+                leftOffset = 0;
+                if (this.text.length <= 0) {
+                    leftOffset = -this.fixedLineWidth / 2;
+                } else {
+                    leftOffset = this.fixedLineWidth / 2;
+                }
+            }
+            ctx.fillRect(boundaries.left + leftOffset + this.cursorDeltaX, boundaries.top + boundaries.topOffset + (1 - this.cursorHeightPercent) / 2 * charHeight + this.cursorDeltaY, this.cursorWidth / this.scaleX, this.cursorHeightPercent * charHeight / this.scaleY);
         },
         renderSelection: function(chars, boundaries, ctx) {
             if (this.textAlign === "stretch") {
