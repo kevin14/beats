@@ -20192,6 +20192,11 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      */
     renderSelection: function(chars, boundaries, ctx) {
 
+      if (this.textAlign === 'stretch') {
+        //REB i broke text selection with this
+        return;
+      }
+
       ctx.fillStyle = this.selectionColor;
 
       var start = this.get2DCursorLocation(this.selectionStart),

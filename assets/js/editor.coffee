@@ -107,6 +107,7 @@ class Editor
       selectionColor: 'rgba(255,255,255,0.85)'
     # Experimental fabric addon features
     @logoText.set
+      selectionColor: 'transparent'
       textAlign: 'stretch'
       width: 750/2 - 12
       fixedLineWidth: 750/2 - 12

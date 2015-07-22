@@ -9960,6 +9960,9 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             ctx.fillRect(boundaries.left + leftOffset, boundaries.top + boundaries.topOffset + (1 - this.cursorHeightPercent) / 2 * charHeight, this.cursorWidth / this.scaleX, this.cursorHeightPercent * charHeight);
         },
         renderSelection: function(chars, boundaries, ctx) {
+            if (this.textAlign === "stretch") {
+                return;
+            }
             ctx.fillStyle = this.selectionColor;
             var start = this.get2DCursorLocation(this.selectionStart), end = this.get2DCursorLocation(this.selectionEnd), startLine = start.lineIndex, endLine = end.lineIndex;
             for (var i = startLine; i <= endLine; i++) {
