@@ -25,9 +25,6 @@ class Editor
     lockScalingX: true
     lockScalingY: true
 
-  # for the changing backgrounds
-  currentBG = 1
-
   constructor: ($canvas, $controls) ->
     @values =
       logo: 0
@@ -126,9 +123,10 @@ class Editor
     # TODO better way to do this as well as avoid newline input?
     @logoText.on 'changed', (e) =>
       # console.log(e)
-      @cityText = @logoText.text # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
+      newText = @logoText.text
+      window.reactToKeypress(newText.length < @cityText.length)
+      @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
       @canvas.renderAll()
-      #changeBackground()
 
     # forcibly keep selected
     # @logoText.on 'editing:exited', =>
@@ -329,31 +327,6 @@ class Editor
     # l.top -= l.height/2
     @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left))# + l.width/2
     @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top))# + l.height/2
-
-  #region TYPING EFFECTS
-
-  changeBackground = ->
-    hideAll()
-    #if e.which == 8 or e.which == 46
-    #  $('.type-red').css(opacity: 0).show().css(opacity: 0.3).fadeOut 300
-    #else
-    console.log("current bg: " + currentBG)
-    $('.img' + currentBG).stop().fadeIn 300, ->
-      $(this).fadeOut 2000
-      return
-    currentBG++
-    if currentBG > $('.type-img').length
-      currentBG = 1
-    return
-
-  hideAll = ->
-    $('.type-red').hide()
-    ti = $('.type-img').length
-    x = 1
-    while x <= ti
-      $('.img' + x).hide()
-      x++
-    return
 
 # /class Editor
 

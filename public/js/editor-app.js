@@ -70,29 +70,31 @@ function editorFunctions() {
 
   });
 
-  $(document).on('keydown', function(e) {
-    hideAll();
-    console.log("E: " + e.which);
+  //$(document).on('keydown', reactToKeypress);
 
-    if(e.which == 8 || e.which == 46) {
+}
+
+function reactToKeypress(isDeletion) {
+    hideAll();
+    //console.log("E: " + e.which);
+
+    //if(e.which == 8 || e.which == 46) {
+    if (isDeletion) {
         $(".type-red").css({opacity: 0}).show().css({opacity: 0.3}).fadeOut(300);
 
     } else {
         $(".img"+currentBG).stop().fadeIn(300, function(){
-          $(this).fadeOut(2000);
+            $(this).fadeOut(2000);
         });
 
         currentBG++;
         if(currentBG > $( ".type-img" ).length) {
-          currentBG = 1;
+            currentBG = 1;
         }
 
         if(soundOn)
-          playAudio();
+            playAudio();
     }
-
-
-  });
 
 
 }
