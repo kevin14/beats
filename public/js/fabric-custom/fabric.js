@@ -21366,6 +21366,9 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
       }
 
       for (var i = 0, len = _chars.length; i < len; i++) {
+        if (this.maxLength > 0 && this.text.length >= this.maxLength) {
+          break;
+        }
         if (useCopiedStyle) {
           style = fabric.copiedTextStyle[i];
         }
@@ -21834,6 +21837,9 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
     this.hiddenTextarea = fabric.document.createElement('textarea');
 
     this.hiddenTextarea.setAttribute('autocapitalize', 'off');
+    if (this.maxLength > 0) {
+      this.hiddenTextarea.setAttribute('maxlength', this.maxLength);
+    }
     this.hiddenTextarea.style.cssText = 'position: fixed; bottom: 20px; left: 0px; opacity: 0;'
                                         + ' width: 0px; height: 0px; z-index: -999;';
     fabric.document.body.appendChild(this.hiddenTextarea);

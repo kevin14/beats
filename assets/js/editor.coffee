@@ -113,6 +113,7 @@ class Editor
       multiline: false
       capitalize: true
       cursorHeightPercent: 0.7
+      maxLength: 25
 
 
     @logoText.set NO_CONTROLS_OPTIONS
