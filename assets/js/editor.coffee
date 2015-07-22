@@ -50,6 +50,7 @@ class Editor
 
     $controls.find('.share').click => @upload()
 
+    $(".upload.button").click -> $("input[type=file]").click()
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
 
@@ -59,9 +60,17 @@ class Editor
     @controlsRadios = $controls.find('.editor-types input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
 
-    @controlsRange = $controls.find('input[type=range]').change ->
-      self.setValue.call self, parseFloat($(this).val())
+    # @controlsRange = $controls.find('input[type=range]').change ->
+    #   self.setValue.call self, parseFloat($(this).val())
 
+    sliderElement = $('.editor-range-control .range')[0]
+    noUiSlider.create sliderElement,
+      start: 0
+      range: {min: 0, max: 1}
+      connect: 'lower'
+    @controlsRange = sliderElement.noUiSlider
+    @controlsRange.on 'change', (values)->
+      self.setValue.call self, parseFloat(values[0])
 
     @setMode 'text'
 
@@ -264,7 +273,7 @@ class Editor
       $("#control-#{parameterId}").click()
     @controls.removeClass().addClass('editor-controls').addClass(parameterId)
     @parameter = parameterId
-    @controlsRange.val @values[@parameter]
+    @controlsRange.set @values[@parameter]
     unless programmatic
       switch @parameter
         when 'photo'
@@ -369,4 +378,3 @@ GrayscaleContrastFilter.fromObject = (o)->new GrayscaleContrastFilter(o)
 
 do ->
   Editor._instance = new Editor $('#canvas'), $('.editor-controls')
-  $(".upload.button").click -> $("input[type=file]").click()

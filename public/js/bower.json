@@ -9,6 +9,7 @@
     "file-saver-saveas-js": "~1.20150507.2",
     "blueimp-load-image": "~1.13.0",
     "blueimp-canvas-to-blob": "~2.1.1",
-    "imagesloaded": "*"
+    "imagesloaded": "*",
+    "nouislider": "~8.0.2"
   }
 }
