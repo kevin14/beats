@@ -132,11 +132,12 @@ html, body
     margin: 0 auto
 
   .editor-controls
+    display none
     text-align center
     margin 20px auto
 
     .editor-image-controls
-      display block
+      display none
 
     .editor-range-control
     .editor-invert-control
@@ -209,16 +210,24 @@ html, body
 
 // Change UI depending on state
 .editor
-  &.mode-intro
-    .editor-controlsstw
-      display none
+
+  //&.mode-intro
+
   &.mode-text
-    .editor-image-controls
-      display none
+    .editor-controls
+      display block
+
   &.mode-photo
+    .editor-controls
+      display block
+    .editor-image-controls
+      display block
     .canvas-outer
       background white
+
   &.mode-done
+    .editor-controls
+      display block
     .editor-image-controls
       display none
 
