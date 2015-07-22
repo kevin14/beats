@@ -81,7 +81,9 @@ class Editor
       connect: 'lower'
     @controlsRange = sliderElement.noUiSlider
     @controlsRange.on 'change', (values)->
-      self.setValue.call self, parseFloat(values[0])
+      self.setValue.call self, parseFloat(values[0]), 'change'
+    @controlsRange.on 'update', (values)->
+      self.setValue.call self, parseFloat(values[0]), 'update'
 
     @setMode 'text'
 
@@ -313,7 +315,7 @@ class Editor
         when 'logo' then @canvas.setActiveObject @logo
         else @canvas.discardActiveObject()
 
-  setValue: (value) ->
+  setValue: (value, eventType) ->
     @values[@parameter] = value
     switch @parameter
       when 'photo'
@@ -323,8 +325,9 @@ class Editor
         @logo?.scale Maths.mapToRange(value, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
         @constrainLogoMove()
       when 'contrast'
-        @photo?.filters[0]?.contrast = value
-        @photo?.applyFilters => @canvas.renderAll()
+        unless eventType == 'update'
+          @photo?.filters[0]?.contrast = value
+          @photo?.applyFilters => @canvas.renderAll()
       when 'invert'
         if value <= 0
           @logo.filters = []
@@ -347,10 +350,8 @@ class Editor
     l = @logo.getBoundingRect()
     l.width -= @logo.padding*2
     l.height -= @logo.padding*2
-    # l.left -= l.width/2
-    # l.top -= l.height/2
-    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left))# + l.width/2
-    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top))# + l.height/2
+    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, @logo.left))
+    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, @logo.top))
 
 # /class Editor
 
