@@ -1,3 +1,14 @@
+Maths =
+  clamp: (val, min = 0, max = 1) ->
+    if val > max
+      max
+    else if val < min
+      min
+    else
+      val
+  normalizeFromRange: (val, min, max) -> (val - min) / (max - min)
+  mapToRange: (normalized, min, max) -> min + (max - min) * normalized
+
 class Editor
 
   SELECTABLE_OPTIONS =
@@ -25,10 +36,13 @@ class Editor
     lockScalingX: true
     lockScalingY: true
 
+  LOGO_SCALE_MIN = 0.25
+  LOGO_SCALE_MAX = 2.0
+
   constructor: ($canvas, $controls) ->
     @values =
-      logo: 0
-      photo: 0.5
+      logo: Maths.normalizeFromRange(1, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
+      photo: 0
       grain: 1
       contrast: 0.25
       invert: 1
@@ -175,6 +189,13 @@ class Editor
       # Setup select & move event handlers
       @logo.on 'selected', =>@setParameter('logo', true)
       @logo.on 'moving', =>@constrainLogoMove()
+      @logo.on 'scaling', =>
+        scale = @logo.scaleX
+        if scale < LOGO_SCALE_MIN
+          @logo.scaleX = @logo.scaleY = scale = LOGO_SCALE_MIN
+        scaleSlider = Maths.normalizeFromRange scale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
+        @values.logo = scaleSlider
+        @controlsRange.set scaleSlider
 
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
@@ -299,7 +320,7 @@ class Editor
         @photo?.scale(value + 1)
         @constrainPhotoMove()
       when 'logo'
-        @logo?.scale(2 * value)
+        @logo?.scale Maths.mapToRange(value, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
         @constrainLogoMove()
       when 'contrast'
         @photo?.filters[0]?.contrast = value
