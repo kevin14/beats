@@ -38,6 +38,7 @@ class Editor
 
   LOGO_SCALE_MIN = 0.25
   LOGO_SCALE_MAX = 2.0
+  PHOTO_RESIZE_PIXEL_THRESHOLD = 1024 * 1024
 
   constructor: ($canvas, $controls) ->
     @values =
@@ -45,7 +46,7 @@ class Editor
       photo: 0
       grain: 1
       contrast: 0.25
-      invert: 1
+      invert: 0
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
@@ -81,7 +82,9 @@ class Editor
       connect: 'lower'
     @controlsRange = sliderElement.noUiSlider
     @controlsRange.on 'change', (values)->
-      self.setValue.call self, parseFloat(values[0])
+      self.setValue.call self, parseFloat(values[0]), 'change'
+    @controlsRange.on 'update', (values)->
+      self.setValue.call self, parseFloat(values[0]), 'update'
 
     @setMode 'text'
 
@@ -264,40 +267,66 @@ class Editor
     @setMode 'photo'
     reader = new FileReader()
     reader.onload = =>
+
       img = new Image()
       img.src = reader.result
+      aspect = img.width/img.height
 
-      if @photo?
-        @photo.off 'selected'
-        @photo.off 'moving'
-        @canvas.remove @photo
+      @downscalePhotoIfNeededDeferred(img).done (photo)=>
+        if @photo?
+          @photo.off 'selected'
+          @photo.off 'moving'
+          @canvas.remove @photo
 
-      @photo = new fabric.Image img
-      aspect = @photo.width/@photo.height
-      @photo.set(SELECTABLE_OPTIONS).set
-        originX: 'left'
-        originY: 'top'
-        hasBorders: false
-        hasControls: false
-        lockScalingX: true
-        lockScalingY: true
-        width: @canvas.width
-        height: @canvas.height
-        padding: 0
-      if aspect > 1
-        @photo.width = @canvas.width * aspect
-      else
-        @photo.height = @canvas.height / aspect
-      @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-      @photo.applyFilters =>@canvas.renderAll()
-      @canvas.add @photo
-      @canvas.sendToBack @photo
-      @photo.center()
-      @fixOrderingOnLoad()
-      @photo.on 'selected', =>@setParameter('photo', true)
-      @photo.on 'moving', =>@constrainPhotoMove()
-      @setParameter('photo', true)
+        console.log "Final dimensions #{photo.width}x#{photo.height}"
+        @photo = photo
+        @photo.set(SELECTABLE_OPTIONS).set
+          originX: 'left'
+          originY: 'top'
+          hasBorders: false
+          hasControls: false
+          lockScalingX: true
+          lockScalingY: true
+          width: @canvas.width
+          height: @canvas.height
+          padding: 0
+        if aspect > 1
+          @photo.width = @canvas.width * aspect
+        else
+          @photo.height = @canvas.height / aspect
+        @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
+        @photo.applyFilters =>@canvas.renderAll()
+        @canvas.add @photo
+        @canvas.sendToBack @photo
+        @photo.center()
+        @fixOrderingOnLoad()
+        @photo.on 'selected', =>@setParameter('photo', true)
+        @photo.on 'moving', =>@constrainPhotoMove()
+        @setParameter('photo', true)
     reader.readAsDataURL fileDescriptor
+
+  downscalePhotoIfNeededDeferred: (img) ->
+    OVERSCALE = 1
+    deferred = $.Deferred()
+    aspect = img.width/img.height
+    console.log "Loaded image at #{img.width}x#{img.height}"
+    scaleNeeded = img.width > @canvas.width * OVERSCALE && img.height > @canvas.height * OVERSCALE
+    if scaleNeeded
+      console.warn "Scaling down image"
+      resizeCanvas = document.createElement 'canvas'
+      resizeCanvas.width = @canvas.width * OVERSCALE
+      resizeCanvas.height = @canvas.height * OVERSCALE
+      if aspect > 1
+        resizeCanvas.width = @canvas.width * OVERSCALE * aspect
+      else
+        resizeCanvas.heigth = @canvas.height * OVERSCALE / aspect
+      ctx = resizeCanvas.getContext '2d'
+      ctx.drawImage img, 0, 0, resizeCanvas.width, resizeCanvas.height
+      fabric.Image.fromURL resizeCanvas.toDataURL(), (photo)=>deferred.resolve(photo)
+    else
+      deferred.resolve new fabric.Image(img)
+    deferred
+
 
   setParameter: (parameterId, programmatic = false) ->
     # console.log "Setting parameter to", parameterId
@@ -313,7 +342,7 @@ class Editor
         when 'logo' then @canvas.setActiveObject @logo
         else @canvas.discardActiveObject()
 
-  setValue: (value) ->
+  setValue: (value, eventType) ->
     @values[@parameter] = value
     switch @parameter
       when 'photo'
@@ -323,8 +352,9 @@ class Editor
         @logo?.scale Maths.mapToRange(value, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
         @constrainLogoMove()
       when 'contrast'
-        @photo?.filters[0]?.contrast = value
-        @photo?.applyFilters => @canvas.renderAll()
+        unless eventType == 'update'
+          @photo?.filters[0]?.contrast = value
+          @photo?.applyFilters => @canvas.renderAll()
       when 'invert'
         if value <= 0
           @logo.filters = []
@@ -347,10 +377,8 @@ class Editor
     l = @logo.getBoundingRect()
     l.width -= @logo.padding*2
     l.height -= @logo.padding*2
-    # l.left -= l.width/2
-    # l.top -= l.height/2
-    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left))# + l.width/2
-    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top))# + l.height/2
+    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, @logo.left))
+    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, @logo.top))
 
 # /class Editor
 

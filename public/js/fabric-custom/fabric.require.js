@@ -9202,7 +9202,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                 imageData = this.hermiteFastResize(canvasEl, oW, oH, dW, dH);
             }
             if (this.resizeType === "bilinear") {
-                imageData = this.bilinearFiltering(canvasEl, oW, oH, dW, dH);
+                imageData = this.bilinearFiltering(canvimageasEl, oW, oH, dW, dH);
             }
             if (this.resizeType === "lanczos") {
                 imageData = this.lanczosResize(canvasEl, oW, oH, dW, dH);
