@@ -138,9 +138,14 @@ html, body
     .editor-image-controls
       display block
 
-    // .editor-range-control
-    // .editor-range-control
-    //   height 100px
+    .editor-range-control
+    .editor-invert-control
+      display block
+      margin 0 auto
+      height 40px
+      
+    .editor-range-control
+      padding-top 18px
 
     .editor-invert-control
       margin 0 auto
@@ -151,90 +156,6 @@ html, body
         display none
       label
         margin 0 10px
-
-    input[type=range]
-      display block
-      margin-bottom 20px
-      margin 20px auto
-      -webkit-appearance none
-      /*fix for FF unable to apply focus style bug */
-      //border 1px solid whit
-      /*required for proper track sizing in FF*/
-      width 300px
-
-    input[type=range]::-webkit-slider-runnable-track
-      width 300px
-      height 1px
-      background #fff
-      border none
-
-    input[type=range]::-webkit-slider-thumb
-        -webkit-appearance none
-        border none
-        height 16px
-        width 16px
-        border-radius 50%
-        background #ed1c24
-        margin-top -7px
-
-    input[type=range]:focus
-        outline none
-
-    input[type=range]:focus::-webkit-slider-runnable-track
-        background #fff
-
-    input[type=range]::-moz-range-track
-        width 300px
-        height 1px
-        background #fff
-        border none
-        border-radius 3px
-
-    input[type=range]::-moz-range-thumb
-        border none
-        height 16px
-        width 16px
-        border-radius 50%
-        background #ed1c24
-
-    /*hide the outline behind the border*/
-    input[type=range]:-moz-focusring
-        outline 1px solid white
-        outline-offset -1px
-
-    input[type=range]::-ms-track
-        width 300px
-        height 5px
-
-        /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-        background transparent
-
-        /*leave room for the larger thumb to overflow with a transparent border */
-        border-color transparent
-        border-width 6px 0
-
-        /*remove default tick marks*/
-        color transparent
-
-    input[type=range]::-ms-fill-lower
-        background #fff
-
-    input[type=range]::-ms-fill-upper
-        background #ed1c24
-
-    input[type=range]::-ms-thumb
-        border none
-        height 16px
-        width 16px
-        border-radius 50%
-        background #ed1c24
-
-    input[type=range]:focus::-ms-fill-lower
-        background #fff
-
-    input[type=range]:focus::-ms-fill-upper
-        background #ed1c24
-
 
     label, input[type=radio]
       display inline
