@@ -96,18 +96,25 @@ class Editor
       fill: grimePattern
       left: (12 + 768/2)/2 + @logoFrame.left
       top: 594/2 - 16 + @logoFrame.top
-      width: 750/2
       height: 80
-      lineHeight: 1
+      lineHeight: 0.4
       fontSize: 254/2
-      textAlign: 'center'
       fontFamily: 'knockout'
       editable: true
       cursorWidth: 5
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
       selectionColor: 'rgba(255,255,255,0.85)'
+    # Experimental fabric addon features
+    @logoText.set
+      textAlign: 'stretch'
+      width: 750/2 - 12
+      fixedLineWidth: 750/2 - 12
+      multiline: false
+      capitalize: true
       cursorHeightPercent: 0.7
+
+
     @logoText.set NO_CONTROLS_OPTIONS
 
     @canvas.add @logoFrame
@@ -117,7 +124,7 @@ class Editor
     # TODO better way to do this as well as avoid newline input?
     @logoText.on 'changed', (e) =>
       # console.log(e)
-      @cityText = @logoText.text = @logoText.text.toUpperCase().replace(/\n/, ' ')
+      @cityText = @logoText.text # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
       @canvas.renderAll()
       #changeBackground()
 

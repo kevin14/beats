@@ -9469,7 +9469,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
         },
         _translateForTextAlign: function(ctx) {
             if (this.textAlign !== "left" && this.textAlign !== "justify") {
-                ctx.translate(this.textAlign === "center" ? this.width / 2 : this.width, 0);
+                ctx.translate(this.textAlign === "center" || this.textAlign === "stretch" ? this.width / 2 : this.width, 0);
             }
         },
         _setTextStyles: function(ctx) {
@@ -9504,23 +9504,6 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             ctx[method](chars, left, top);
             this[shortM].toLive && ctx.restore();
         },
-        _renderTextLine: function(method, ctx, line, left, top, lineIndex) {
-            top -= this.fontSize * this._fontSizeFraction;
-            if (this.textAlign !== "justify") {
-                this._renderChars(method, ctx, line, left, top, lineIndex);
-                return;
-            }
-            var lineWidth = this._getLineWidth(ctx, lineIndex), totalWidth = this.width;
-            if (totalWidth >= lineWidth) {
-                var words = line.split(/\s+/), wordsWidth = this._getWidthOfWords(ctx, line, lineIndex), widthDiff = totalWidth - wordsWidth, numSpaces = words.length - 1, spaceWidth = widthDiff / numSpaces, leftOffset = 0;
-                for (var i = 0, len = words.length; i < len; i++) {
-                    this._renderChars(method, ctx, words[i], left + leftOffset, top, lineIndex);
-                    leftOffset += ctx.measureText(words[i]).width + spaceWidth;
-                }
-            } else {
-                this._renderChars(method, ctx, line, left, top, lineIndex);
-            }
-        },
         _getWidthOfWords: function(ctx, line) {
             return ctx.measureText(line.replace(/\s+/g, "")).width;
         },
@@ -9539,6 +9522,33 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                 var heightOfLine = this._getHeightOfLine(ctx, i), maxHeight = heightOfLine / this.lineHeight;
                 this._renderTextLine("fillText", ctx, this._textLines[i], this._getLeftOffset(), this._getTopOffset() + lineHeights + maxHeight, i);
                 lineHeights += heightOfLine;
+            }
+        },
+        _renderTextLine: function(method, ctx, line, left, top, lineIndex) {
+            top -= this.fontSize * this._fontSizeFraction;
+            if (this.textAlign !== "justify" && this.textAlign !== "stretch") {
+                return;
+            }
+            if (this.textAlign == "justify") {
+                var lineWidth = this._getLineWidth(ctx, lineIndex), totalWidth = this.width;
+                var shouldStretch = this.textAlign == "justify" && totalWidth >= lineWidth || this.textAlign == "stretch" && this.fixedLineWidth > 0;
+                if (totalWidth >= lineWidth) {
+                    var words = line.split(/\s+/), wordsWidth = this._getWidthOfWords(ctx, line, lineIndex), widthDiff = totalWidth - wordsWidth, numSpaces = words.length - 1, spaceWidth = widthDiff / numSpaces, leftOffset = 0;
+                    for (var i = 0, len = words.length; i < len; i++) {
+                        this._renderChars(method, ctx, words[i], left + leftOffset, top, lineIndex);
+                        leftOffset += ctx.measureText(words[i]).width + spaceWidth;
+                    }
+                } else {
+                    this._renderChars(method, ctx, line, left, top, lineIndex);
+                }
+            } else if (this.textAlign == "stretch" && this.fixedLineWidth > 0) {
+                var letters = line.split(""), wordsWidth = ctx.measureText(line).width, widthDiff = this.fixedLineWidth - wordsWidth, numSpaces = letters.length - 1, spaceWidth = Math.max(widthDiff / numSpaces, 0), leftOffset = -this.fixedLineWidth / 2;
+                for (var i = 0, len = letters.length; i < len; i++) {
+                    this._renderChars(method, ctx, letters[i], left + leftOffset, top, lineIndex);
+                    leftOffset += ctx.measureText(letters[i]).width + spaceWidth;
+                }
+            } else {
+                this._renderChars(method, ctx, line, left, top, lineIndex);
             }
         },
         _renderTextStroke: function(ctx) {
@@ -9598,6 +9608,9 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             ctx.restore();
         },
         _getLineLeftOffset: function(lineWidth) {
+            if (this.textAlign === "stretch") {
+                return (this.fixedLineWidth - lineWidth) / 2;
+            }
             if (this.textAlign === "center") {
                 return (this.width - lineWidth) / 2;
             }
@@ -9629,7 +9642,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             if (this.__lineWidths[lineIndex]) {
                 return this.__lineWidths[lineIndex];
             }
-            this.__lineWidths[lineIndex] = ctx.measureText(this._textLines[lineIndex]).width;
+            this.__lineWidths[lineIndex] = this.fixedLineWidth > 0 ? this.fixedLineWidth : ctx.measureText(this._textLines[lineIndex]).width;
             return this.__lineWidths[lineIndex];
         },
         _renderTextDecoration: function(ctx) {
@@ -9734,12 +9747,14 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
         editable: true,
         editingBorderColor: "rgba(102,153,255,0.25)",
         cursorWidth: 2,
-        cursorHeightPercent: .75,
+        cursorHeightPercent: 1,
         cursorColor: "#333",
         cursorDelay: 1e3,
         cursorDuration: 600,
         styles: null,
         caching: true,
+        multiline: true,
+        capitalize: false,
         _skipFillStrokeCheck: false,
         _reSpace: /\s|\n/,
         _currentCursorOpacity: 0,
@@ -10595,6 +10610,12 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
         },
         insertChar: function(_char, skipUpdate, styleObject) {
             var isEndOfLine = this.text[this.selectionStart] === "\n";
+            if (this.multiline === false && _char === "\n") {
+                return;
+            }
+            if (this.capitalize === true) {
+                _char = _char.toUpperCase();
+            }
             this.text = this.text.slice(0, this.selectionStart) + _char + this.text.slice(this.selectionEnd);
             this._textLines = this._splitTextIntoLines();
             this.insertStyleObjects(_char, isEndOfLine, styleObject);
