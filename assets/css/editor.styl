@@ -137,7 +137,11 @@ html, body
 
     .editor-image-controls
       display block
-    
+
+    // .editor-range-control
+    // .editor-range-control
+    //   height 100px
+
     .editor-invert-control
       margin 0 auto
       display inline-block
@@ -232,12 +236,8 @@ html, body
         background #ed1c24
 
 
-
     label, input[type=radio]
       display inline
-
-    input[type=radio]
-      margin-left 25px
 
     input[type=file]
       display none
@@ -252,11 +252,39 @@ html, body
     input:checked + label
       color red
 
-    .button
-      //margin 0 10px
-
   .editor-types
     margin 20px 0
+
+    //custom radio buttons
+    input[type=radio]
+      display none
+
+    label
+      display inline-block
+      margin-left 25px
+      vertical-align middle
+
+    input[type=radio] + label:before
+      display inline-block
+      content ''
+      vertical-align middle
+      height 26px
+      width 26px
+      margin-right 8px
+      background-size 100px 26px
+      background-repeat no-repeat
+      background-position left center
+    input[type=radio]:checked + label:before
+      background-position -50px 0
+
+    #control-photo + label:before
+      background-image url(/img/editor/control-icon-image-2x.png)
+    #control-logo + label:before
+    #control-invert + label:before
+      background-image url(/img/editor/control-icon-logo-2x.png)
+    #control-contrast + label:before
+      background-image url(/img/editor/control-icon-contrast-2x.png)
+
 
 // Change UI depending on state
 .editor
