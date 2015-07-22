@@ -94,7 +94,7 @@ class Editor
     @logoText = new fabric.IText "",
       originX: 'center'
       fill: grimePattern
-      left: (12 + 768/2)/2 + @logoFrame.left
+      left: (6 + 768/2)/2 + @logoFrame.left
       top: 594/2 - 16 + @logoFrame.top
       height: 80
       lineHeight: 0.4

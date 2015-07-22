@@ -19184,7 +19184,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      * @param {Number} left Left position of text
      * @param {Number} top Top position of text
      */
-    _renderChars: function(method, ctx, chars, left, top) {
+    _renderChars: function(method, ctx, chars, left, top, maxwidth) {
       // remove Text word from method var
       var shortM = method.slice(0, -4);
       if (this[shortM].toLive) {
@@ -19195,7 +19195,12 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
         left -= offsetX;
         top -= offsetY;
       }
-      ctx[method](chars, left, top);
+      if (maxwidth > 0) {
+        ctx[method](chars, left, top, maxwidth);
+      }
+      else {
+        ctx[method](chars, left, top);
+      }
       this[shortM].toLive && ctx.restore();
     },
 
@@ -19296,11 +19301,15 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
           wordsWidth = ctx.measureText(line).width,
           widthDiff = this.fixedLineWidth - wordsWidth,
           numSpaces = letters.length - 1,
-          spaceWidth = Math.max(widthDiff/numSpaces, 0),
+          spaceWidth = widthDiff/numSpaces,
           leftOffset = -this.fixedLineWidth/2;
-        for (var i = 0, len = letters.length; i < len; i++) {
-          this._renderChars(method, ctx, letters[i], left + leftOffset, top, lineIndex);
-          leftOffset += ctx.measureText(letters[i]).width + spaceWidth;
+        if (spaceWidth > 0) {
+          for (var i = 0, len = letters.length; i < len; i++) {
+            this._renderChars(method, ctx, letters[i], left + leftOffset, top, lineIndex);
+            leftOffset += ctx.measureText(letters[i]).width + spaceWidth;
+          }
+        } else {
+          this._renderChars(method, ctx, line, left + leftOffset, top, lineIndex, this.fixedLineWidth);
         }
 
       }
@@ -20229,10 +20238,10 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      * @param {String} method
      * @param {CanvasRenderingContext2D} ctx Context to render on
      */
-    _renderChars: function(method, ctx, line, left, top, lineIndex) {
+    _renderChars: function(method, ctx, line, left, top, lineIndex, maxwidth) {
 
       if (this.isEmptyStyles()) {
-        return this._renderCharsFast(method, ctx, line, left, top);
+        return this._renderCharsFast(method, ctx, line, left, top, maxwidth);
       }
 
       this.skipTextAlign = true;
@@ -20277,14 +20286,14 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      * @param {Number} left Left coordinate
      * @param {Number} top Top coordinate
      */
-    _renderCharsFast: function(method, ctx, line, left, top) {
+    _renderCharsFast: function(method, ctx, line, left, top, maxwidth) {
       this.skipTextAlign = false;
 
       if (method === 'fillText' && this.fill) {
-        this.callSuper('_renderChars', method, ctx, line, left, top);
+        this.callSuper('_renderChars', method, ctx, line, left, top, maxwidth);
       }
       if (method === 'strokeText' && ((this.stroke && this.strokeWidth > 0) || this.skipFillStrokeCheck)) {
-        this.callSuper('_renderChars', method, ctx, line, left, top);
+        this.callSuper('_renderChars', method, ctx, line, left, top, maxwidth);
       }
     },
 

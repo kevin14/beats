@@ -9492,7 +9492,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             }
             return maxWidth;
         },
-        _renderChars: function(method, ctx, chars, left, top) {
+        _renderChars: function(method, ctx, chars, left, top, maxwidth) {
             var shortM = method.slice(0, -4);
             if (this[shortM].toLive) {
                 var offsetX = -this.width / 2 + this[shortM].offsetX || 0, offsetY = -this.height / 2 + this[shortM].offsetY || 0;
@@ -9501,7 +9501,11 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                 left -= offsetX;
                 top -= offsetY;
             }
-            ctx[method](chars, left, top);
+            if (maxwidth > 0) {
+                ctx[method](chars, left, top, maxwidth);
+            } else {
+                ctx[method](chars, left, top);
+            }
             this[shortM].toLive && ctx.restore();
         },
         _getWidthOfWords: function(ctx, line) {
@@ -9542,10 +9546,14 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                     this._renderChars(method, ctx, line, left, top, lineIndex);
                 }
             } else if (this.textAlign == "stretch" && this.fixedLineWidth > 0) {
-                var letters = line.split(""), wordsWidth = ctx.measureText(line).width, widthDiff = this.fixedLineWidth - wordsWidth, numSpaces = letters.length - 1, spaceWidth = Math.max(widthDiff / numSpaces, 0), leftOffset = -this.fixedLineWidth / 2;
-                for (var i = 0, len = letters.length; i < len; i++) {
-                    this._renderChars(method, ctx, letters[i], left + leftOffset, top, lineIndex);
-                    leftOffset += ctx.measureText(letters[i]).width + spaceWidth;
+                var letters = line.split(""), wordsWidth = ctx.measureText(line).width, widthDiff = this.fixedLineWidth - wordsWidth, numSpaces = letters.length - 1, spaceWidth = widthDiff / numSpaces, leftOffset = -this.fixedLineWidth / 2;
+                if (spaceWidth > 0) {
+                    for (var i = 0, len = letters.length; i < len; i++) {
+                        this._renderChars(method, ctx, letters[i], left + leftOffset, top, lineIndex);
+                        leftOffset += ctx.measureText(letters[i]).width + spaceWidth;
+                    }
+                } else {
+                    this._renderChars(method, ctx, line, left + leftOffset, top, lineIndex, this.fixedLineWidth);
                 }
             } else {
                 this._renderChars(method, ctx, line, left, top, lineIndex);
@@ -9976,9 +9984,9 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                 boundaries.topOffset += lineHeight;
             }
         },
-        _renderChars: function(method, ctx, line, left, top, lineIndex) {
+        _renderChars: function(method, ctx, line, left, top, lineIndex, maxwidth) {
             if (this.isEmptyStyles()) {
-                return this._renderCharsFast(method, ctx, line, left, top);
+                return this._renderCharsFast(method, ctx, line, left, top, maxwidth);
             }
             this.skipTextAlign = true;
             left -= this.textAlign === "center" ? this.width / 2 : this.textAlign === "right" ? this.width : 0;
@@ -9998,13 +10006,13 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             }
             ctx.restore();
         },
-        _renderCharsFast: function(method, ctx, line, left, top) {
+        _renderCharsFast: function(method, ctx, line, left, top, maxwidth) {
             this.skipTextAlign = false;
             if (method === "fillText" && this.fill) {
-                this.callSuper("_renderChars", method, ctx, line, left, top);
+                this.callSuper("_renderChars", method, ctx, line, left, top, maxwidth);
             }
             if (method === "strokeText" && (this.stroke && this.strokeWidth > 0 || this.skipFillStrokeCheck)) {
-                this.callSuper("_renderChars", method, ctx, line, left, top);
+                this.callSuper("_renderChars", method, ctx, line, left, top, maxwidth);
             }
         },
         _renderChar: function(method, ctx, lineIndex, i, _char, left, top, lineHeight) {
