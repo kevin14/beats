@@ -209,7 +209,7 @@ class Editor
 
   initializeIntroMode: ->
     @typeTextSeries(INTRO_CITIES).always =>
-      $('#slides').remove()
+      # $('#slides').remove()
       $('#bottom').removeClass('hidden').show()
       $('#down').removeClass('hidden').show()
       @setMode 'text'
@@ -247,22 +247,24 @@ class Editor
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
-    console.log "focusTextField()"
+    # console.log "focusTextField()"
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
 
   typeTextSeries: (textArray)->
-    console.log "typeTextSeries()"
+    # console.log "typeTextSeries()"
     @typeTextSeriesDeferred = $.Deferred()
     @typeTextSeriesArray = textArray
     @typeTextSeriesNext(true)
     @typeTextSeriesDeferred
 
   typeTextSeriesNext: (isFirst)->
-    console.log "typeTextSeriesNext()"
+    # console.log "typeTextSeriesNext()"
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
     unless text?
+      $slide = $('#slides .slide').first()
+      $slide.fadeOut 1200, ->$(this).parent().remove()
       return @typeTextSeriesDeferred.resolve()
     window.setTimeout =>
       unless isFirst
@@ -272,7 +274,7 @@ class Editor
     , 750+Math.random()*400
 
   typeTextClear: ->
-    console.log "typeTextClear()"
+    # console.log "typeTextClear()"
     @logoText.exitEditing()
     @logoText.setSelectionStart 0
     @logoText.setSelectionEnd 0
@@ -282,7 +284,7 @@ class Editor
     @canvasUpdateFunction()
 
   typeText: (text)->
-    console.log "typeText()"
+    # console.log "typeText()"
     return unless @logoText?
     @typeTextDeferred = $.Deferred()
     @typeTextClear()
@@ -291,19 +293,19 @@ class Editor
     @typeTextDeferred
 
   typeTextStop: ->
-    console.log "typeTextStop()"
+    # console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
     @typeTextDeferred.fail()
     @typeTextSeriesDeferred.fail()
 
   typeTextQueueUpdate: ->
-    console.log "typeTextQueueUpdate()"
-    delay = 60 + Math.random()*60
+    # console.log "typeTextQueueUpdate()"
+    delay = 30 + Math.random()*60
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
-    console.log "typeTextUpdate()"
+    # console.log "typeTextUpdate()"
     return if @typeTextCanceling
     char = @autoTypeChars.shift()
     unless char? && @logoText?
