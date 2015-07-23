@@ -11,6 +11,8 @@ Maths =
 
 class Editor
 
+  INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
+
   SELECTABLE_OPTIONS =
     selectable: true
     hasRotatingPoint: false
@@ -39,7 +41,6 @@ class Editor
 
   LOGO_SCALE_MIN = 0.1
   LOGO_SCALE_MAX = 1.0
-  PHOTO_RESIZE_PIXEL_THRESHOLD = 1024 * 1024
 
   constructor: ($canvas, $controls) ->
     @values =
@@ -88,9 +89,10 @@ class Editor
     @controlsRange.on 'update', (values)->
       self.setValue.call self, parseFloat(values[0]), 'update'
 
-    @setMode 'text'
+    @initializeTextMode()
+    @setMode 'intro'
 
-  #region EDITOR MODES
+  #region EDITOR MODES -------------------------------------------------------------------------------------------------
 
   initializeTextMode: ->
     console.log "Entering city entry Phase"
@@ -141,19 +143,14 @@ class Editor
     @logoText.on 'changed', (e) =>
       # console.log(e)
       newText = @logoText.text
-      window.reactToKeypress(newText.length < @cityText.length)
+#      window.reactToKeypress(newText.length < @cityText.length)
       @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
-      @canvas.renderAll()
+#      @canvas.renderAll()
 
     # forcibly keep selected
-    # @logoText.on 'editing:exited', =>
-    @canvas.on 'selection:cleared', =>
-      @canvas.setActiveObject(@logoText)
-      @logoText.enterEditing()
-
-    @canvas.setActiveObject @logoText
-    @logoText.enterEditing()
-
+#    @logoText.on 'editing:exited', =>
+    @canvas.on 'selection:cleared', =>@focusTextField()
+    @focusTextField()
 
   initializePhotoMode: ->
     console.log "Entering photo phase"
@@ -202,6 +199,11 @@ class Editor
       left: @canvas.width/2
       top: @canvas.height - 80
 
+  initializeIntroMode: ->
+    @typeTextSeries(INTRO_CITIES).always =>
+      @setMode 'text'
+      @focusTextField()
+
   fixOrderingOnLoad: ->
     @canvas.discardActiveObject()
     if @photo? then @canvas.sendToBack @photo
@@ -224,12 +226,62 @@ class Editor
     # switch oldMode
     #   when 'text' then @bakeLogoText()
     switch newMode
-      when 'text' then @initializeTextMode()
+#      when 'text' then @initializeTextMode()
+      when 'intro' then @initializeIntroMode()
       when 'photo' then @initializePhotoMode()
       when 'done' then @finalizeForDoneMode()
     @mode = newMode
 
-  #region EXPORTING AND SHARING
+  #region INTRO --------------------------------------------------------------------------------------------------------
+
+  focusTextField: ->
+    @canvas.setActiveObject @logoText
+    @logoText.enterEditing()
+
+  typeTextSeries: (textArray)->
+    @typeTextSeriesDeferred = $.Deferred()
+    @typeTextSeriesArray = textArray
+    @typeTextSeriesNext()
+    @typeTextSeriesDeferred
+
+  typeTextSeriesNext: ->
+    return if @typeTextCanceling
+    text = @typeTextSeriesArray.shift()
+    unless text?
+      @logoText.setText ''
+      return @typeTextSeriesDeferred.resolve()
+    window.setTimeout =>
+      @typeText(text).done @typeTextSeriesNext.bind(@)
+    , 750+Math.random()*400
+
+  typeText: (text)->
+    return unless @logoText?
+    @typeTextDeferred = $.Deferred()
+    @logoText.setText ''
+    @autoTypeChars = text.split ''
+    @typeTextQueueUpdate()
+    @typeTextDeferred
+
+  typeTextStop: ->
+    @typeTextCanceling = true
+    window.clearTimeout @interval
+    @typeTextDeferred.fail()
+    @typeTextSeriesDeferred.fail()
+
+  typeTextQueueUpdate: ->
+    delay = 60 + Math.random()*60
+    @interval = window.setTimeout @typeTextUpdate.bind(@), delay
+
+  typeTextUpdate: ->
+    return if @typeTextCanceling
+    char = @autoTypeChars.shift()
+    unless char? && @logoText?
+      return @typeTextDeferred.resolve()
+    @logoText.insertChar char
+    @typeTextQueueUpdate()
+
+
+  #region EXPORTING AND SHARING ----------------------------------------------------------------------------------------
 
   captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
     # prepare canvas for capture
@@ -276,8 +328,7 @@ class Editor
           h = $this.data('popheight')
           window.open $(this).attr('href'), "share", "width=#{w},height=#{h},centerscreen=true"
 
-
-  #region PHOTO EDITING
+  #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
     @setMode 'photo'
@@ -334,20 +385,22 @@ class Editor
     reader.readAsDataURL fileDescriptor
 
   downscalePhotoIfNeededDeferred: (img) ->
-    OVERSCALE = 1
     deferred = $.Deferred()
+    OVERSCALE = 1
+    W = @canvas.width * OVERSCALE
+    H = @canvas.height * OVERSCALE
     aspect = img.width/img.height
     console.log "Loaded image at #{img.width}x#{img.height}"
-    scaleNeeded = img.width > @canvas.width * OVERSCALE && img.height > @canvas.height * OVERSCALE
+    scaleNeeded = img.width > W && img.height > H
     if scaleNeeded
       console.warn "Scaling down image"
       resizeCanvas = document.createElement 'canvas'
-      resizeCanvas.width = @canvas.width * OVERSCALE
-      resizeCanvas.height = @canvas.height * OVERSCALE
+      resizeCanvas.width = W
+      resizeCanvas.height = H
       if aspect > 1
-        resizeCanvas.width = @canvas.width * OVERSCALE * aspect
+        resizeCanvas.width = W * aspect
       else
-        resizeCanvas.heigth = @canvas.height * OVERSCALE / aspect
+        resizeCanvas.heigth = H / aspect
       ctx = resizeCanvas.getContext '2d'
       ctx.drawImage img, 0, 0, resizeCanvas.width, resizeCanvas.height
       fabric.Image.fromURL resizeCanvas.toDataURL(), (photo)=>deferred.resolve(photo)
@@ -355,9 +408,7 @@ class Editor
       deferred.resolve new fabric.Image(img)
     deferred
 
-
   setParameter: (parameterId, programmatic = false) ->
-    # console.log "Setting parameter to", parameterId
     if programmatic and @parameter != parameterId
       $("#control-#{parameterId}").click()
     @controls.removeClass().addClass('editor-controls').addClass(parameterId)
