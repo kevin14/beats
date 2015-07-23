@@ -17,74 +17,6 @@ html, body
   letter-spacing $base-letter-spacing
 
 
-#editor
-  position fixed
-  width 100%
-  height 100%
-  display block
-  top 0px
-  left 0px
-  z-index 0
-
-  #down
-    display block
-    text-align right
-    padding 20px
-
-
-  #editor-type-images
-      background-color #000
-      background-image url(/img/bg-black.jpg)
-      background-repeat no-repeat
-      background-position top center
-      background-attachment fixed
-      -webkit-background-size cover
-      -moz-background-size cover
-      -o-background-size cover
-      background-size cover
-      width 100%
-      height 100%
-
-      .type-img
-
-        width 100%
-        height 100%
-        background-repeat no-repeat
-        background-position center center
-        background-attachment fixed
-        -webkit-background-size cover
-        -moz-background-size cover
-        -o-background-size cover
-        background-size cover
-
-      .type-red
-        display none
-        width 100%
-        height 100%
-        background-color #f00
-
-
-      .img1
-        display none
-        background-image url(/img/bg1.jpg)
-
-      .img2
-        display none
-        background-image url(/img/bg2.jpg)
-
-      .img3
-        display none
-        background-image url(/img/bg3.jpg)
-
-      .img4
-        display none
-        background-image url(/img/bg4.jpg)
-
-      .img5
-        display none
-        background-image url(/img/bg5.jpg)
-
-
 #editor-type-images
   height 100%
 
@@ -98,14 +30,11 @@ html, body
   display none
 
 .editor
-  position relative
-  user-select none
-  -webkit-user-select none
-  z-index 1
-  position relative
+  position absolute
+  width 100%
+  z-index 10
   overflow hidden
 
-  width ($canvas-size + $canvas-border * 2)
   margin 0 auto
   display flex
   flex-direction column
@@ -264,3 +193,51 @@ html, body
     pointer-events none
   .button
     margin 0 10px
+
+
+// Intro
+
+#top
+  position relative
+  //background #eee
+  //display none
+  width 100%
+
+  #slides
+    position absolute
+    width 100%
+    height 100%
+
+  .slide
+    width 100%
+    height 100%
+    position absolute
+    top 0
+    left 0
+    background-color #000
+    background-repeat no-repeat
+    background-position top center
+    background-attachment fixed
+    -webkit-background-size cover
+    -moz-background-size cover
+    -o-background-size cover
+    background-size cover
+
+  .slide1
+    background-image url(/img/intro-bg1.jpg)
+    z-index 6
+  .slide2
+    background-image url(/img/intro-bg2.jpg)
+    z-index 5
+  .slide3
+    background-image url(/img/intro-bg3.jpg)
+    z-index 4
+  .slide4
+    background-image url(/img/bg1.jpg)
+    z-index 3
+  .slide5
+    background-image url(/img/bg4.jpg)
+    z-index 2
+  .slide6
+    background-image url(/img/bg3.jpg)
+    z-index 1

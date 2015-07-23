@@ -170,4 +170,5 @@ function resizeMe() {
     WH = $(window).height();
 
     $(".editor").height(WH);
+    $("#top").height(WH);
 }

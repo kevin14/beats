@@ -251,6 +251,8 @@ class Editor
       @logoText.setText ''
       return @typeTextSeriesDeferred.resolve()
     window.setTimeout =>
+      $slide = $('#slides .slide').first()
+      $slide.fadeOut 100, ->$(this).remove()
       @typeText(text).done @typeTextSeriesNext.bind(@)
     , 750+Math.random()*400
 
@@ -258,11 +260,13 @@ class Editor
     return unless @logoText?
     @typeTextDeferred = $.Deferred()
     @logoText.setText ''
+    @canvasUpdateFunction()
     @autoTypeChars = text.split ''
     @typeTextQueueUpdate()
     @typeTextDeferred
 
   typeTextStop: ->
+    $('#slides').remove()
     @typeTextCanceling = true
     window.clearTimeout @interval
     @typeTextDeferred.fail()
