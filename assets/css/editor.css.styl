@@ -267,3 +267,13 @@ html, body
   .slide6
     background-image url(/img/bg3.jpg)
     z-index 1
+
+
+// Try to position fake textbox on screen so iOS doesn't scroll away
+textarea.fabric-hidden-input
+  position absolute
+  bottom 35% !important
+  left 50% !important
+  color rgba(0,0,0,0)
+  opacity 0.0
+  // filter alpha(opacity=00)
