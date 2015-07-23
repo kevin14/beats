@@ -10,7 +10,7 @@ block content
   .editor
     
     .canvas-outer
-      canvas#canvas(width="863", height="863")
+      canvas#canvas(width="846", height="846")
       img.hidden#img-logo-frame(src="/img/editor/logo-frame-2x.png")
       img.hidden#img-pattern-grime(src="/img/editor/pattern-grime.jpg")
       img.hidden#img-beats-watermark(src="/img/editor/beats-watermark-2x.png")
@@ -69,26 +69,26 @@ block content
       .type-img.img5
         
         
-  #bottom
-    ul.cf
-      each post in posts
-        li
-          if post.type == "video"
-            a.video-link(href="#", data-video="#{post.videoId}")
-              img.bg-img(src="#{post.photo}")
-              .over
-                .over-inner
-                  .over-cell.video
-                    img.play(src="/img/play.png")
-                    h3 #{post.title}
-          else
-            img.bg-img(src="#{post.photo}")
-            if post.text != null 
-              .over
-                .over-inner
-                  .over-cell
-                    h3 #{post.title}
-                    p #{post.text}
+  //#bottom
+  //  ul.cf
+  //    each post in posts
+  //      li
+  //        if post.type == "video"
+  //          a.video-link(href="#", data-video="#{post.videoId}")
+  //            img.bg-img(src="#{post.photo}")
+  //            .over
+  //              .over-inner
+  //                .over-cell.video
+  //                  img.play(src="/img/play.png")
+  //                  h3 #{post.title}
+  //        else
+  //          img.bg-img(src="#{post.photo}")
+  //          if post.text != null
+  //            .over
+  //              .over-inner
+  //                .over-cell
+  //                  h3 #{post.title}
+  //                  p #{post.text}
 
 
   != js("jquery/dist/jquery")
