@@ -210,6 +210,8 @@ class Editor
   initializeIntroMode: ->
     @typeTextSeries(INTRO_CITIES).always =>
       $('#slides').remove()
+      $('#bottom').removeClass('hidden').show()
+      $('#down').removeClass('hidden').show()
       @setMode 'text'
       @typeTextClear()
 #      @focusTextField()
