@@ -15,6 +15,9 @@ var mySound1,
 $(document).ready(function(){
   editorFunctions();
   initSounds();
+
+  resizeMe();
+  $(window).on("resize", resizeMe);
 });
 
 function initSounds() {
@@ -160,4 +163,11 @@ function hideAll() {
   for(var x = 1 ; x <= ti ; x++) {
       $(".img"+x).hide();
   }
+}
+
+function resizeMe() {
+    WW = $(window).width();
+    WH = $(window).height();
+
+    $(".editor").height(WH);
 }
