@@ -9,6 +9,7 @@
     "blueimp-load-image": "~1.13.0",
     "blueimp-canvas-to-blob": "~2.1.1",
     "imagesloaded": "*",
-    "nouislider": "~8.0.2"
+    "nouislider": "~8.0.2",
+    "buzz": "~1.1.10"
   }
 }

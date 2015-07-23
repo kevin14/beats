@@ -1,9 +1,5 @@
 extends layout
 
-block head
-  != css("all")
-
-
 block content
 
   #top
@@ -96,9 +92,3 @@ block content
                     h3 #{post.title}
                     p #{post.text}
 
-
-  != js("jquery/dist/jquery")
-  script(src="/js/fabric-custom/fabric.js")
-  != js("editor-deps")
-  script(src="/js/buzz.min.js")
-  script(src="/js/editor-app.js")

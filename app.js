@@ -44,6 +44,9 @@ app.use(connectAssets({
   helperContext: app.locals,
   paths: ['assets/js', 'assets/css', 'public/js/bower_components'],
   fingerprinting: false
+}, function(instance) {
+  //instance.environment.enable("autoprefixer");
+  //instance.environment.enable("rupture");
 }));
 
 // TODO replace with connect-assets pipeline
@@ -60,7 +63,6 @@ app.use(stylus.middleware({
 }));
 
 
-//app.use(require('stylus').autoprefixer().middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 

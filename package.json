@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "autoprefixer-core": "^5.2.1",
     "autoprefixer-stylus": "*",
     "aws-sdk": "*",
     "body-parser": "~1.12.4",
@@ -16,13 +17,13 @@
     "debug": "~2.2.0",
     "express": "~4.12.4",
     "express-livereload": "0.0.24",
+    "http-auth": "*",
     "jade": "~1.9.2",
     "mongoose": "*",
     "morgan": "~1.5.3",
+    "rupture": "*",
     "serve-favicon": "~2.2.1",
     "stylus": "0.42.3",
-    "uglify-js": "^2.4.23",
-    "rupture": "*",
-    "http-auth": "*"
+    "uglify-js": "^2.4.23"
   }
 }
