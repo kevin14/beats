@@ -159,8 +159,6 @@ class Editor
     console.log "Entering photo phase"
     console.log "Baking text image"
 
-    @canvas.backgroundColor = 'black'
-
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
     @logoText.off 'editing:exited'
@@ -212,9 +210,11 @@ class Editor
 
   finalizeForDoneMode: ->
     @logoText?.exitEditing()
+    @canvas.backgroundColor = 'black'
     @canvas.discardActiveObject()
     for obj in [@photo, @logo, @logoText]
       obj?.set(selectable: false, evented: false, editable: false)
+    @canvas.renderAll()
 
   setMode: (newMode)->
     oldMode = @mode
