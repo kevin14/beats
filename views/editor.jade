@@ -82,11 +82,12 @@ block content
                     h3 #{post.title}
           else
             img.bg-img(src="#{post.photo}")
-            .over
-              .over-inner
-                .over-cell
-                  h3 #{post.title}
-                  p #{post.text}
+            if post.text != null 
+              .over
+                .over-inner
+                  .over-cell
+                    h3 #{post.title}
+                    p #{post.text}
 
 
   != js("jquery/dist/jquery")
