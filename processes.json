@@ -1,0 +1,11 @@
+{
+  "apps" : [{
+    "name"        : "straightouttacompton",
+    "script"      : "app.js",
+    "args"        : ["-i", "0"],
+    "watch"       : true,
+    "env": {
+        "NODE_ENV": "production",
+        "IS_LIVE": true
+    }
+  }
