@@ -263,6 +263,11 @@ class Editor
         url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
         $twitter.attr(href: url)
 
+        $facebook = $popup.find 'a.facebook'
+        redir = window.location.origin + "/close.html"
+        url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+        $facebook.attr(href: url)
+
         # Override href to open in new window
         $popup.find('a').click (e)->
           e.preventDefault()
