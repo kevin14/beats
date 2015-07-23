@@ -23,6 +23,18 @@ html, body
   height 16px
   z-index 999
 
+#down
+  position absolute
+  bottom 20px
+  right 15px
+  z-index 999
+
+  +at(1)
+    display none
+
+  img
+    width 20px
+
 
 #sound-toggle
   position fixed
@@ -161,13 +173,6 @@ html, body
     height 100%
     display none
 
-    #down
-      position absolute
-      bottom 20px
-      right 20px
-
-      img
-        width 25px
 
     #editor-type-images
         background-color #000
