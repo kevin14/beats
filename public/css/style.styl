@@ -17,6 +17,7 @@ html, body
 
 
 #loader
+  display none
   position absolute
   width 16px
   height 16px
@@ -121,9 +122,14 @@ html, body
 
     #lower
       padding-top 20px
+      +at(1)
+        padding-top 10px
 
       #beats-logo-white
         width 45px
+
+        +at(1)
+          width 30px
 
       #buttons
         display none
@@ -146,8 +152,8 @@ html, body
       text-align center
       text-transform uppercase
       +at(1)
-        font-size 32px
-        top 155px
+        font-size 50px
+        top 135px
 
 
   #editor

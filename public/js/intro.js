@@ -5,6 +5,7 @@ var mySlide = 1;
 
 
 $(document).ready(function(){
+  $("#loader").show();
   resizeMe();
   $(window).on("resize", resizeMe);
 
