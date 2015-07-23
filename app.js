@@ -45,22 +45,22 @@ app.use(connectAssets({
   paths: ['assets/js', 'assets/css', 'public/js/bower_components'],
   fingerprinting: false
 }, function(instance) {
-  //instance.environment.enable("autoprefixer");
+  instance.environment.enable("autoprefixer");
   //instance.environment.enable("rupture");
 }));
 
-// TODO replace with connect-assets pipeline
-app.use(stylus.middleware({
-  src: path.join(__dirname, 'public'),
-  compile: function(str, path) {
-    return stylus(str)
-      .use(rupture())
-      .use(autoprefixer())   // autoprefixer
-      .set('filename', path) // @import
-      .set('compress', true) // compress
-    ;
-  }
-}));
+//// TODO replace with connect-assets pipeline
+//app.use(stylus.middleware({
+//  src: path.join(__dirname, 'public'),
+//  compile: function(str, path) {
+//    return stylus(str)
+//      .use(rupture())
+//      .use(autoprefixer())   // autoprefixer
+//      .set('filename', path) // @import
+//      .set('compress', true) // compress
+//    ;
+//  }
+//}));
 
 
 app.use(express.static(path.join(__dirname, 'public')));

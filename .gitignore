@@ -1,6 +1,7 @@
 Thumbs.db
 .DS_Store
-node_modules/
-.idea/
 *.log
 *.psd
+node_modules/
+/.idea/
+/builtAssets/
