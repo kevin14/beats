@@ -95,6 +95,8 @@ class Editor
   #region EDITOR MODES -------------------------------------------------------------------------------------------------
 
   initializeTextMode: ->
+    # don't reinitialize
+    return if @logoText?
     console.log "Entering city entry Phase"
 
     grimePattern = new fabric.Pattern
@@ -145,6 +147,8 @@ class Editor
       newText = @logoText.text
 #      window.reactToKeypress(newText.length < @cityText.length)
       @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
+      #TODO this cancels even if text was input programmatically
+#      @typeTextStop() if @mode == 'intro'
 #      @canvas.renderAll()
 
     # forcibly keep selected
@@ -153,8 +157,12 @@ class Editor
     @focusTextField()
 
   initializePhotoMode: ->
+    # don't reinitialize
+    return if @logo?
     console.log "Entering photo phase"
     console.log "Baking text image"
+
+    @canvas.backgroundColor = 'black'
 
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
@@ -201,8 +209,10 @@ class Editor
 
   initializeIntroMode: ->
     @typeTextSeries(INTRO_CITIES).always =>
+      $('#slides').remove()
       @setMode 'text'
-      @focusTextField()
+      @typeTextClear()
+#      @focusTextField()
 
   fixOrderingOnLoad: ->
     @canvas.discardActiveObject()
@@ -212,7 +222,6 @@ class Editor
 
   finalizeForDoneMode: ->
     @logoText?.exitEditing()
-    @canvas.backgroundColor = 'black'
     @canvas.discardActiveObject()
     for obj in [@photo, @logo, @logoText]
       obj?.set(selectable: false, evented: false, editable: false)
@@ -222,7 +231,7 @@ class Editor
     oldMode = @mode
     return if oldMode == newMode
     console.log "editor.mode = #{newMode}"
-    $('.editor').removeClass("mode-#{oldMode}").addClass("mode-#{newMode}")
+
     # switch oldMode
     #   when 'text' then @bakeLogoText()
     switch newMode
@@ -230,53 +239,69 @@ class Editor
       when 'intro' then @initializeIntroMode()
       when 'photo' then @initializePhotoMode()
       when 'done' then @finalizeForDoneMode()
+    $('.editor').removeClass("mode-#{oldMode}").addClass("mode-#{newMode}")
     @mode = newMode
 
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
+    console.log "focusTextField()"
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
 
   typeTextSeries: (textArray)->
+    console.log "typeTextSeries()"
     @typeTextSeriesDeferred = $.Deferred()
     @typeTextSeriesArray = textArray
-    @typeTextSeriesNext()
+    @typeTextSeriesNext(true)
     @typeTextSeriesDeferred
 
-  typeTextSeriesNext: ->
+  typeTextSeriesNext: (isFirst)->
+    console.log "typeTextSeriesNext()"
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
     unless text?
-      @logoText.setText ''
       return @typeTextSeriesDeferred.resolve()
     window.setTimeout =>
-      $slide = $('#slides .slide').first()
-      $slide.fadeOut 100, ->$(this).remove()
+      unless isFirst
+        $slide = $('#slides .slide').first()
+        $slide.fadeOut 100, ->$(this).remove()
       @typeText(text).done @typeTextSeriesNext.bind(@)
     , 750+Math.random()*400
 
+  typeTextClear: ->
+    console.log "typeTextClear()"
+    @logoText.exitEditing()
+    @logoText.setSelectionStart 0
+    @logoText.setSelectionEnd 0
+    @logoText.setText ''
+    @logoText._clearCache()
+    @logoText.enterEditing()
+    @canvasUpdateFunction()
+
   typeText: (text)->
+    console.log "typeText()"
     return unless @logoText?
     @typeTextDeferred = $.Deferred()
-    @logoText.setText ''
-    @canvasUpdateFunction()
+    @typeTextClear()
     @autoTypeChars = text.split ''
     @typeTextQueueUpdate()
     @typeTextDeferred
 
   typeTextStop: ->
-    $('#slides').remove()
+    console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
     @typeTextDeferred.fail()
     @typeTextSeriesDeferred.fail()
 
   typeTextQueueUpdate: ->
+    console.log "typeTextQueueUpdate()"
     delay = 60 + Math.random()*60
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
+    console.log "typeTextUpdate()"
     return if @typeTextCanceling
     char = @autoTypeChars.shift()
     unless char? && @logoText?
