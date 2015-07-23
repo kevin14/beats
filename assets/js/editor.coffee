@@ -19,6 +19,7 @@ class Editor
     lockUniScaling: true
     lockMovementX: false
     lockMovementY: false
+#    centeredScaling: true
     selectionColor: 'white'
     cornerColor: 'white'
     borderColor: 'white'
@@ -36,8 +37,8 @@ class Editor
     lockScalingX: true
     lockScalingY: true
 
-  LOGO_SCALE_MIN = 0.25
-  LOGO_SCALE_MAX = 2.0
+  LOGO_SCALE_MIN = 0.1
+  LOGO_SCALE_MAX = 1.0
   PHOTO_RESIZE_PIXEL_THRESHOLD = 1024 * 1024
 
   constructor: ($canvas, $controls) ->
@@ -50,6 +51,7 @@ class Editor
 
     @canvas = new fabric.Canvas $canvas.get(0)
     @canvas.selection = false
+    @canvasUpdateFunction = =>@canvas.renderAll()
 
     @cityText = ""
     @controls = $controls
@@ -100,22 +102,24 @@ class Editor
     @logoFrame = new fabric.Image document.getElementById('img-logo-frame'),
       left: @canvas.width/2 - 768/4
       top: @canvas.height - 824/2 - 40
-      scaleX: 0.5
-      scaleY: 0.5
+#      scaleX: 0.5
+#      scaleY: 0.5
       selectable: false
       evented: false
+    @canvas.add @logoFrame
+    @logoFrame.scaleToHeight @canvas.height
+    @logoFrame.center()
 
     @logoText = new fabric.IText "",
       originX: 'center'
       fill: grimePattern
-      left: 750/4 + 4 + @logoFrame.left
-      top: 594/2 - 16 + @logoFrame.top
-      height: 80
+      left: @canvas.width/2
+      top: 580
       lineHeight: 0.4
-      fontSize: 254/2
+      fontSize: 260
       fontFamily: 'knockout'
       editable: true
-      cursorWidth: 5
+      cursorWidth: 8
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
       selectionColor: 'rgba(255,255,255,0.85)'
@@ -123,23 +127,17 @@ class Editor
     @logoText.set
       selectionColor: 'transparent'
       textAlign: 'stretch'
-      width: 750/2 - 8
-      fixedLineWidth: 750/2 - 8
+      width: 740
+      fixedLineWidth: 740
       multiline: false
       capitalize: true
       cursorHeightPercent: 0.7
       cursorDeltaX: 0
-      cursorDeltaY: -5
+      cursorDeltaY: -12
       maxLength: 25
-
-
     @logoText.set NO_CONTROLS_OPTIONS
-
-    @canvas.add @logoFrame
     @canvas.add @logoText
 
-    # keep capitalized
-    # TODO better way to do this as well as avoid newline input?
     @logoText.on 'changed', (e) =>
       # console.log(e)
       newText = @logoText.text
@@ -159,16 +157,7 @@ class Editor
 
   initializePhotoMode: ->
     console.log "Entering photo phase"
-    # fabric.Image.fromURL '/img/editor/sample-logo.png', (img)=>
-    #   @logo = img
-    #   @logo.set(SELECTABLE_OPTIONS).set
-    #     left: @canvas.width/2 - @logo.width/2
-    #     top: @canvas.height - @logo.height - 40
-    #   @canvas.add @logo
-    #   @fixOrderingOnLoad()
     console.log "Baking text image"
-
-    @canvas.backgroundColor = 'black'
 
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
@@ -186,8 +175,11 @@ class Editor
     logoGroup.cloneAsImage (img)=>
       @logo = img
       @logo.set(SELECTABLE_OPTIONS).set
-        left: @canvas.width/2 - @logo.width/2
-        top: @canvas.height - @logo.height - 40
+        minScaleLimit: LOGO_SCALE_MIN
+        originX: 'center'
+        originY: 'center'
+        left: @canvas.width/2
+        top: @canvas.height/2
       @canvas.add @logo
       # @fixOrderingOnLoad()
 
@@ -196,8 +188,6 @@ class Editor
       @logo.on 'moving', =>@constrainLogoMove()
       @logo.on 'scaling', =>
         scale = @logo.scaleX
-        if scale < LOGO_SCALE_MIN
-          @logo.scaleX = @logo.scaleY = scale = LOGO_SCALE_MIN
         scaleSlider = Maths.normalizeFromRange scale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
         @values.logo = scaleSlider
         @controlsRange.set scaleSlider
@@ -205,14 +195,12 @@ class Editor
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
       originX: 'center'
-      originY: 'bottom'
-      scaleX: 0.5
-      scaleY: 0.5
+      originY: 'center'
       selectable: false
       evented: false
     @watermark.set
       left: @canvas.width/2
-      top: @canvas.height - 5
+      top: @canvas.height - 80
 
   fixOrderingOnLoad: ->
     @canvas.discardActiveObject()
@@ -222,9 +210,11 @@ class Editor
 
   finalizeForDoneMode: ->
     @logoText?.exitEditing()
+    @canvas.backgroundColor = 'black'
     @canvas.discardActiveObject()
     for obj in [@photo, @logo, @logoText]
       obj?.set(selectable: false, evented: false, editable: false)
+    @canvas.renderAll()
 
   setMode: (newMode)->
     oldMode = @mode
@@ -273,6 +263,11 @@ class Editor
         url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
         $twitter.attr(href: url)
 
+        $facebook = $popup.find 'a.facebook'
+        redir = window.location.origin + "/close.html"
+        url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+        $facebook.attr(href: url)
+
         # Override href to open in new window
         $popup.find('a').click (e)->
           e.preventDefault()
@@ -299,6 +294,17 @@ class Editor
           @photo.off 'selected'
           @photo.off 'moving'
           @canvas.remove @photo
+        else
+          # Animate logo into smaller position
+          window.setTimeout =>
+            toScale = 0.55
+            opts = duration: 2000, easing: fabric.util.ease.easeOutExpo
+            @logo.animate 'scaleX', toScale, opts
+            @logo.animate 'scaleY', toScale, opts
+            opts.onChange = =>@canvas.renderAll()
+            @logo.animate 'top', 440, opts
+            @values.logo = Maths.normalizeFromRange toScale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
+          , 1000
 
         console.log "Final dimensions #{photo.width}x#{photo.height}"
         @photo = photo
@@ -399,8 +405,8 @@ class Editor
     l = @logo.getBoundingRect()
     l.width -= @logo.padding*2
     l.height -= @logo.padding*2
-    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, @logo.left))
-    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, @logo.top))
+    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left)) + l.width/2
+    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top)) + l.height/2
 
 # /class Editor
 

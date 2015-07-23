@@ -5,7 +5,7 @@
   box-sizing border-box
 
 $base-letter-spacing = 0.05em
-$canvas-size = 863px
+$canvas-size = 423px
 $canvas-border = 5px
 
 html, body
@@ -102,11 +102,13 @@ html, body
   -webkit-user-select none
   z-index 1
   position relative
-
   overflow hidden
 
   width ($canvas-size + $canvas-border * 2)
   margin 0 auto
+  display flex
+  flex-direction column
+  justify-content center
 
   .button
     cursor pointer
@@ -128,10 +130,14 @@ html, body
       opacity 0.5
 
   .canvas-outer
-    width: ($canvas-size + $canvas-border*2)
-    height: @width
-    padding: $canvas-border
-    margin: 0 auto
+    width ($canvas-size + $canvas-border*2)
+    height @width
+    padding $canvas-border
+    margin 0 auto
+
+    .canvas-container
+      transform scale(0.5, 0.5)
+      transform-origin top left
 
   .editor-controls
     display none
