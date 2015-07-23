@@ -288,6 +288,7 @@ class Editor
     @setMode 'photo'
     reader = new FileReader()
     reader.onload = =>
+      $(".upload img").attr("src", "/img/btn-changephoto.png")
 
       img = new Image()
       img.src = reader.result
