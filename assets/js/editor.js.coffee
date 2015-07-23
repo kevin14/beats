@@ -162,8 +162,6 @@ class Editor
     console.log "Entering photo phase"
     console.log "Baking text image"
 
-    @canvas.backgroundColor = 'black'
-
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
     @logoText.off 'editing:exited'
@@ -171,14 +169,11 @@ class Editor
     @logoText.exitEditing()
     @canvas.discardActiveObject()
 
-    # Make group out of logo text and frame
-    @canvas.remove @logoText
-    @canvas.remove @logoFrame
-    logoGroup = new fabric.Group [@logoText, @logoFrame], SELECTABLE_OPTIONS
-
     # Bake as an image
-    logoGroup.cloneAsImage (img)=>
-      @logo = img
+    fabric.util.loadImage @canvas.toDataURL(), (img)=>
+      @canvas.remove @logoText
+      @canvas.remove @logoFrame
+      @logo = new fabric.Image(img)
       @logo.set(SELECTABLE_OPTIONS).set
         minScaleLimit: LOGO_SCALE_MIN
         originX: 'center'
@@ -186,7 +181,7 @@ class Editor
         left: @canvas.width/2
         top: @canvas.height/2
       @canvas.add @logo
-      # @fixOrderingOnLoad()
+      @canvas.backgroundColor = 'black'
 
       # Setup select & move event handlers
       @logo.on 'selected', =>@setParameter('logo', true)
