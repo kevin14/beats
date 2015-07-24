@@ -22,7 +22,7 @@ var admin = require('./routes/admin');
 var config = require('./config');
 
 var app = express();
-var port = 8080;
+var port;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -111,9 +111,9 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'oh no, connection error:'));
 db.once('open', function callback () {
   console.log('database connected');
+  port = process.env.PORT || 8080;
   console.log("listening on: http://localhost:" + port);
 
-  port = process.env.PORT || 8080;
   app.listen(port, "0.0.0.0");
 });
 
