@@ -287,7 +287,7 @@ class Editor
     # console.log "typeTextSeriesNext()"
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
-    delay = 300
+    delay = 250
     unless text?
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
     window.setTimeout =>
