@@ -350,11 +350,8 @@ class Editor
         uploader = new Uploader(blob, @cityText)
         uploader.start().done (shareUrl)=>
           loader.resolve()
-          console.log "Ready to share!", shareUrl
           @permalink = window.location.origin + shareUrl
-
-          #DEBUG
-          window.location = @permalink
+          console.log "Ready to share!", @permalink
 
           $popup = $('#share-popup-src').addClass('ready')
 
