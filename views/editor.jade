@@ -66,31 +66,34 @@ block content
 
   a#beats-logo(href="/")
     img(src="/img/beats-logo.png")
-  a#sound-toggle.on(href="#") Sound On
-
-  a#down.hidden
-    img(src="/img/arrow-down.png")
+  //a#sound-toggle.on(href="#") Sound On
 
   img#loader(src="/img/loader.gif")
+  // 
+  //  a#down.hidden
+  //    img(src="/img/arrow-down.png")
 
-  #bottom.hidden
-    ul.cf
-      each post in posts
-        li
-          if post.type == "video"
-            a.video-link(href="#", data-video="#{post.videoId}")
-              img.bg-img(src="#{post.photo}")
-              .over
-                .over-inner
-                  .over-cell.video
-                    img.play(src="/img/play.png")
-                    h3 #{post.title}
-          else
-            img.bg-img(src="#{post.photo}")
-            if post.text != null
-              .over
-                .over-inner
-                  .over-cell
-                    h3 #{post.title}
-                    p #{post.text}
+  
 
+   
+  //  
+  //  #bottom.hidden
+  //    ul.cf
+  //      each post in posts
+  //        li
+  //          if post.type == "video"
+  //            a.video-link(href="#", data-video="#{post.videoId}")
+  //              img.bg-img(src="#{post.photo}")
+  //              .over
+  //                .over-inner
+  //                  .over-cell.video
+  //                    img.play(src="/img/play.png")
+  //                    h3 #{post.title}
+  //          else
+  //            img.bg-img(src="#{post.photo}")
+  //            if post.text != null
+  //              .over
+  //                .over-inner
+  //                  .over-cell
+  //                    h3 #{post.title}
+  //                    p #{post.text}

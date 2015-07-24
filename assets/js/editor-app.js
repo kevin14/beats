@@ -38,7 +38,7 @@ function initSounds() {
 
   });
 
-  mySound1 = new buzz.sound( "/audio/compton4_01", {
+  /*mySound1 = new buzz.sound( "/audio/compton4_01", {
     formats: [ "mp3" ]
   });
 
@@ -60,7 +60,7 @@ function initSounds() {
 
   mySound6 = new buzz.sound( "/audio/compton9_01", {
     formats: [ "mp3" ]
-  });
+  });*/
 }
 
 function editorFunctions() {
@@ -110,7 +110,9 @@ function reactToKeypress(isDeletion) {
 }
 
 function playAudio() {
+  return;
 
+  
   switch(currentSound) {
     case 1:
       mySound6.stop();
