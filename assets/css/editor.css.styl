@@ -9,9 +9,9 @@ $canvas-size = 423px
 $canvas-border = 5px
 
 html, body
-  border 0px
-  margin 0px
-  padding 0px
+  border 0
+  margin 0
+  padding 0
   font-family 'knockout46_flyweight', Impact, sans-serif
   letter-spacing $base-letter-spacing
 
@@ -218,6 +218,9 @@ html, body
   //  pointer-events none
   .button
     margin 0 10px
+    @media (max-width: 500px)
+      display block
+      margin 10px 0
 
 .featherlight-share
   .share-popup
