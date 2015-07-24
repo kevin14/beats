@@ -9,9 +9,17 @@ Maths =
   normalizeFromRange: (val, min, max) -> (val - min) / (max - min)
   mapToRange: (normalized, min, max) -> min + (max - min) * normalized
 
+
+String::contains = (str) ->
+  @indexOf(str) != -1
+
 class Editor
 
   INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
+
+  profanities = new Array("fuckload","fuckem","fuckin’","motherfuckin-g","fcking","fuckity","fuckn","fucktards","niggas","nigger","motherfuckin","fucker","nigga","asshole","fuckhole","fuckapple","fuckwad","fuckoff","cocksucker","fuckers","niggaz","mutherfucker","fuck",
+    "fuckme","fuck?","fucks","fuckin","fuckwit","fuckin’","motherfucker","fuckman","fuckass","fuckin","fuckyou","titfucker","fucked","blowjob","tittyfucker","clit","fuckwhore","gangbang","motherfucking","titfuck","wetback","fuckfest")
+
 
   SELECTABLE_OPTIONS =
     selectable: true
@@ -144,9 +152,16 @@ class Editor
 
     @logoText.on 'changed', (e) =>
       # console.log(e)
-      newText = @logoText.text
-#      window.reactToKeypress(newText.length < @cityText.length)
-      @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
+
+      if containsProfanity(@logoText.text)
+        @logoText.text = ""
+        @typeTextClear()
+      else
+        newText = @logoText.text
+        #      window.reactToKeypress(newText.length < @cityText.length)
+        @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
+
+
       #TODO this cancels even if text was input programmatically
 #      @typeTextStop() if @mode == 'intro'
 #      @canvas.renderAll()
@@ -491,6 +506,17 @@ class Editor
     @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left)) + l.width/2
     @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top)) + l.height/2
 
+
+  containsProfanity = (text) ->
+    returnVal = false
+    i = 0
+
+    while i < profanities.length
+      if text.toLowerCase().contains(profanities[i].toLowerCase())
+        returnVal = true
+        break
+      i++
+    returnVal
 # /class Editor
 
 GrayscaleContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
