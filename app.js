@@ -114,7 +114,7 @@ db.once('open', function callback () {
 
   console.log("listening on: http://localhost:" + port);
 
-  app.listen(port, "0.0.0.0");
+  app.listen(port);//, "0.0.0.0");
 });
 
 
