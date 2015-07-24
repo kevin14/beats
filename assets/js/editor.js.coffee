@@ -224,7 +224,8 @@ class Editor
     @typeTextSeries(INTRO_CITIES).always =>
       # $('#slides').remove()
       $('#bottom').removeClass('hidden').show()
-      $('#down').removeClass('hidden').show()
+      $('#down').removeClass('hidden').show().click ->
+        $('body').animate {scrollTop: $('#bottom').offset().top}, 750
       $('#beats-logo').show()
       @setMode 'text'
       @typeTextClear()
@@ -289,7 +290,7 @@ class Editor
     window.setTimeout =>
       unless isFirst
         $slide = $('#slides .slide').first()
-        $slide.fadeOut 100, ->$(this).remove()
+        $slide.fadeOut 200, ->$(this).remove()
       @typeText(text).done @typeTextSeriesNext.bind(@)
 
     , 750+Math.random()*400
