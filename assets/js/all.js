@@ -6,6 +6,7 @@
 //= require featherlight/release/featherlight.min
 //= require buzz/dist/buzz
 
+//= require utils
 //= require editor
 //= require uploader
 //= require editor-app

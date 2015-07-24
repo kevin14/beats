@@ -1,25 +1,10 @@
-Maths =
-  clamp: (val, min = 0, max = 1) ->
-    if val > max
-      max
-    else if val < min
-      min
-    else
-      val
-  normalizeFromRange: (val, min, max) -> (val - min) / (max - min)
-  mapToRange: (normalized, min, max) -> min + (max - min) * normalized
-
-
-String::contains = (str) ->
-  @indexOf(str) != -1
-
 class Editor
 
   INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
 
-  profanities = new Array("fuckload","fuckem","fuckin’","motherfuckin-g","fcking","fuckity","fuckn","fucktards","niggas","nigger","motherfuckin","fucker","nigga","asshole","fuckhole","fuckapple","fuckwad","fuckoff","cocksucker","fuckers","niggaz","mutherfucker","fuck",
-    "fuckme","fuck?","fucks","fuckin","fuckwit","fuckin’","motherfucker","fuckman","fuckass","fuckin","fuckyou","titfucker","fucked","blowjob","tittyfucker","clit","fuckwhore","gangbang","motherfucking","titfuck","wetback","fuckfest")
-
+  #  PROFANITIES = /fuckload|fuckem|fuckin'|motherfuckin-g|fcking|fuckity|fuckn|fucktards|niggas|nigger|motherfuckin|fucker|nigga|asshole|fuckhole|fuckapple|fuckwad|fuckoff|cocksucker|fuckers|niggaz|mutherfucker|fuck|fuckme|fucks|fuckin|fuckwit|fuckin|motherfucker|fuckman|fuckass|fuckin|fuckyou|titfucker|fucked|blowjob|tittyfucker|clit|fuckwhore|gangbang|motherfucking|titfuck|wetback|fuckfest/i
+  # All duplicates removed
+  PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
   SELECTABLE_OPTIONS =
     selectable: true
@@ -71,7 +56,7 @@ class Editor
 
     $controls.find('.download').click => @downloadLocal()
 
-    $controls.find('.share').click => @showSharing()
+    $controls.find('.share').click => @share()
 
     $(".upload.button").click -> $("input[type=file]").click()
     $controls.find('input[type=file]').change ->
@@ -104,8 +89,6 @@ class Editor
 
   initializeTextMode: ->
     # don't reinitialize
-
-
     return if @logoText?
     console.log "Entering city entry Phase"
 
@@ -153,20 +136,12 @@ class Editor
     @canvas.add @logoText
 
     @logoText.on 'changed', (e) =>
-      # console.log(e)
-
-      if containsProfanity(@logoText.text)
-        @logoText.text = ""
+      newText = @logoText.text
+      if PROFANITIES.test newText
         @typeTextClear()
       else
-        newText = @logoText.text
         window.reactToKeypress(newText.length < @cityText.length)
-        @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
-
-
-      #TODO this cancels even if text was input programmatically
-#      @typeTextStop() if @mode == 'intro'
-#      @canvas.renderAll()
+        @cityText = newText
 
     # forcibly keep selected
 #    @logoText.on 'editing:exited', =>
@@ -175,7 +150,6 @@ class Editor
 
   initializePhotoMode: ->
     # don't reinitialize
-
     return if @logo?
     console.log "Entering photo phase"
     console.log "Baking text image"
@@ -288,14 +262,15 @@ class Editor
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
     delay = 250
-    unless text?
+    if text?
+      window.setTimeout =>
+        unless isFirst
+          $slide = $('#slides .slide').first()
+          $slide.fadeOut 200, ->$(this).remove()
+        @typeText(text).done @typeTextSeriesNext.bind(@)
+      , delay
+    else
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
-    window.setTimeout =>
-      unless isFirst
-        $slide = $('#slides .slide').first()
-        $slide.fadeOut 200, ->$(this).remove()
-      @typeText(text).done @typeTextSeriesNext.bind(@)
-    , delay
 
   typeTextClear: ->
     # console.log "typeTextClear()"
@@ -309,7 +284,7 @@ class Editor
 
   typeText: (text)->
     # console.log "typeText()"
-    return unless @logoText?
+    return unless @logoText? and
     @typeTextDeferred = $.Deferred()
     @typeTextClear()
     @autoTypeChars = text.split ''
@@ -358,7 +333,7 @@ class Editor
     @canvas.backgroundColor = oldColor
     @canvasUpdateFunction()
 
-  showSharing: ->
+  share: ->
     if @isSharingBusy then return else @isSharingBusy = true
 
     if @permalink?
@@ -367,6 +342,7 @@ class Editor
       loader = @getLoader()
       @setMode 'done'
       @captureImageDeferred().done (blob)=>
+        @cityText = @cityText.toTitleCase()
         uploader = new Uploader(blob, @cityText)
         uploader.start().done (shareUrl)=>
           loader.resolve()
@@ -548,16 +524,6 @@ class Editor
     deferred.always ->$('#loader').hide()
     deferred
 
-  containsProfanity = (text) ->
-    returnVal = false
-    i = 0
-
-    while i < profanities.length
-      if text.toLowerCase().contains(profanities[i].toLowerCase())
-        returnVal = true
-        break
-      i++
-    returnVal
 # /class Editor
 
 GrayscaleContrastFilter = fabric.util.createClass fabric.Image.filters.BaseFilter,
