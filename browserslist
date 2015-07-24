@@ -1,0 +1,6 @@
+# Browsers which will add prefixes
+> 1%
+last 4 versions
+Safari >= 6
+iOS >= 7
+IE >= 10
