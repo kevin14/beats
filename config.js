@@ -17,7 +17,7 @@ var config = {
 
     //mongoURL: 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta',
     //live
-    mongoURL: 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@52.7.17.12:27017/admin',
+    //mongoURL: 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@52.7.17.12:27017/admin',
 
     fbId: "415295758676714"
 };
