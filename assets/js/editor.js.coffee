@@ -359,14 +359,17 @@ class Editor
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
+    console.log "Loading in #{fileDescriptor.name} at size #{fileDescriptor.fileSize}"
     @setMode 'photo'
     reader = new FileReader()
-    reader.onload = =>
+    reader.onload = (e)=>
       $(".upload img").attr("src", "/img/btn-changephoto.png")
 
+      console.log "Loaded!"
       img = new Image()
-      img.src = reader.result
+      img.src = e.target.result
       aspect = img.width/img.height
+      console.log "Set into an image tag of size #{img.width}x#{img.height}"
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
         if @photo?
