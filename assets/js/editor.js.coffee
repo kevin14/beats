@@ -341,13 +341,20 @@ class Editor
     else
       loader = @getLoader()
       @setMode 'done'
-      @captureImageDeferred().done (blob)=>
+      # RB FB WIDE IMAGE
+      @canvas.setDimensions width: @canvas.height * 1.91
+      @canvas.backgroundColor = 'transparent'
+      @canvasUpdateFunction()
+      @captureImageDeferred('image/png').done (blob)=>
         @cityText = @cityText.toTitleCase()
         uploader = new Uploader(blob, @cityText)
         uploader.start().done (shareUrl)=>
           loader.resolve()
           console.log "Ready to share!", shareUrl
           @permalink = window.location.origin + shareUrl
+
+          #DEBUG
+          window.location = @permalink
 
           $popup = $('#share-popup-src').addClass('ready')
 
