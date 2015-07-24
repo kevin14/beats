@@ -287,15 +287,15 @@ class Editor
     # console.log "typeTextSeriesNext()"
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
+    delay = 250
     unless text?
-      return @typeTextSeriesDeferred.resolve()
+      window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
     window.setTimeout =>
       unless isFirst
         $slide = $('#slides .slide').first()
         $slide.fadeOut 200, ->$(this).remove()
       @typeText(text).done @typeTextSeriesNext.bind(@)
-
-    , 750+Math.random()*400
+    , delay
 
   typeTextClear: ->
     # console.log "typeTextClear()"
@@ -326,7 +326,7 @@ class Editor
 
   typeTextQueueUpdate: ->
     # console.log "typeTextQueueUpdate()"
-    delay = 30 + Math.random()*60
+    delay = 10 + Math.random()*20
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
