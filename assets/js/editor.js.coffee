@@ -104,6 +104,8 @@ class Editor
 
   initializeTextMode: ->
     # don't reinitialize
+
+
     return if @logoText?
     console.log "Entering city entry Phase"
 
@@ -158,7 +160,7 @@ class Editor
         @typeTextClear()
       else
         newText = @logoText.text
-        #      window.reactToKeypress(newText.length < @cityText.length)
+        window.reactToKeypress(newText.length < @cityText.length)
         @cityText = newText # = @logoText.text.toUpperCase() #.replace(/\n/, ' ')
 
 
@@ -173,6 +175,7 @@ class Editor
 
   initializePhotoMode: ->
     # don't reinitialize
+
     return if @logo?
     console.log "Entering photo phase"
     console.log "Baking text image"
@@ -245,6 +248,12 @@ class Editor
     return if oldMode == newMode
     console.log "editor.mode = #{newMode}"
 
+    # turn the sound on
+    if newMode == "text"
+      window.intro = false
+      console.log("SETTING INTRO TO FALSE")
+
+
     # switch oldMode
     #   when 'text' then @bakeLogoText()
     switch newMode
@@ -282,6 +291,7 @@ class Editor
         $slide = $('#slides .slide').first()
         $slide.fadeOut 100, ->$(this).remove()
       @typeText(text).done @typeTextSeriesNext.bind(@)
+
     , 750+Math.random()*400
 
   typeTextClear: ->
@@ -304,11 +314,12 @@ class Editor
     @typeTextDeferred
 
   typeTextStop: ->
-    # console.log "typeTextStop()"
+    console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
     @typeTextDeferred.fail()
     @typeTextSeriesDeferred.fail()
+
 
   typeTextQueueUpdate: ->
     # console.log "typeTextQueueUpdate()"

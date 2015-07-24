@@ -1,6 +1,8 @@
 var WW, WH; // window height / width
 var currentBG = 1;
 
+var intro = true;
+
 var soundOn = true;
 
 var currentSound = 1;
@@ -78,6 +80,11 @@ function editorFunctions() {
 }
 
 function reactToKeypress(isDeletion) {
+    if(soundOn && !intro) {
+      playAudio();
+    }
+    return;
+
     hideAll();
     //console.log("E: " + e.which);
 
