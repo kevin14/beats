@@ -78,7 +78,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  port = process.env.PORT || 3001
+  port =  3001;
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -87,6 +87,7 @@ if (app.get('env') === 'development') {
     });
   });
 }
+
 
 // production error handler
 // no stacktraces leaked to user
@@ -112,6 +113,7 @@ db.once('open', function callback () {
   console.log('database connected');
   console.log("listening on: http://localhost:" + port);
 
+  port = process.env.PORT || 8080;
   app.listen(port, "0.0.0.0");
 });
 
