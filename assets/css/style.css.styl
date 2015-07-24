@@ -2,7 +2,6 @@
 
 $base-letter-spacing = 0.05em
 
-
 html, body
   margin 0px
   padding 0px
@@ -22,7 +21,6 @@ html, body
 
   @media (max-width: 500px)
     background-attachment scroll
-
 
 #loader
   display none
@@ -45,7 +43,6 @@ html, body
   img
     width 20px
 
-
 #sound-toggle
   position fixed
   z-index 9999
@@ -60,127 +57,62 @@ html, body
   &:hover
     color #f00
 
-
 #big-video-wrap
   display: none
-
 
 #beats-logo
   position fixed
   top 15px
   left 15px
-  width 35px
   z-index 999
-  //display none
+  img
+    width 35px
 
-  #city-holder
-    position absolute
-    top 0px
-    left 0px
-    z-index 999
-    width 400px
-    text-align center
+#editor-type-images
+  background-color #000
+  background-image url(/img/bg-black.jpg)
+  background-repeat no-repeat
+  background-position top center
+  background-attachment fixed
+  background-size cover
+  width 100%
+  height 100%
 
-    #city
-      position relative
-      margin 0 auto
-      width 320px
-      height 343px
-      text-align center
-      @media (max-width: 500px)
-        width 200px
-        height 229px
+  .type-img
 
-    #logo
-      width 100%
-
-    #lower
-      padding-top 20px
-      @media (max-width: 500px)
-        padding-top 10px
-
-      #beats-logo-white
-        width 45px
-
-        @media (max-width: 500px)
-          width 30px
-
-      #buttons
-        display none
-
-      #buttons-hide
-        display none
-
-    input
-      font-family: "knockout", serif;
-      position absolute
-      left 0px
-      bottom -2px
-      background none
-      color #fff
-      width 100%
-      border none
-      font-size 92px
-      line-height 92px
-      outline none
-      text-align center
-      text-transform uppercase
-      @media (max-width: 500px)
-        font-size 50px
-        top 135px
-
-
-  #editor
     width 100%
     height 100%
+    background-repeat no-repeat
+    background-position center center
+    background-attachment fixed
+    background-size cover
+
+  .type-red
     display none
+    width 100%
+    height 100%
+    background-color #f00
 
+  .img1
+    display none
+    background-image url(/img/bg1.jpg)
 
-    #editor-type-images
-        background-color #000
-        background-image url(/img/bg-black.jpg)
-        background-repeat no-repeat
-        background-position top center
-        background-attachment fixed
-        background-size cover
-        width 100%
-        height 100%
+  .img2
+    display none
+    background-image url(/img/bg2.jpg)
 
-        .type-img
+  .img3
+    display none
+    background-image url(/img/bg3.jpg)
 
-          width 100%
-          height 100%
-          background-repeat no-repeat
-          background-position center center
-          background-attachment fixed
-          background-size cover
+  .img4
+    display none
+    background-image url(/img/bg4.jpg)
 
-        .type-red
-          display none
-          width 100%
-          height 100%
-          background-color #f00
+  .img5
+    display none
+    background-image url(/img/bg5.jpg)
 
-
-        .img1
-          display none
-          background-image url(/img/bg1.jpg)
-
-        .img2
-          display none
-          background-image url(/img/bg2.jpg)
-
-        .img3
-          display none
-          background-image url(/img/bg3.jpg)
-
-        .img4
-          display none
-          background-image url(/img/bg4.jpg)
-
-        .img5
-          display none
-          background-image url(/img/bg5.jpg)
 #bottom
   background #000
   display none
@@ -212,10 +144,7 @@ html, body
         background-repeat no-repeat
         background-position top center
         background-size cover
-        transition:.5s;
-
-
-
+        transition: .5s;
 
         .over-inner
           display table
@@ -226,7 +155,6 @@ html, body
             display table-cell
             vertical-align middle
 
-
         h3
           font-size 32px
           letter-spacing 2px
@@ -234,8 +162,6 @@ html, body
           text-transform uppercase
           padding 40px 40px 20px 40px
           margin 0px
-
-
 
         p
           font-family "knockout48_featherweight"
@@ -277,7 +203,6 @@ html, body
       @media (min-width: 501px) and (max-width: 800px)
         width 50%
 
-
       &:hover
         .over
           opacity 1
@@ -306,23 +231,23 @@ html, body
   &:hover
     color #f00 !important
 
-
 .video-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 30px; height: 0; overflow: hidden;
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
 }
 
 .video-container iframe,
 .video-container object,
 .video-container embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
-
 
 .cf:before, .cf:after
   content " "
