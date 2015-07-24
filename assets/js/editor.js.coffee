@@ -71,7 +71,7 @@ class Editor
 
     $controls.find('.download').click => @downloadLocal()
 
-    $controls.find('.share').click => @upload()
+    $controls.find('.share').click => @showSharing()
 
     $(".upload.button").click -> $("input[type=file]").click()
     $controls.find('input[type=file]').change ->
@@ -352,46 +352,61 @@ class Editor
     @setMode 'done'
     @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
 
-  upload: ->
-    return if @permalink? #only run this once
-    @setMode 'done'
-    @captureImageDeferred().done (blob)=>
-      uploader = new Uploader(blob, @cityText)
-      uploader.start().done (shareUrl)=>
-        console.log "Ready to share!", shareUrl
-        @permalink = window.location.origin + shareUrl
-        $popup = $('.featherlight .share-popup').addClass('ready')
+  showSharing: ->
+    if @isSharingBusy then return else @isSharingBusy = true
 
-        encodedData = (src) =>
-          cityText = @cityText
-          (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
+    if @permalink?
+      @popupSharing()
+    else
+      loader = @getLoader()
+      @setMode 'done'
+      @captureImageDeferred().done (blob)=>
+        uploader = new Uploader(blob, @cityText)
+        uploader.start().done (shareUrl)=>
+          loader.resolve()
+          console.log "Ready to share!", shareUrl
+          @permalink = window.location.origin + shareUrl
 
-        $twitter = $popup.find 'a.twitter'
-        td = encodedData $twitter
-        url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
-        $twitter.attr(href: url)
+          $popup = $('#share-popup-src').addClass('ready')
 
-        $facebook = $popup.find 'a.facebook'
-        redir = window.location.origin + "/close.html"
-        url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
-        $facebook.attr(href: url)
+          encodedData = (src) =>
+            cityText = @cityText
+            (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
 
-        # Override href to open in new window
-        $popup.find('a').click (e)->
+          $twitter = $popup.find 'a.twitter'
+          td = encodedData $twitter
+          url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
+          $twitter.attr(href: url)
+
+          $facebook = $popup.find 'a.facebook'
+          redir = window.location.origin + "/close.html"
+          url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+          $facebook.attr(href: url)
+
+          @popupSharing()
+
+  popupSharing: ->
+    $.featherlight $('#share-popup-src'),
+      variant: 'featherlight-share'
+      afterOpen: ->
+        $('.share-popup').find('a').click (e)->
           e.preventDefault()
           $this = $(this)
           w = $this.data('popwidth')
           h = $this.data('popheight')
+          # Override href to open in new window
           window.open $(this).attr('href'), "share", "width=#{w},height=#{h},centerscreen=true"
+      afterClose: =>
+        @isSharingBusy = false
+
 
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
-    console.log "Loading in #{fileDescriptor.name} at size #{fileDescriptor.fileSize}"
-    @setMode 'photo'
+    $(".upload img").attr("src", "/img/btn-changephoto.png")
+    loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>
-      $(".upload img").attr("src", "/img/btn-changephoto.png")
 
       console.log "Loaded!"
       img = new Image()
@@ -400,6 +415,8 @@ class Editor
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
+        loader.resolve()
+        @setMode 'photo'
         if @photo?
           @photo.off 'selected'
           @photo.off 'moving'
@@ -518,6 +535,12 @@ class Editor
     @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left)) + l.width/2
     @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top)) + l.height/2
 
+
+  getLoader: ->
+    $('#loader').show()
+    deferred = $.Deferred()
+    deferred.always ->$('#loader').hide()
+    deferred
 
   containsProfanity = (text) ->
     returnVal = false

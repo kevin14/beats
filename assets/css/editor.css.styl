@@ -206,19 +206,25 @@ html, body
         display none
 
 // Popup
-.popup
+.share-popup
   display none
   text-align center
   background-image url(/img/bg-white.jpg)
   background-size cover
   padding 128px 0
-  &:not(.ready) .button
-    cursor wait
-    opacity 0.25
-    pointer-events none
+  //&:not(.ready) .button
+  //  cursor wait
+  //  opacity 0.25
+  //  pointer-events none
   .button
     margin 0 10px
 
+.featherlight-share
+  .share-popup
+    display block
+  .featherlight-content
+    width 800px
+    max-width 90%
 
 // Intro
 

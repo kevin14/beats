@@ -51,13 +51,13 @@ block content
         form.editor-actions
           .button.download
             img(src="/img/btn-download.png")
-          .button.share(data-featherlight="#share-popup")
+          .button.share
             img(src="/img/btn-share.png")
           input#action-upload(type="file", accept="image/*")
           .button.upload
             img(src="/img/btn-addphoto.png")
 
-      #share-popup.share-popup.popup
+      #share-popup-src.share-popup
         a.close
         a.button.twitter(href="#", target="share", data-text="Straight Outta {CITY}", data-hashtags="soc,beats", data-popwidth="550", data-popheight="420")
           img(src="/img/btn-twitter.png", height="45")
@@ -71,6 +71,7 @@ block content
   a#down.hidden
     img(src="/img/arrow-down.png")
 
+  img#loader(src="/img/loader.gif")
 
   #bottom.hidden
     ul.cf
