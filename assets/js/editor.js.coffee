@@ -221,15 +221,19 @@ class Editor
       top: @canvas.height - 80
 
   initializeIntroMode: ->
+    $(document).on 'keydown', =>
+      @typeTextStop()
+      $(document).off 'keydown'
     @typeTextSeries(INTRO_CITIES).always =>
-      # $('#slides').remove()
+      console.log 'Intro over'
+      $('#slides').delay(100).fadeOut 600, ->$(this).remove()
       $('#bottom').removeClass('hidden').show()
       $('#down').removeClass('hidden').show().click ->
         $('body').animate {scrollTop: $('#bottom').offset().top}, 750
       $('#beats-logo').show()
       @setMode 'text'
       @typeTextClear()
-#      @focusTextField()
+      @focusTextField()
 
   fixOrderingOnLoad: ->
     @canvas.discardActiveObject()
@@ -284,8 +288,6 @@ class Editor
     return if @typeTextCanceling
     text = @typeTextSeriesArray.shift()
     unless text?
-      $slide = $('#slides .slide').first()
-      $slide.fadeOut 1200, ->$(this).parent().remove()
       return @typeTextSeriesDeferred.resolve()
     window.setTimeout =>
       unless isFirst
@@ -318,8 +320,8 @@ class Editor
     console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
-    @typeTextDeferred.fail()
-    @typeTextSeriesDeferred.fail()
+    @typeTextDeferred.reject()
+    @typeTextSeriesDeferred.reject()
 
 
   typeTextQueueUpdate: ->
