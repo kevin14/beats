@@ -339,7 +339,7 @@ class Editor
 
   #region EXPORTING AND SHARING ----------------------------------------------------------------------------------------
 
-  captureImageDeferred: (type = 'image/jpg', quality = 0.8)->
+  captureImageDeferred: (type = 'image/jpeg', quality = 0.8)->
     # prepare canvas for capture
     @canvas.discardActiveObject()
     # capture as deferred
@@ -349,8 +349,12 @@ class Editor
     deferred
 
   downloadLocal: ->
+    oldColor = @canvas.backgroundColor
+    @canvas.backgroundColor = 'black'
     @setMode 'done'
     @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
+    @canvas.backgroundColor = oldColor
+    @canvasUpdateFunction()
 
   showSharing: ->
     if @isSharingBusy then return else @isSharingBusy = true
