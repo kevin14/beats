@@ -207,6 +207,7 @@ class Editor
       # $('#slides').remove()
       $('#bottom').removeClass('hidden').show()
       $('#down').removeClass('hidden').show()
+      $('#beats-logo').show()
       @setMode 'text'
       @typeTextClear()
 #      @focusTextField()
