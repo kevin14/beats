@@ -6,22 +6,6 @@ class Editor
   # All duplicates removed
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
-  SELECTABLE_OPTIONS =
-    selectable: true
-    hasRotatingPoint: false
-    lockRotation: true
-    lockScalingFlip: true
-    lockUniScaling: true
-    lockMovementX: false
-    lockMovementY: false
-#    centeredScaling: true
-    selectionColor: 'white'
-    cornerColor: 'white'
-    borderColor: 'white'
-    borderWidth: 3
-    transparentCorners: false
-    padding: 10
-
   NO_CONTROLS_OPTIONS =
     hasBorders: false
     hasControls: false
@@ -32,12 +16,8 @@ class Editor
     lockScalingX: true
     lockScalingY: true
 
-  LOGO_SCALE_MIN = 0.1
-  LOGO_SCALE_MAX = 1.0
-
   constructor: ($canvas, $controls) ->
     @values =
-      logo: Maths.normalizeFromRange(1, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
       photo: 0
       grain: 1
       contrast: 0.25
@@ -166,8 +146,9 @@ class Editor
       @canvas.remove @logoText
       @canvas.remove @logoFrame
       @logo = new fabric.Image(img)
-      @logo.set(SELECTABLE_OPTIONS).set
-        minScaleLimit: LOGO_SCALE_MIN
+      @logo.set
+        selectable: false
+        evented: false
         originX: 'center'
         originY: 'center'
         left: @canvas.width/2
@@ -175,24 +156,14 @@ class Editor
       @canvas.add @logo
       @canvas.backgroundColor = 'black'
 
-      # Setup select & move event handlers
-      @logo.on 'selected', =>@setParameter('logo', true)
-      @logo.on 'moving', =>@constrainLogoMove()
-      @logo.on 'scaling', =>
-        scale = @logo.scaleX
-        scaleSlider = Maths.normalizeFromRange scale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
-        @values.logo = scaleSlider
-        @controlsRange.set scaleSlider
-
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
       originX: 'center'
       originY: 'center'
       selectable: false
       evented: false
-    @watermark.set
       left: @canvas.width/2
-      top: @canvas.height - 80
+      top: @canvas.height * 0.9
 
   initializeIntroMode: ->
     $(document).on 'keydown', =>
@@ -226,17 +197,7 @@ class Editor
     oldMode = @mode
     return if oldMode == newMode
     console.log "editor.mode = #{newMode}"
-
-    # turn the sound on
-    if newMode == "text"
-      window.intro = false
-      console.log("SETTING INTRO TO FALSE")
-
-
-    # switch oldMode
-    #   when 'text' then @bakeLogoText()
     switch newMode
-#      when 'text' then @initializeTextMode()
       when 'intro' then @initializeIntroMode()
       when 'photo' then @initializePhotoMode()
       when 'done' then @finalizeForDoneMode()
@@ -315,10 +276,6 @@ class Editor
 
 
   #region EXPORTING AND SHARING ----------------------------------------------------------------------------------------
-
-  captureWideImageDeferred: ->
-    @canvas.discardActiveObject()
-
 
   captureImageDeferred: (type = 'image/jpeg', quality = 0.8)->
     # prepare canvas for capture
@@ -411,24 +368,31 @@ class Editor
         else
           # Animate logo into smaller position
           window.setTimeout =>
-            toScale = 0.55
-            opts = duration: 2000, easing: fabric.util.ease.easeOutExpo
+            toScale = 0.6
+            opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
             @logo.animate 'scaleX', toScale, opts
             @logo.animate 'scaleY', toScale, opts
             opts.onChange = =>@canvas.renderAll()
-            @logo.animate 'top', 440, opts
-            @values.logo = Maths.normalizeFromRange toScale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
-          , 1000
+            @logo.animate 'top', 410, opts
+          , 500
 
         console.log "Final dimensions #{photo.width}x#{photo.height}"
         @photo = photo
-        @photo.set(SELECTABLE_OPTIONS).set
+        @photo.set
           originX: 'left'
           originY: 'top'
-          hasBorders: false
-          hasControls: false
+          selectable: true
+          hasRotatingPoint: false
+          lockRotation: true
+          lockScalingFlip: true
+          lockUniScaling: true
+          lockMovementX: false
+          lockMovementY: false
           lockScalingX: true
           lockScalingY: true
+          centeredScaling: true
+          hasBorders: false
+          hasControls: false
           width: @canvas.width
           height: @canvas.height
           padding: 0
@@ -454,8 +418,7 @@ class Editor
     H = @canvas.height * OVERSCALE
     aspect = img.width/img.height
     console.log "Loaded image at #{img.width}x#{img.height}"
-    scaleNeeded = img.width > W && img.height > H
-    if scaleNeeded
+    if img.width > W && img.height > H
       console.warn "Scaling down image"
       resizeCanvas = document.createElement 'canvas'
       resizeCanvas.width = W
@@ -478,11 +441,10 @@ class Editor
     @parameter = parameterId
     @controlsRange.set @values[@parameter]
     unless programmatic
-      switch @parameter
-        when 'photo'
-          if @photo? then @canvas.setActiveObject @photo
-        when 'logo' then @canvas.setActiveObject @logo
-        else @canvas.discardActiveObject()
+      if @parameter == 'photo' and @photo?
+        @canvas.setActiveObject @photo
+      else
+        @canvas.discardActiveObject()
 
   setValue: (value, eventType) ->
     @values[@parameter] = value
@@ -490,9 +452,6 @@ class Editor
       when 'photo'
         @photo?.scale(value + 1)
         @constrainPhotoMove()
-      when 'logo'
-        @logo?.scale Maths.mapToRange(value, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
-        @constrainLogoMove()
       when 'contrast'
         unless eventType == 'update'
           @photo?.filters[0]?.contrast = value
@@ -504,8 +463,6 @@ class Editor
         else if @logo.filters.length == 0
           @logo.filters = [new fabric.Image.filters.Invert()]
           @logo.applyFilters => @canvas.renderAll()
-      # when 'grain'
-      #   @grain?.set opacity: value
     @canvas.renderAll()
 
   constrainPhotoMove: ->
@@ -513,15 +470,6 @@ class Editor
     p = @photo.getBoundingRect()
     @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left))
     @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top))
-
-  constrainLogoMove: ->
-    @logo.setCoords()
-    l = @logo.getBoundingRect()
-    l.width -= @logo.padding*2
-    l.height -= @logo.padding*2
-    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left)) + l.width/2
-    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top)) + l.height/2
-
 
   getLoader: ->
     $('#loader').show()
