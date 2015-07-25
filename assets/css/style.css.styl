@@ -47,6 +47,45 @@ html, body
   img
     width 20px
 
+#legal
+  position absolute
+  bottom 15px
+  left 15px
+  text-transform uppercase
+  font-size 22px
+  letter-spacing 2px
+  z-index 998
+
+  a
+    text-decoration none
+    padding-right 10px
+    color #959595
+
+    &:hover
+      color #fff
+
+  @media (max-width: 500px)
+    font-size 18px
+
+
+#theaters
+  position absolute
+  top 25px
+  width 100%
+  text-align center
+  color #fff
+  text-transform uppercase
+  font-size 22px
+  letter-spacing 2px
+  z-index 998
+
+  @media (max-width: 500px)
+    font-size 18px
+    top 26px
+    padding-right 15px
+    text-align right
+
+
 #sound-toggle
   position fixed
   z-index 9999

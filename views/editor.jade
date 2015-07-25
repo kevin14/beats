@@ -3,6 +3,13 @@ extends layout
 block content
 
   #top
+    #theaters
+      |Straight Outta Compton in Theaters August 14  
+      
+    #legal 
+      a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy 
+      a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
+    
     #slides
       .slide.slide1(data-city="Chicago")
       .slide.slide2(data-city="Brooklyn")
@@ -66,7 +73,9 @@ block content
 
   a#beats-logo(href="/")
     img(src="/img/beats-logo.png")
-  //a#sound-toggle.on(href="#") Sound On
+  
+  
+  // a#sound-toggle.on(href="#") Sound On
 
   img#loader(src="/img/loader.gif")
   // 
