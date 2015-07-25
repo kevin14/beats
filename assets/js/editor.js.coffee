@@ -129,6 +129,7 @@ class Editor
     console.log "Entering photo phase"
     console.log "Baking text image"
 
+
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
     @logoText.off 'editing:exited'
@@ -149,7 +150,14 @@ class Editor
         left: @canvas.width/2
         top: @canvas.height/2
       @canvas.add @logo
-      @canvas.backgroundColor = 'black'
+
+      # Animate logo to final position
+      toScale = 0.6
+      opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
+      @logo.animate 'scaleX', toScale, opts
+      @logo.animate 'scaleY', toScale, opts
+      opts.onChange = =>@canvas.renderAll()
+      @logo.animate 'top', 410, opts
 
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
@@ -159,6 +167,10 @@ class Editor
       evented: false
       left: @canvas.width/2
       top: @canvas.height * 0.9
+
+    @canvas.backgroundColor = 'black'
+    @canvas.renderAll()
+    @canvas.add @watermark
 
   initializeIntroMode: ->
     $(document).on 'keydown', =>
@@ -350,6 +362,7 @@ class Editor
     @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
+
     reader = new FileReader()
     reader.onload = (e)=>
 
@@ -360,22 +373,10 @@ class Editor
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
-        loader.resolve()
-        @setMode 'photo'
         if @photo?
           @photo.off 'selected'
           @photo.off 'moving'
           @canvas.remove @photo
-        else
-          # Animate logo into smaller position
-          window.setTimeout =>
-            toScale = 0.6
-            opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
-            @logo.animate 'scaleX', toScale, opts
-            @logo.animate 'scaleY', toScale, opts
-            opts.onChange = =>@canvas.renderAll()
-            @logo.animate 'top', 410, opts
-          , 500
 
         console.log "Final dimensions #{photo.width}x#{photo.height}"
         @photo = photo
@@ -403,12 +404,13 @@ class Editor
           @photo.height = @canvas.height / aspect
         @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
         @photo.applyFilters =>
+          @setMode 'photo'
           @canvas.insertAt @photo, 0
           @photo.center()
-          @fixOrderingOnLoad()
           @photo.on 'selected', =>@setParameter('photo', true)
           @photo.on 'moving', =>@constrainPhotoMove()
           @setParameter('photo', true)
+          loader.resolve()
     reader.readAsDataURL fileDescriptor
 
   downscalePhotoIfNeededDeferred: (img) ->
