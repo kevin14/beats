@@ -4,7 +4,6 @@ var aws = require('aws-sdk');
 var config = require('../config');
 
 //var http = require('http');
-var gm = require("gm"), im = gm.subClass({imageMagick: true});
 var mongoose = require("mongoose");
 var model = require("../model");
 
@@ -33,6 +32,7 @@ router.get("/:id", function(req, res) {
 });
 
 router.get("/:id/wide", function(req, res) {
+  var gm = require("gm"), im = gm.subClass({imageMagick: true});
   model.Uploads.findOne({'file_id': req.params.id}).exec(function(err, upload) {
     if(err) {
       console.log(err);
