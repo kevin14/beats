@@ -4,6 +4,8 @@ html
     != LRScript
     title Straight Outta #{location}
 
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1", user-scalable="no")
+    
     meta(property="og:image", content="#{baseUrl}/share/#{id}/wide")
     meta(property="og:image:width", content="1900")
     meta(property="og:image:height", content="846")
@@ -16,8 +18,14 @@ html
     meta(name="twitter:site" content="@straightouttacompton")
     meta(name="twitter:creator" content="@straightouttacompton")
       
+    link(rel='stylesheet', href='/assets/share.css')
+      
 
-  block content
-    img(src="#{url}")
+  body
+    a#beats-logo(href="/")
+      img(src="/img/beats-logo.png")
+    #share-body
+      #share-inner
+        img(src="#{url}")
     
   
