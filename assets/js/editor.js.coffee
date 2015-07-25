@@ -2,19 +2,7 @@ class Editor
 
   INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
 
-  #  PROFANITIES = /fuckload|fuckem|fuckin'|motherfuckin-g|fcking|fuckity|fuckn|fucktards|niggas|nigger|motherfuckin|fucker|nigga|asshole|fuckhole|fuckapple|fuckwad|fuckoff|cocksucker|fuckers|niggaz|mutherfucker|fuck|fuckme|fucks|fuckin|fuckwit|fuckin|motherfucker|fuckman|fuckass|fuckin|fuckyou|titfucker|fucked|blowjob|tittyfucker|clit|fuckwhore|gangbang|motherfucking|titfuck|wetback|fuckfest/i
-  # All duplicates removed
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
-
-  NO_CONTROLS_OPTIONS =
-    hasBorders: false
-    hasControls: false
-    hasRotatingPoint: false
-    lockMovementX: true
-    lockMovementY: true
-    lockRotation: true
-    lockScalingX: true
-    lockScalingY: true
 
   constructor: ($canvas, $controls) ->
     @values =
@@ -99,10 +87,18 @@ class Editor
       cursorWidth: 8
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
-      selectionColor: 'rgba(255,255,255,0.85)'
+      hasBorders: false
+      hasControls: false
+      hasRotatingPoint: false
+      lockMovementX: true
+      lockMovementY: true
+      lockRotation: true
+      lockScalingX: true
+      lockScalingY: true
+      selectionColor: 'transparent'
+
     # Experimental fabric addon features
     @logoText.set
-      selectionColor: 'transparent'
       textAlign: 'stretch'
       width: 740
       fixedLineWidth: 740
@@ -112,7 +108,6 @@ class Editor
       cursorDeltaX: 0
       cursorDeltaY: -12
       maxLength: 25
-    @logoText.set NO_CONTROLS_OPTIONS
     @canvas.add @logoText
 
     @logoText.on 'changed', (e) =>
@@ -385,9 +380,10 @@ class Editor
         console.log "Final dimensions #{photo.width}x#{photo.height}"
         @photo = photo
         @photo.set
-          originX: 'left'
-          originY: 'top'
           selectable: true
+          originX: 'center'
+          originY: 'center'
+          centeredScaling: true
           hasRotatingPoint: false
           lockRotation: true
           lockScalingFlip: true
@@ -396,7 +392,6 @@ class Editor
           lockMovementY: false
           lockScalingX: true
           lockScalingY: true
-          centeredScaling: true
           hasBorders: false
           hasControls: false
           width: @canvas.width
@@ -407,14 +402,13 @@ class Editor
         else
           @photo.height = @canvas.height / aspect
         @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-        @photo.applyFilters =>@canvas.renderAll()
-        @canvas.add @photo
-        @canvas.sendToBack @photo
-        @photo.center()
-        @fixOrderingOnLoad()
-        @photo.on 'selected', =>@setParameter('photo', true)
-        @photo.on 'moving', =>@constrainPhotoMove()
-        @setParameter('photo', true)
+        @photo.applyFilters =>
+          @canvas.insertAt @photo, 0
+          @photo.center()
+          @fixOrderingOnLoad()
+          @photo.on 'selected', =>@setParameter('photo', true)
+          @photo.on 'moving', =>@constrainPhotoMove()
+          @setParameter('photo', true)
     reader.readAsDataURL fileDescriptor
 
   downscalePhotoIfNeededDeferred: (img) ->
@@ -474,8 +468,8 @@ class Editor
   constrainPhotoMove: ->
     @photo.setCoords()
     p = @photo.getBoundingRect()
-    @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left))
-    @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top))
+    @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left)) + p.width/2
+    @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top)) + p.height/2
 
   getLoader: ->
     $('#loader').show()
