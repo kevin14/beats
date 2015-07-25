@@ -316,6 +316,10 @@ class Editor
 
   #region EXPORTING AND SHARING ----------------------------------------------------------------------------------------
 
+  captureWideImageDeferred: ->
+    @canvas.discardActiveObject()
+
+
   captureImageDeferred: (type = 'image/jpeg', quality = 0.8)->
     # prepare canvas for capture
     @canvas.discardActiveObject()
@@ -341,9 +345,6 @@ class Editor
     else
       loader = @getLoader()
       @setMode 'done'
-      # RB FB WIDE IMAGE
-      @canvas.setDimensions width: @canvas.height * 1.91
-      @canvas.backgroundColor = 'transparent'
       @canvasUpdateFunction()
       @captureImageDeferred('image/png').done (blob)=>
         @cityText = @cityText.toTitleCase()

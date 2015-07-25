@@ -17,6 +17,7 @@
     "debug": "~2.2.0",
     "express": "~4.12.4",
     "express-livereload": "0.0.24",
+    "gm": "^1.18.1",
     "http-auth": "*",
     "jade": "~1.9.2",
     "mongoose": "*",
