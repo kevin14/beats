@@ -4,7 +4,7 @@ var aws = require('aws-sdk');
 var config = require('../config');
 
 //var http = require('http');
-var gm = require("gm");
+var gm = require("gm"), im = gm.subClass({imageMagick: true});
 var mongoose = require("mongoose");
 var model = require("../model");
 
@@ -40,7 +40,7 @@ router.get("/:id/wide", function(req, res) {
     if(upload) {
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/png');
-      gm(url).gravity('center').borderColor('transparent').border(527,0).stream('png').pipe(res);
+      im(url).gravity('center').borderColor('transparent').border(527,0).stream('png').pipe(res);
     }
   });
 });
