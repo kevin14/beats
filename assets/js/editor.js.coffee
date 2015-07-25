@@ -1,6 +1,6 @@
 class Editor
 
-  INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
+  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago", "Brooklyn"]
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
