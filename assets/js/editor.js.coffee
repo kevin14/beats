@@ -1,6 +1,6 @@
 class Editor
 
-  INTRO_CITIES = ["Chicago", "Brooklyn", "Oakland", "Boston", "Los Angeles"]
+  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago", "Brooklyn"]
 
   #  PROFANITIES = /fuckload|fuckem|fuckin'|motherfuckin-g|fcking|fuckity|fuckn|fucktards|niggas|nigger|motherfuckin|fucker|nigga|asshole|fuckhole|fuckapple|fuckwad|fuckoff|cocksucker|fuckers|niggaz|mutherfucker|fuck|fuckme|fucks|fuckin|fuckwit|fuckin|motherfucker|fuckman|fuckass|fuckin|fuckyou|titfucker|fucked|blowjob|tittyfucker|clit|fuckwhore|gangbang|motherfucking|titfuck|wetback|fuckfest/i
   # All duplicates removed
