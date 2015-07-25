@@ -2,42 +2,10 @@ class Editor
 
   INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago", "Brooklyn"]
 
-  #  PROFANITIES = /fuckload|fuckem|fuckin'|motherfuckin-g|fcking|fuckity|fuckn|fucktards|niggas|nigger|motherfuckin|fucker|nigga|asshole|fuckhole|fuckapple|fuckwad|fuckoff|cocksucker|fuckers|niggaz|mutherfucker|fuck|fuckme|fucks|fuckin|fuckwit|fuckin|motherfucker|fuckman|fuckass|fuckin|fuckyou|titfucker|fucked|blowjob|tittyfucker|clit|fuckwhore|gangbang|motherfucking|titfuck|wetback|fuckfest/i
-  # All duplicates removed
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
-
-  SELECTABLE_OPTIONS =
-    selectable: true
-    hasRotatingPoint: false
-    lockRotation: true
-    lockScalingFlip: true
-    lockUniScaling: true
-    lockMovementX: false
-    lockMovementY: false
-#    centeredScaling: true
-    selectionColor: 'white'
-    cornerColor: 'white'
-    borderColor: 'white'
-    borderWidth: 3
-    transparentCorners: false
-    padding: 10
-
-  NO_CONTROLS_OPTIONS =
-    hasBorders: false
-    hasControls: false
-    hasRotatingPoint: false
-    lockMovementX: true
-    lockMovementY: true
-    lockRotation: true
-    lockScalingX: true
-    lockScalingY: true
-
-  LOGO_SCALE_MIN = 0.1
-  LOGO_SCALE_MAX = 1.0
 
   constructor: ($canvas, $controls) ->
     @values =
-      logo: Maths.normalizeFromRange(1, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
       photo: 0
       grain: 1
       contrast: 0.25
@@ -119,10 +87,18 @@ class Editor
       cursorWidth: 8
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
-      selectionColor: 'rgba(255,255,255,0.85)'
+      hasBorders: false
+      hasControls: false
+      hasRotatingPoint: false
+      lockMovementX: true
+      lockMovementY: true
+      lockRotation: true
+      lockScalingX: true
+      lockScalingY: true
+      selectionColor: 'transparent'
+
     # Experimental fabric addon features
     @logoText.set
-      selectionColor: 'transparent'
       textAlign: 'stretch'
       width: 740
       fixedLineWidth: 740
@@ -132,7 +108,6 @@ class Editor
       cursorDeltaX: 0
       cursorDeltaY: -12
       maxLength: 25
-    @logoText.set NO_CONTROLS_OPTIONS
     @canvas.add @logoText
 
     @logoText.on 'changed', (e) =>
@@ -154,6 +129,7 @@ class Editor
     console.log "Entering photo phase"
     console.log "Baking text image"
 
+
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
     @logoText.off 'editing:exited'
@@ -166,23 +142,22 @@ class Editor
       @canvas.remove @logoText
       @canvas.remove @logoFrame
       @logo = new fabric.Image(img)
-      @logo.set(SELECTABLE_OPTIONS).set
-        minScaleLimit: LOGO_SCALE_MIN
+      @logo.set
+        selectable: false
+        evented: false
         originX: 'center'
         originY: 'center'
         left: @canvas.width/2
         top: @canvas.height/2
       @canvas.add @logo
-      @canvas.backgroundColor = 'black'
 
-      # Setup select & move event handlers
-      @logo.on 'selected', =>@setParameter('logo', true)
-      @logo.on 'moving', =>@constrainLogoMove()
-      @logo.on 'scaling', =>
-        scale = @logo.scaleX
-        scaleSlider = Maths.normalizeFromRange scale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
-        @values.logo = scaleSlider
-        @controlsRange.set scaleSlider
+      # Animate logo to final position
+      toScale = 0.6
+      opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
+      @logo.animate 'scaleX', toScale, opts
+      @logo.animate 'scaleY', toScale, opts
+      opts.onChange = =>@canvas.renderAll()
+      @logo.animate 'top', 410, opts
 
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
@@ -190,9 +165,12 @@ class Editor
       originY: 'center'
       selectable: false
       evented: false
-    @watermark.set
       left: @canvas.width/2
-      top: @canvas.height - 80
+      top: @canvas.height * 0.9
+
+    @canvas.backgroundColor = 'black'
+    @canvas.renderAll()
+    @canvas.add @watermark
 
   initializeIntroMode: ->
     $(document).on 'keydown', =>
@@ -226,17 +204,7 @@ class Editor
     oldMode = @mode
     return if oldMode == newMode
     console.log "editor.mode = #{newMode}"
-
-    # turn the sound on
-    if newMode == "text"
-      window.intro = false
-      console.log("SETTING INTRO TO FALSE")
-
-
-    # switch oldMode
-    #   when 'text' then @bakeLogoText()
     switch newMode
-#      when 'text' then @initializeTextMode()
       when 'intro' then @initializeIntroMode()
       when 'photo' then @initializePhotoMode()
       when 'done' then @finalizeForDoneMode()
@@ -316,10 +284,6 @@ class Editor
 
   #region EXPORTING AND SHARING ----------------------------------------------------------------------------------------
 
-  captureWideImageDeferred: ->
-    @canvas.discardActiveObject()
-
-
   captureImageDeferred: (type = 'image/jpeg', quality = 0.8)->
     # prepare canvas for capture
     @canvas.discardActiveObject()
@@ -329,7 +293,11 @@ class Editor
     @canvas.lowerCanvasEl.toBlob onBlobReady, type, quality
     deferred
 
+  logActionToAnalytics: (label)->
+    ga?('send', 'event', 'action', label)
+
   downloadLocal: ->
+    @logActionToAnalytics 'download'
     oldColor = @canvas.backgroundColor
     @canvas.backgroundColor = 'black'
     @setMode 'done'
@@ -340,6 +308,7 @@ class Editor
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
 
+    @logActionToAnalytics 'share'
     if @permalink?
       @popupSharing()
     else
@@ -390,8 +359,10 @@ class Editor
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
+    @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
+
     reader = new FileReader()
     reader.onload = (e)=>
 
@@ -402,33 +373,28 @@ class Editor
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
-        loader.resolve()
-        @setMode 'photo'
         if @photo?
           @photo.off 'selected'
           @photo.off 'moving'
           @canvas.remove @photo
-        else
-          # Animate logo into smaller position
-          window.setTimeout =>
-            toScale = 0.55
-            opts = duration: 2000, easing: fabric.util.ease.easeOutExpo
-            @logo.animate 'scaleX', toScale, opts
-            @logo.animate 'scaleY', toScale, opts
-            opts.onChange = =>@canvas.renderAll()
-            @logo.animate 'top', 440, opts
-            @values.logo = Maths.normalizeFromRange toScale, LOGO_SCALE_MIN, LOGO_SCALE_MAX
-          , 1000
 
         console.log "Final dimensions #{photo.width}x#{photo.height}"
         @photo = photo
-        @photo.set(SELECTABLE_OPTIONS).set
-          originX: 'left'
-          originY: 'top'
-          hasBorders: false
-          hasControls: false
+        @photo.set
+          selectable: true
+          originX: 'center'
+          originY: 'center'
+          centeredScaling: true
+          hasRotatingPoint: false
+          lockRotation: true
+          lockScalingFlip: true
+          lockUniScaling: true
+          lockMovementX: false
+          lockMovementY: false
           lockScalingX: true
           lockScalingY: true
+          hasBorders: false
+          hasControls: false
           width: @canvas.width
           height: @canvas.height
           padding: 0
@@ -437,14 +403,14 @@ class Editor
         else
           @photo.height = @canvas.height / aspect
         @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-        @photo.applyFilters =>@canvas.renderAll()
-        @canvas.add @photo
-        @canvas.sendToBack @photo
-        @photo.center()
-        @fixOrderingOnLoad()
-        @photo.on 'selected', =>@setParameter('photo', true)
-        @photo.on 'moving', =>@constrainPhotoMove()
-        @setParameter('photo', true)
+        @photo.applyFilters =>
+          @setMode 'photo'
+          @canvas.insertAt @photo, 0
+          @photo.center()
+          @photo.on 'selected', =>@setParameter('photo', true)
+          @photo.on 'moving', =>@constrainPhotoMove()
+          @setParameter('photo', true)
+          loader.resolve()
     reader.readAsDataURL fileDescriptor
 
   downscalePhotoIfNeededDeferred: (img) ->
@@ -454,8 +420,7 @@ class Editor
     H = @canvas.height * OVERSCALE
     aspect = img.width/img.height
     console.log "Loaded image at #{img.width}x#{img.height}"
-    scaleNeeded = img.width > W && img.height > H
-    if scaleNeeded
+    if img.width > W && img.height > H
       console.warn "Scaling down image"
       resizeCanvas = document.createElement 'canvas'
       resizeCanvas.width = W
@@ -478,11 +443,10 @@ class Editor
     @parameter = parameterId
     @controlsRange.set @values[@parameter]
     unless programmatic
-      switch @parameter
-        when 'photo'
-          if @photo? then @canvas.setActiveObject @photo
-        when 'logo' then @canvas.setActiveObject @logo
-        else @canvas.discardActiveObject()
+      if @parameter == 'photo' and @photo?
+        @canvas.setActiveObject @photo
+      else
+        @canvas.discardActiveObject()
 
   setValue: (value, eventType) ->
     @values[@parameter] = value
@@ -490,9 +454,6 @@ class Editor
       when 'photo'
         @photo?.scale(value + 1)
         @constrainPhotoMove()
-      when 'logo'
-        @logo?.scale Maths.mapToRange(value, LOGO_SCALE_MIN, LOGO_SCALE_MAX)
-        @constrainLogoMove()
       when 'contrast'
         unless eventType == 'update'
           @photo?.filters[0]?.contrast = value
@@ -504,24 +465,13 @@ class Editor
         else if @logo.filters.length == 0
           @logo.filters = [new fabric.Image.filters.Invert()]
           @logo.applyFilters => @canvas.renderAll()
-      # when 'grain'
-      #   @grain?.set opacity: value
     @canvas.renderAll()
 
   constrainPhotoMove: ->
     @photo.setCoords()
     p = @photo.getBoundingRect()
-    @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left))
-    @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top))
-
-  constrainLogoMove: ->
-    @logo.setCoords()
-    l = @logo.getBoundingRect()
-    l.width -= @logo.padding*2
-    l.height -= @logo.padding*2
-    @logo.setLeft Math.max(0, Math.min(@canvas.width-l.width, l.left)) + l.width/2
-    @logo.setTop Math.max(0, Math.min(@canvas.height-l.height, l.top)) + l.height/2
-
+    @photo.setLeft Math.min(0, Math.max(@canvas.width-p.width, p.left)) + p.width/2
+    @photo.setTop Math.min(0, Math.max(@canvas.height-p.height, p.top)) + p.height/2
 
   getLoader: ->
     $('#loader').show()
