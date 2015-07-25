@@ -67,8 +67,6 @@ class Editor
     @logoFrame = new fabric.Image document.getElementById('img-logo-frame'),
       left: @canvas.width/2 - 768/4
       top: @canvas.height - 824/2 - 40
-#      scaleX: 0.5
-#      scaleY: 0.5
       selectable: false
       evented: false
     @canvas.add @logoFrame
@@ -359,18 +357,23 @@ class Editor
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
+    console.log "Loading file", fileDescriptor.name
+    console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
-
     reader = new FileReader()
     reader.onload = (e)=>
-
       console.log "Loaded!"
       img = new Image()
       img.src = e.target.result
       aspect = img.width/img.height
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
+      if img.width == img.height == 0
+        loader.reject()
+        console.error "Load fail. Retrying."
+        window.setTimeout @setPhoto.call(this, fileDescriptor), 1000
+        return
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
         if @photo?
