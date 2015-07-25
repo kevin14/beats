@@ -286,7 +286,11 @@ class Editor
     @canvas.lowerCanvasEl.toBlob onBlobReady, type, quality
     deferred
 
+  logActionToAnalytics: (label)->
+    ga?('send', 'event', 'action', label)
+
   downloadLocal: ->
+    @logActionToAnalytics 'download'
     oldColor = @canvas.backgroundColor
     @canvas.backgroundColor = 'black'
     @setMode 'done'
@@ -297,6 +301,7 @@ class Editor
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
 
+    @logActionToAnalytics 'share'
     if @permalink?
       @popupSharing()
     else
@@ -347,6 +352,7 @@ class Editor
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
+    @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
