@@ -365,15 +365,13 @@ class Editor
     reader = new FileReader()
     reader.onload = (e)=>
       console.log "Loaded!"
-      console.dir e
       img = new Image()
       img.src = e.target.result
       aspect = img.width/img.height
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
       if img.width == img.height == 0
         loader.reject()
-        console.error "Load fail"
-        console.debug()
+        console.error "Load fail. Retrying."
         window.setTimeout @setPhoto.call(this, fileDescriptor), 1000
         return
 
