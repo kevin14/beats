@@ -379,7 +379,7 @@ class Editor
         return
 
       try
-        imgHeader = @dataUrlToBinary(dataUrl, 64*1024+3)
+        imgHeader = @dataUrlToBinary(dataUrl, 64*1024+32)
       catch e
         console.error e
 
@@ -425,11 +425,13 @@ class Editor
 
         # Now that photo is loaded, try to parse EXIF out and rotate as needed
         if imgHeader? then inkjet.exif imgHeader, (err, metadata)=>
-          switch metadata?.Orientation?.value
-            when 8 then @photo.setAngle -90
-            when 3 then @photo.setAngle -180
-            when 6 then @photo.setAngle 90
-          @canvas.renderAll() unless @photo.angle == 0
+          if metadata?.Orientation?
+            console.log "Rotating from", metadata.Orientation.description
+            switch metadata.Orientation.value
+              when 8 then @photo.setAngle -90
+              when 3 then @photo.setAngle -180
+              when 6 then @photo.setAngle 90
+            @canvas.renderAll() unless @photo.angle == 0
 
     reader.readAsDataURL fileDescriptor
 
