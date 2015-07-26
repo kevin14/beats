@@ -284,10 +284,14 @@ class Editor
 
   captureImageDeferred: (type = 'image/jpeg', quality = 0.8)->
     # prepare canvas for capture
+    oldColor = @canvas.backgroundColor
+    @canvas.backgroundColor = 'black'
     @canvas.discardActiveObject()
     # capture as deferred
     deferred = $.Deferred()
-    onBlobReady = (blob)=>deferred.resolve blob
+    onBlobReady = (blob)=>
+      @canvas.backgroundColor = oldColor
+      deferred.resolve blob
     @canvas.lowerCanvasEl.toBlob onBlobReady, type, quality
     deferred
 
@@ -296,12 +300,8 @@ class Editor
 
   downloadLocal: ->
     @logActionToAnalytics 'download'
-    oldColor = @canvas.backgroundColor
-    @canvas.backgroundColor = 'black'
     @setMode 'done'
     @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
-    @canvas.backgroundColor = oldColor
-    @canvasUpdateFunction()
 
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
@@ -464,7 +464,7 @@ class Editor
       when 'invert'
         if value <= 0
           @logo.filters = []
-          @logo.applyFilters()
+          @logo.applyFilters => @canvas.renderAll()
         else if @logo.filters.length == 0
           @logo.filters = [new fabric.Image.filters.Invert()]
           @logo.applyFilters => @canvas.renderAll()
