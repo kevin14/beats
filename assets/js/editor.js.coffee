@@ -55,7 +55,7 @@ class Editor
 
   #region EDITOR MODES -------------------------------------------------------------------------------------------------
 
-  initializeTextMode: ->
+  initializeTextMode: (deferred)->
     # don't reinitialize
     return if @logoText?
     console.log "Entering city entry Phase"
@@ -120,13 +120,13 @@ class Editor
 #    @logoText.on 'editing:exited', =>
     @canvas.on 'selection:cleared', =>@focusTextField()
     @focusTextField()
+    deferred?.resolve()
 
-  initializePhotoMode: ->
+  initializePhotoMode: (deferred = null, animate = true)->
     # don't reinitialize
     return if @logo?
     console.log "Entering photo phase"
     console.log "Baking text image"
-
 
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
@@ -149,13 +149,28 @@ class Editor
         top: @canvas.height/2
       @canvas.add @logo
 
+      # Use background texture
+      @photo = new fabric.Image document.getElementById('img-bg'),
+        selectable: false
+        evented: false
+        width: @canvas.width
+        height: @canvas.height
+      @canvas.insertAt @photo, 0
+
       # Animate logo to final position
       toScale = 0.6
-      opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
-      @logo.animate 'scaleX', toScale, opts
-      @logo.animate 'scaleY', toScale, opts
-      opts.onChange = =>@canvas.renderAll()
-      @logo.animate 'top', 410, opts
+      toTop = 410
+      if animate
+        opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
+        @logo.animate 'scaleX', toScale, opts
+        @logo.animate 'scaleY', toScale, opts
+        opts.onChange = =>@canvas.renderAll()
+        @logo.animate 'top', toTop, opts
+      else
+        @logo.set scaleX: toScale, scaleY: toScale, top: toTop
+        @canvas.renderAll()
+
+      deferred?.resolve()
 
     # Watermark beats logo
     @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
@@ -170,7 +185,7 @@ class Editor
     @canvas.renderAll()
     @canvas.add @watermark
 
-  initializeIntroMode: ->
+  initializeIntroMode: (deferred)->
     $(document).on 'keydown', =>
       @typeTextStop()
       $(document).off 'keydown'
@@ -184,6 +199,7 @@ class Editor
       @setMode 'text'
       @typeTextClear()
       @focusTextField()
+    deferred?.resolve()
 
   fixOrderingOnLoad: ->
     @canvas.discardActiveObject()
@@ -191,23 +207,36 @@ class Editor
     if @logo? then @canvas.bringToFront @logo
     if @watermark? then @canvas.bringToFront @watermark
 
-  finalizeForDoneMode: ->
-    @logoText?.exitEditing()
-    @canvas.discardActiveObject()
-    for obj in [@photo, @logo, @logoText]
-      obj?.set(selectable: false, evented: false, editable: false)
-    @canvas.renderAll()
+  finalizeForDoneMode: (deferred)->
+    secondDeferred = $.Deferred()
+    secondDeferred.always =>
+      @canvas.discardActiveObject()
+      for obj in [@photo, @logo, @logoText]
+        obj?.set(selectable: false, evented: false, editable: false)
+      @canvas.renderAll()
+      deferred.resolve()
+
+    if @mode != 'photo'
+      @initializePhotoMode(secondDeferred, false)
+    else
+      secondDeferred.resolve()
+
+    deferred
 
   setMode: (newMode)->
+    deferred = new $.Deferred()
     oldMode = @mode
-    return if oldMode == newMode
+    if oldMode == newMode
+      return deferred.resolve()
     console.log "editor.mode = #{newMode}"
     switch newMode
-      when 'intro' then @initializeIntroMode()
-      when 'photo' then @initializePhotoMode()
-      when 'done' then @finalizeForDoneMode()
+      when 'intro' then @initializeIntroMode(deferred)
+      when 'photo' then @initializePhotoMode(deferred)
+      when 'done' then @finalizeForDoneMode(deferred)
+      else deferred.resolve()
     $('.editor').removeClass("mode-#{oldMode}").addClass("mode-#{newMode}")
     @mode = newMode
+    deferred
 
   #region INTRO --------------------------------------------------------------------------------------------------------
 
@@ -287,6 +316,7 @@ class Editor
     oldColor = @canvas.backgroundColor
     @canvas.backgroundColor = 'black'
     @canvas.discardActiveObject()
+    @canvas.renderAll()
     # capture as deferred
     deferred = $.Deferred()
     onBlobReady = (blob)=>
@@ -300,8 +330,9 @@ class Editor
 
   downloadLocal: ->
     @logActionToAnalytics 'download'
-    @setMode 'done'
-    @captureImageDeferred().done (blob)->saveAs(blob, 'StraightOuttaCompton.jpg')
+    @setMode('done').done =>
+      @captureImageDeferred().done (blob)->
+        saveAs(blob, 'StraightOuttaCompton.jpg')
 
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
@@ -311,33 +342,32 @@ class Editor
       @popupSharing()
     else
       loader = @getLoader()
-      @setMode 'done'
-      @canvasUpdateFunction()
-      @captureImageDeferred('image/png').done (blob)=>
-        @cityText = @cityText.toTitleCase()
-        uploader = new Uploader(blob, @cityText)
-        uploader.start().done (shareUrl)=>
-          loader.resolve()
-          @permalink = window.location.origin + shareUrl
-          console.log "Ready to share!", @permalink
+      @setMode('done').done =>
+        @captureImageDeferred().done (blob)=>
+          @cityText = @cityText.toTitleCase()
+          uploader = new Uploader(blob, @cityText)
+          uploader.start().done (shareUrl)=>
+            loader.resolve()
+            @permalink = window.location.origin + shareUrl
+            console.log "Ready to share!", @permalink
 
-          $popup = $('#share-popup-src').addClass('ready')
+            $popup = $('#share-popup-src').addClass('ready')
 
-          encodedData = (src) =>
-            cityText = @cityText
-            (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
+            encodedData = (src) =>
+              cityText = @cityText
+              (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
 
-          $twitter = $popup.find 'a.twitter'
-          td = encodedData $twitter
-          url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
-          $twitter.attr(href: url)
+            $twitter = $popup.find 'a.twitter'
+            td = encodedData $twitter
+            url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
+            $twitter.attr(href: url)
 
-          $facebook = $popup.find 'a.facebook'
-          redir = window.location.origin + "/close.html"
-          url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
-          $facebook.attr(href: url)
+            $facebook = $popup.find 'a.facebook'
+            redir = window.location.origin + "/close.html"
+            url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+            $facebook.attr(href: url)
 
-          @popupSharing()
+            @popupSharing()
 
   popupSharing: ->
     $.featherlight $('#share-popup-src'),
@@ -383,55 +413,55 @@ class Editor
       catch e
         console.error e
 
-      @downscalePhotoIfNeededDeferred(img).done (photo)=>
-        if @photo?
-          @photo.off 'selected'
-          @photo.off 'moving'
-          @canvas.remove @photo
+      @setMode('photo').done =>
+        @downscalePhotoIfNeededDeferred(img).done (photo)=>
+          if @photo?
+            @photo.off 'selected'
+            @photo.off 'moving'
+            @canvas.remove @photo
 
-        console.log "Final dimensions #{photo.width}x#{photo.height}"
-        @photo = photo
-        @photo.set
-          selectable: true
-          originX: 'center'
-          originY: 'center'
-          centeredScaling: true
-          hasRotatingPoint: false
-          lockRotation: true
-          lockScalingFlip: true
-          lockUniScaling: true
-          lockMovementX: false
-          lockMovementY: false
-          lockScalingX: true
-          lockScalingY: true
-          hasBorders: false
-          hasControls: false
-          width: @canvas.width
-          height: @canvas.height
-          padding: 0
-        if aspect > 1
-          @photo.width = @canvas.width * aspect
-        else
-          @photo.height = @canvas.height / aspect
-        @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
-        @photo.applyFilters =>
-          @setMode 'photo'
-          @canvas.insertAt @photo, 0
-          @photo.center()
-          @photo.on 'selected', =>@setParameter('photo', true)
-          @photo.on 'moving', =>@constrainPhotoMove()
-          @setParameter('photo', true)
-          loader.resolve()
+          console.log "Final dimensions #{photo.width}x#{photo.height}"
+          @photo = photo
+          @photo.set
+            selectable: true
+            originX: 'center'
+            originY: 'center'
+            centeredScaling: true
+            hasRotatingPoint: false
+            lockRotation: true
+            lockScalingFlip: true
+            lockUniScaling: true
+            lockMovementX: false
+            lockMovementY: false
+            lockScalingX: true
+            lockScalingY: true
+            hasBorders: false
+            hasControls: false
+            width: @canvas.width
+            height: @canvas.height
+            padding: 0
+          if aspect > 1
+            @photo.width = @canvas.width * aspect
+          else
+            @photo.height = @canvas.height / aspect
+          @photo.filters.push new GrayscaleContrastFilter(contrast: @values.contrast)
+          @photo.applyFilters =>
+            @canvas.insertAt @photo, 0
+            @photo.center()
+            @photo.on 'selected', =>@setParameter('photo', true)
+            @photo.on 'moving', =>@constrainPhotoMove()
+            @setParameter('photo', true)
+            loader.resolve()
 
-        # Now that photo is loaded, try to parse EXIF out and rotate as needed
-        if imgHeader? then inkjet.exif imgHeader, (err, metadata)=>
-          if metadata?.Orientation?
-            console.log "Rotating from", metadata.Orientation.description
-            switch metadata.Orientation.value
-              when 8 then @photo.setAngle -90
-              when 3 then @photo.setAngle -180
-              when 6 then @photo.setAngle 90
-            @canvas.renderAll() unless @photo.angle == 0
+          # Now that photo is loaded, try to parse EXIF out and rotate as needed
+          if imgHeader? then inkjet.exif imgHeader, (err, metadata)=>
+            if metadata?.Orientation?
+              console.log "Rotating from", metadata.Orientation.description
+              switch metadata.Orientation.value
+                when 8 then @photo.setAngle -90
+                when 3 then @photo.setAngle -180
+                when 6 then @photo.setAngle 90
+              @canvas.renderAll() unless @photo.angle == 0
 
     reader.readAsDataURL fileDescriptor
 
