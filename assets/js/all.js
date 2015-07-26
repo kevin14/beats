@@ -4,7 +4,7 @@
 //= require file-saver-saveas-js/FileSaver
 //= require nouislider/distribute/nouislider
 //= require featherlight/release/featherlight.min
-//= require buzz/dist/buzz
+//= require inkjet/dist/inkjet
 
 //= require utils
 //= require editor

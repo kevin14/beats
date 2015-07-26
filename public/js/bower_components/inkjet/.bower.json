@@ -1,0 +1,47 @@
+{
+  "name": "inkjet",
+  "main": "./dist/inkjet.js",
+  "version": "1.2.0",
+  "homepage": "https://github.com/gchudnov/inkjet",
+  "authors": [
+    "Grigoriy Chudnov <g.chudnov@gmail.com>"
+  ],
+  "description": "JPEG-image decoding, encoding & EXIF reading library for browser and node.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "jpeg",
+    "exif",
+    "image",
+    "photo",
+    "decode",
+    "encode",
+    "metadata"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "coverage",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "examples",
+    "images",
+    "lib",
+    "gulpfile.js",
+    "index.js",
+    "package.json"
+  ],
+  "_release": "1.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.0",
+    "commit": "c0c41e9c129b23c759a9c2583b09fd599ad2d9d2"
+  },
+  "_source": "git://github.com/gchudnov/inkjet.git",
+  "_target": "~1.2.0",
+  "_originalSource": "inkjet",
+  "_direct": true
+}

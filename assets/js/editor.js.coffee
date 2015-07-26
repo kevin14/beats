@@ -357,16 +357,19 @@ class Editor
   #region PHOTO EDITING ------------------------------------------------------------------------------------------------
 
   setPhoto: (fileDescriptor) ->
+    return unless fileDescriptor?
     console.log "Loading file", fileDescriptor.name
-    console.dir fileDescriptor
+    #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>
       console.log "Loaded!"
+
       img = new Image()
-      img.src = e.target.result
+      dataUrl = e.target.result
+      img.src = dataUrl
       aspect = img.width/img.height
       console.log "Set into an image tag of size #{img.width}x#{img.height}"
       if img.width == img.height == 0
@@ -374,6 +377,11 @@ class Editor
         console.error "Load fail. Retrying."
         window.setTimeout @setPhoto.call(this, fileDescriptor), 1000
         return
+
+      try
+        imgHeader = @dataUrlToBinary(dataUrl, 64*1024+3)
+      catch e
+        console.error e
 
       @downscalePhotoIfNeededDeferred(img).done (photo)=>
         if @photo?
@@ -414,7 +422,31 @@ class Editor
           @photo.on 'moving', =>@constrainPhotoMove()
           @setParameter('photo', true)
           loader.resolve()
+
+        # Now that photo is loaded, try to parse EXIF out and rotate as needed
+        if imgHeader? then inkjet.exif imgHeader, (err, metadata)=>
+          switch metadata?.Orientation?.value
+            when 8 then @photo.setAngle -90
+            when 3 then @photo.setAngle -180
+            when 6 then @photo.setAngle 90
+          @canvas.renderAll() unless @photo.angle == 0
+
     reader.readAsDataURL fileDescriptor
+
+  dataUrlToBinary: (dataURL, stopAfterBytes)->
+    BASE64_MARKER = ';base64,'
+    parts = dataURL.split(BASE64_MARKER)
+    base64 = parts[1]
+    #contentType = parts[0].split(':')[1]
+    if stopAfterBytes > 0
+      stopAfterChars = Math.ceil((4*stopAfterBytes/3)/4)*4
+      base64 = base64.substr(0, stopAfterChars)
+    raw = window.atob base64
+    len = raw.length
+    binArray = new Uint8Array(len)
+    for i in [0..len]
+      binArray[i] = raw.charCodeAt(i)
+    binArray
 
   downscalePhotoIfNeededDeferred: (img) ->
     deferred = $.Deferred()
