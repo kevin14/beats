@@ -112,7 +112,7 @@ function reactToKeypress(isDeletion) {
 function playAudio() {
   return;
 
-  
+
   switch(currentSound) {
     case 1:
       mySound6.stop();
@@ -178,6 +178,14 @@ function resizeMe() {
     WW = $(window).width();
     WH = $(window).height();
 
-    $(".editor").height(WH);
-    $("#top").height(WH);
+    if(WH < 600 && WW > WH) {
+      $(".editor").height(600);
+      $("#top").height(600);
+      $("html,body").css("overflow-y", "auto");
+    } else {
+      $(".editor").height(WH);
+      $("#top").height(WH);
+
+    }
+
 }

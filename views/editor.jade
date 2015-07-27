@@ -54,13 +54,16 @@ block content
             label(for="control-invert") Logo Color
 
         form.editor-actions
-          .button.download
-            img(src="/img/btn-download.png")
-          .button.share
-            img(src="/img/btn-share.png")
           input#action-upload(type="file", accept="image/*")
           .button.upload
             img(src="/img/btn-addphoto.png")
+              
+          .button.share
+            img(src="/img/btn-share.png")
+          
+          .button.download
+            img(src="/img/btn-download.png")
+          
 
       #share-popup-src.share-popup
         a.close
