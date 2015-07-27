@@ -31,7 +31,8 @@ class Editor
       self.setPhoto.call self, this.files[0]
 
     $controls.find('form.editor-invert-control').change ->
-      self.setValue.call self, parseInt(this['invert'].value)
+      # console.log this, this['invert']
+      self.setValue.call self, parseInt($(this).find(':checked').val())
 
     @controlsRadios = $controls.find('.editor-types input[type=radio]').change ->
       self.setParameter.call self, $(this).val()
