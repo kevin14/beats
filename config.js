@@ -9,7 +9,7 @@ if(dev.indexOf("development") != -1) {
       s3bucket: "soc-assets",
       mongoURL: 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta',
       fbId: "415295758676714",
-      port: 3001
+      port: process.env.port || 3001
   };
 } else {
   config = {

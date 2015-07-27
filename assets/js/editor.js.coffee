@@ -1,6 +1,6 @@
 class Editor
 
-  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago", "Brooklyn"]
+  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago"]#, "Brooklyn"]
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
@@ -299,6 +299,7 @@ class Editor
   typeTextQueueUpdate: ->
     # console.log "typeTextQueueUpdate()"
     delay = 10 + Math.random()*20
+    delay = 0
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
