@@ -1,25 +1,31 @@
-var config = {
-    baseUrl: "https://straightouttabeta.herokuapp.com",
-    //live
-    //baseUrl: "http://straightouttasomewhere.com",
+var config = {};
+var dev = "__development__";
 
-    //awsAccess: "AKIAIGXDAGJQ32YY5MRQ",
-    //live
-    awsAccess: "AKIAIURK23YYWU5W5RNA",
+if(dev.indexOf("development") != -1) {
+  config = {
+      baseUrl: "https://straightouttabeta.herokuapp.com",
+      awsAccess: "AKIAIURK23YYWU5W5RNA",
+      awsSecret: "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",
+      s3bucket: "soc-assets",
+      mongoURL: 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta',
+      fbId: "415295758676714",
+      port: 3001
+  };
+} else {
+  config = {
+      baseUrl: "http://straightouttasomewhere.com",
+      awsAccess: "AKIAIURK23YYWU5W5RNA",
+      awsSecret: "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",
+      s3bucket: "soc-assets",
+      mongoURL: 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@172.32.8.43:27017/admin',
+      fbId: "415295758676714",
+      port: 8080
+  };
 
-    //awsSecret: "WG0vViuVgeNG+ifwu4dtW88ApLwb7hK70oTMTYhx",
-    //live
-    awsSecret: "EdY9Ap0YpiXwro6HAHomSg+9iNNVP1VSrPdVw7Vz",
+}
 
-    //s3bucket: "straightouttabeta",
-    //live
-    s3bucket: "soc-assets",
 
-    mongoURL: 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta',
-    //live
-    //mongoURL: 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@172.32.8.43:27017/admin',
 
-    fbId: "415295758676714"
-};
+
 
 module.exports = config;

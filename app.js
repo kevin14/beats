@@ -21,8 +21,10 @@ var admin = require('./routes/admin');
 
 var config = require('./config');
 
+console.log("port is: " + config.port);
+
 var app = express();
-var port = process.env.PORT || 3001;
+//var port = process.env.PORT || 3001;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -112,11 +114,14 @@ db.on('error', console.error.bind(console, 'oh no, connection error:'));
 db.once('open', function callback () {
   console.log('database connected');
 
-  app.listen(port);
-  // port = 8080;
-  // app.listen(port, "0.0.0.0");
+  if(config.port == 8080) {
+    app.listen(config.port, "0.0.0.0");
 
-  console.log("listening on: http://localhost:" + port);
+  } else {
+    app.listen(config.port);
+  }
+
+  console.log("listening on: http://localhost:" + config.port);
 
 
 });
