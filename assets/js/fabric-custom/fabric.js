@@ -50,9 +50,9 @@ fabric.reNum = '(?:[-+]?(?:\\d+|\\d*\\.\\d+)(?:e[-+]?\\d+)?)';
  * Device Pixel Ratio
  * @see https://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/HTML-canvas-guide/SettingUptheCanvas/SettingUptheCanvas.html
  */
-fabric.devicePixelRatio = fabric.window.devicePixelRatio ||
-                          fabric.window.webkitDevicePixelRatio ||
-                          fabric.window.mozDevicePixelRatio ||
+fabric.devicePixelRatio = fabric.window.devicePixelRatio || 
+                          fabric.window.webkitDevicePixelRatio || 
+                          fabric.window.mozDevicePixelRatio || 
                           1;
 
 
@@ -6181,7 +6181,7 @@ if (typeof console !== 'undefined') {
 
 (function() {
 
-
+  
 
   /**
    * Gradient class
@@ -6269,7 +6269,7 @@ if (typeof console !== 'undefined') {
       };
     },
 
-
+    
 
     /**
      * Returns an instance of CanvasGradient
@@ -6320,7 +6320,7 @@ if (typeof console !== 'undefined') {
 
   fabric.util.object.extend(fabric.Gradient, {
 
-
+    
 
     /**
      * Returns {@link fabric.Gradient} instance from its object representation
@@ -6478,7 +6478,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
     };
   },
 
-
+  
 
   /**
    * Returns an instance of CanvasPattern
@@ -6615,7 +6615,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
       return [this.offsetX, this.offsetY, this.blur, this.color].join('px ');
     },
 
-
+    
 
     /**
      * Returns object representation of a shadow
@@ -7869,7 +7869,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
       return data;
     },
 
-
+    
 
     /**
      * Moves an object to the bottom of the stack of drawn objects
@@ -13716,7 +13716,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       };
     },
 
-
+    
 
     /**
      * Returns complexity of an instance
@@ -13727,7 +13727,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns fabric.Line instance from an object representation
@@ -13862,7 +13862,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       });
     },
 
-
+    
 
     /**
      * @private
@@ -13914,7 +13914,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns {@link fabric.Circle} instance from an object representation
@@ -14004,7 +14004,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       ctx.closePath();
     },
 
-
+    
 
     /**
      * Returns complexity of an instance
@@ -14138,7 +14138,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       });
     },
 
-
+    
 
     /**
      * @private
@@ -14170,7 +14170,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns {@link fabric.Ellipse} instance from an object representation
@@ -14347,7 +14347,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return object;
     },
 
-
+    
 
     /**
      * Returns complexity of an instance
@@ -14358,7 +14358,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns {@link fabric.Rect} instance from an object representation
@@ -14468,7 +14468,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return fabric.Polygon.prototype.toObject.call(this, propertiesToInclude);
     },
 
-
+    
 
     /**
      * @private
@@ -14506,7 +14506,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns fabric.Polyline instance from an object representation
@@ -14634,7 +14634,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       });
     },
 
-
+    
 
     /**
      * @private
@@ -14699,7 +14699,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   });
 
-
+  
 
   /**
    * Returns fabric.Polygon instance from an object representation
@@ -15209,7 +15209,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return o;
     },
 
-
+    
 
     /**
      * Returns number representation of an instance complexity
@@ -15619,7 +15619,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }
   };
 
-
+  
 
   /**
    * Indicates that instances of this type are async
@@ -15800,7 +15800,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return o;
     },
 
-
+    
 
     /**
      * Returns a string representation of this path group
@@ -16406,7 +16406,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return obj;
     },
 
-
+    
 
     /**
      * Returns requested property
@@ -16685,7 +16685,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
       return object;
     },
 
-
+    
 
     /**
      * Returns source of an image
@@ -16988,7 +16988,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     }, null, imgOptions && imgOptions.crossOrigin);
   };
 
-
+  
 
   /**
    * Indicates that instances of this type are async
@@ -19610,7 +19610,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
       return object;
     },
 
-
+    
 
     /**
      * Sets specified property to a specified value
@@ -19637,7 +19637,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
     }
   });
 
-
+  
 
   /**
    * Returns fabric.Text instance from an object representation
@@ -21858,11 +21858,12 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
       this.hiddenTextarea.setAttribute('maxlength', this.maxLength);
     }
     this.hiddenTextarea.className = 'fabric-hidden-input';
+
     this.hiddenTextarea.style.cssText = 'opacity: 0; width: 0; height: 0; z-index: -999;';
     fabric.document.body.appendChild(this.hiddenTextarea);
 
     fabric.util.addListener(this.hiddenTextarea, 'keydown', this.onKeyDown.bind(this));
-    fabric.util.addListener(this.hiddenTextarea, 'keypress', this.onKeyPress.bind(this));
+    fabric.util.addListener(this.hiddenTextarea, 'input', this.onInput.bind(this));
     fabric.util.addListener(this.hiddenTextarea, 'copy', this.copy.bind(this));
     fabric.util.addListener(this.hiddenTextarea, 'paste', this.paste.bind(this));
 
@@ -21981,6 +21982,7 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
     if (copiedText) {
       this.insertChars(copiedText, useCopiedStyle);
     }
+    this._cancelOnInput = true;
   },
 
   /**
@@ -22006,16 +22008,20 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
   },
 
   /**
-   * Handles keypress event
+   * Handles onInput event
    * @param {Event} e Event object
    */
-  onKeyPress: function(e) {
-    if (!this.isEditing || e.metaKey || e.ctrlKey) {
+  onInput: function(e) {
+    if (!this.isEditing || this._cancelOnInput) {
+      this._cancelOnInput = false;
       return;
     }
-    if (e.which !== 0) {
-      this.insertChars(String.fromCharCode(e.which));
-    }
+    var offset = this.selectionStart || 0,
+      textLength = this.text.length,
+      newTextLength = this.hiddenTextarea.value.length,
+      diff = newTextLength - textLength,
+      charsToInsert = this.hiddenTextarea.value.slice(offset, offset + diff);
+    this.insertChars(charsToInsert);
     e.stopPropagation();
   },
 

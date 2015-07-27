@@ -10893,10 +10893,11 @@ fabric.util.object.extend(fabric.IText.prototype, {
         if (this.maxLength > 0) {
             this.hiddenTextarea.setAttribute("maxlength", this.maxLength);
         }
-        this.hiddenTextarea.style.cssText = "position: fixed; bottom: 20px; left: 0px; opacity: 0;" + " width: 0px; height: 0px; z-index: -999;";
+        this.hiddenTextarea.className = "fabric-hidden-input";
+        this.hiddenTextarea.style.cssText = "opacity: 0; width: 0; height: 0; z-index: -999;";
         fabric.document.body.appendChild(this.hiddenTextarea);
         fabric.util.addListener(this.hiddenTextarea, "keydown", this.onKeyDown.bind(this));
-        fabric.util.addListener(this.hiddenTextarea, "keypress", this.onKeyPress.bind(this));
+        fabric.util.addListener(this.hiddenTextarea, "input", this.onInput.bind(this));
         fabric.util.addListener(this.hiddenTextarea, "copy", this.copy.bind(this));
         fabric.util.addListener(this.hiddenTextarea, "paste", this.paste.bind(this));
         if (!this._clickHandlerInitialized && this.canvas) {
@@ -10971,6 +10972,7 @@ fabric.util.object.extend(fabric.IText.prototype, {
         if (copiedText) {
             this.insertChars(copiedText, useCopiedStyle);
         }
+        this._cancelOnInput = true;
     },
     cut: function(e) {
         if (this.selectionStart === this.selectionEnd) {
@@ -10982,13 +10984,13 @@ fabric.util.object.extend(fabric.IText.prototype, {
     _getClipboardData: function(e) {
         return e && (e.clipboardData || fabric.window.clipboardData);
     },
-    onKeyPress: function(e) {
-        if (!this.isEditing || e.metaKey || e.ctrlKey) {
+    onInput: function(e) {
+        if (!this.isEditing || this._cancelOnInput) {
+            this._cancelOnInput = false;
             return;
         }
-        if (e.which !== 0) {
-            this.insertChars(String.fromCharCode(e.which));
-        }
+        var offset = this.selectionStart || 0, textLength = this.text.length, newTextLength = this.hiddenTextarea.value.length, diff = newTextLength - textLength, charsToInsert = this.hiddenTextarea.value.slice(offset, offset + diff);
+        this.insertChars(charsToInsert);
         e.stopPropagation();
     },
     getDownCursorOffset: function(e, isRight) {
