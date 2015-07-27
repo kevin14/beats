@@ -24,6 +24,10 @@ var config = require('./config');
 var app = express();
 var port = process.env.PORT || 3001;
 
+
+console.log("is_live is: " + process.env.IS_LIVE );
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -112,9 +116,16 @@ db.on('error', console.error.bind(console, 'oh no, connection error:'));
 db.once('open', function callback () {
   console.log('database connected');
 
+  if(process.env.IS_LIVE == true) {
+    port = 8080;
+    app.listen(port, "0.0.0.0");
+  } else {
+      app.listen(port);
+  }
+
   console.log("listening on: http://localhost:" + port);
 
-  app.listen(port);//, "0.0.0.0");
+  //app.listen(port);//, "0.0.0.0");
 });
 
 
