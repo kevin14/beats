@@ -216,7 +216,7 @@ class Editor
       for obj in [@photo, @logo, @logoText]
         obj?.set(selectable: false, evented: false, editable: false)
       @canvas.renderAll()
-      deferred.resolve()
+      deferred?.resolve()
 
     if @mode != 'photo'
       @initializePhotoMode(secondDeferred, false)

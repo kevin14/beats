@@ -15,6 +15,10 @@ var mySound1,
     mySound6;
 
 $(document).ready(function(){
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    $('html').addClass('ios');
+  }
+
   editorFunctions();
   initSounds();
 
@@ -189,3 +193,4 @@ function resizeMe() {
     }
 
 }
+
