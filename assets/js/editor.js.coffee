@@ -527,11 +527,13 @@ class Editor
           @photo?.applyFilters => @canvas.renderAll()
       when 'invert'
         if value <= 0
-          @logo.filters = []
-          @logo.applyFilters => @canvas.renderAll()
+          @logo.filters = @watermark.filters = []
         else if @logo.filters.length == 0
-          @logo.filters = [new fabric.Image.filters.Invert()]
-          @logo.applyFilters => @canvas.renderAll()
+          @logo.filters = @watermark.filters = [new fabric.Image.filters.Invert()]
+        @watermark.applyFilters =>
+          @logo.applyFilters =>
+            @canvas.renderAll()
+
     @canvas.renderAll()
 
   constrainPhotoMove: ->
