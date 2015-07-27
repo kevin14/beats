@@ -42,14 +42,14 @@ class Editor
     sliderElement = $('.editor-range-control .range')[0]
     noUiSlider.create sliderElement,
       start: 0
-      step: 0.1
+      #step: 0.1
       range: {min: 0, max: 1}
       connect: 'lower'
     @controlsRange = sliderElement.noUiSlider
     @controlsRange.on 'change', (values)->
       self.setValue.call self, parseFloat(values[0]), 'change'
     @controlsRange.on 'update', (values)->
-      self.setValue.call self, parseFloat(values[0]), 'change'
+      self.setValue.call self, parseFloat(values[0]), 'update'
 
     @initializeTextMode()
     @setMode 'intro'
