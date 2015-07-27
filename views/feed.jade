@@ -1,0 +1,25 @@
+extends layout
+
+block content
+
+ 
+  #bottom
+      ul.cf
+        each post in posts
+          li
+            if post.type == "video"
+              a.video-link(href="#", data-video="#{post.videoId}")
+                img.bg-img(src="#{post.photo}")
+                .over
+                  .over-inner
+                    .over-cell.video
+                      img.play(src="/img/play.png")
+                      h3 #{post.title}
+            else
+              img.bg-img(src="#{post.photo}")
+              if post.text != null
+                .over
+                  .over-inner
+                    .over-cell
+                      h3 #{post.title}
+                      p #{post.text}

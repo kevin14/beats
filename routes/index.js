@@ -15,4 +15,15 @@ router.get('/', function(req, res, next) {
 
 });
 
+
+router.get('/feed', function(req, res, next) {
+
+  model.Posts.find({}).sort({created_at: -1}).exec(function(err, results) {
+    if(!err && results) {
+      res.render('feed', { posts: results });
+    }
+  });
+
+});
+
 module.exports = router;
