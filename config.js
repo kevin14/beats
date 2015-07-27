@@ -1,5 +1,5 @@
 var config = {
-    //baseUrl: "https://straightouttabeta.herokuapp.com",
+    baseUrl: "https://straightouttabeta.herokuapp.com",
     //live
     //baseUrl: "http://straightouttasomewhere.com",
 
@@ -15,19 +15,11 @@ var config = {
     //live
     s3bucket: "soc-assets",
 
-
+    mongoURL: 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta',
     //live
     //mongoURL: 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@172.32.8.43:27017/admin',
 
     fbId: "415295758676714"
 };
-
-if(process.env.IS_LIVE == true) {
-  config.baseUrl = "https://straightouttasomewhere.com";
-  config.mongoURL = 'mongodb://siteUserAdmin:6QwqxshCOMPTON6mJqWWtGxBGBw@172.32.8.43:27017/admin';
-} else {
-  config.baseUrl = "https://straightouttabeta.herokuapp.com",
-  config.mongoURL= 'mongodb://dog:madison69@dogen.mongohq.com:10049/straightouttabeta';
-}
 
 module.exports = config;
