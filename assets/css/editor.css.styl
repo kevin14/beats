@@ -292,9 +292,10 @@ textarea.fabric-hidden-input
   left 50% !important
   color rgba(0,0,0,0)
   opacity 0.0
-  outline none
-  // filter alpha(opacity=00)
-  &:focus
+  //outline none
+
+html.ios
+  textarea.fabric-hidden-input:focus
     visibility hidden
     outline-color transparent
     outline-style none
