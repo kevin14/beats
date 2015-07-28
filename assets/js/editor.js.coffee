@@ -5,6 +5,7 @@ class Editor
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
   constructor: ($canvas, $controls) ->
+    @photoAdded = false
     @values =
       photo: 0
       contrast: 0.25
@@ -134,6 +135,15 @@ class Editor
     @logoText.exitEditing()
     @canvas.discardActiveObject()
 
+    # Watermark beats logo
+    @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
+      originX: 'center'
+      originY: 'center'
+      selectable: false
+      evented: false
+      left: @canvas.width/2
+      top: @canvas.height * 0.9
+
     # Bake as an image
     fabric.util.loadImage @canvas.toDataURL(), (img)=>
       @canvas.remove @logoText
@@ -157,32 +167,43 @@ class Editor
       @canvas.insertAt @photo, 0
 
       # Animate logo to final position
-      toScale = 0.6
-      toTop = 410
+      duration = 1000
+      if @photoAdded
+        toScale = 0.4
+        toTop = 640/1000*@canvas.height
+      else
+        toScale = 0.6
+        toTop = 410
       if animate
-        opts = duration: 1000, easing: fabric.util.ease.easeOutExpo
+        opts = duration: duration, easing: fabric.util.ease.easeOutExpo
         @logo.animate 'scaleX', toScale, opts
         @logo.animate 'scaleY', toScale, opts
-        opts.onChange = =>@canvas.renderAll()
         @logo.animate 'top', toTop, opts
       else
         @logo.set scaleX: toScale, scaleY: toScale, top: toTop
         @canvas.renderAll()
 
+      # Animate watermark to final position
+      if @photoAdded
+        toScale = 0.7
+        toTop = @canvas.height * 0.92
+      else
+        toScale = 1
+        toTop = @canvas.height * 0.9
+      if animate
+        opts = duration: duration, easing: fabric.util.ease.easeOutExpo
+        @watermark.animate 'scaleX', toScale, opts
+        @watermark.animate 'scaleY', toScale, opts
+        opts.onChange = =>@canvas.renderAll()
+        @watermark.animate 'top', toTop, opts
+      else
+        @watermark.set scaleX: toScale, scaleY: toScale, top: toTop
+        @canvas.renderAll()
+
+      @canvas.backgroundColor = 'black'
+      @canvas.add @watermark
+
       deferred?.resolve()
-
-    # Watermark beats logo
-    @watermark = new fabric.Image document.getElementById('img-beats-watermark'),
-      originX: 'center'
-      originY: 'center'
-      selectable: false
-      evented: false
-      left: @canvas.width/2
-      top: @canvas.height * 0.9
-
-    @canvas.backgroundColor = 'black'
-    @canvas.renderAll()
-    @canvas.add @watermark
 
   initializeIntroMode: (deferred)->
     $(document).on 'keydown', =>
@@ -420,6 +441,7 @@ class Editor
       catch e
         console.error e
 
+      @photoAdded = true
       @setMode('photo').done =>
         @downscalePhotoIfNeededDeferred(img).done (photo)=>
           if @photo?
