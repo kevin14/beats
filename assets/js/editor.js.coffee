@@ -1,6 +1,6 @@
 class Editor
 
-  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago"]
+  INTRO_CITIES = ["COLLEGE PARK", "NEW YORK", "LOS ANGELES", "CHICAGO"]
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
@@ -73,12 +73,13 @@ class Editor
     @logoFrame.scaleToHeight @canvas.height
     @logoFrame.center()
 
-    @logoText = new fabric.IText "",
+    @logoText = new fabric.IText INTRO_CITIES[0],
       originX: 'center'
+      textAlign: 'center'
       fill: grimePattern
       left: @canvas.width/2
       top: 580
-      lineHeight: 0.4
+      lineHeight: 1
       fontSize: 260
       fontFamily: 'knockout'
       editable: false
@@ -93,12 +94,10 @@ class Editor
       lockRotation: true
       lockScalingX: true
       lockScalingY: true
-      selectionColor: 'transparent'
-
-    # Experimental fabric addon features
-    @logoText.set
-      textAlign: 'stretch'
+      selectionColor: 'rgba(255,255,255,0.9)'
+      caching: false
       width: 740
+      # BEGIN EXPERIMENTAL FABRIC ADDONS
       fixedLineWidth: 740
       multiline: false
       capitalize: true
@@ -280,7 +279,7 @@ class Editor
 
   typeTextImmediate: (text)->
     @typeTextDeferred = $.Deferred()
-    @logoText.setText text.toUpperCase()
+    @logoText.setText text
     @canvas.renderAll()
     @typeTextDeferred.resolve()
 

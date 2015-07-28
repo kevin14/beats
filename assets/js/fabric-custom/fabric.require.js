@@ -9530,12 +9530,8 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
         },
         _renderTextLine: function(method, ctx, line, left, top, lineIndex) {
             top -= this.fontSize * this._fontSizeFraction;
-            if (this.textAlign !== "justify" && this.textAlign !== "stretch") {
-                return;
-            }
             if (this.textAlign == "justify") {
                 var lineWidth = this._getLineWidth(ctx, lineIndex), totalWidth = this.width;
-                var shouldStretch = this.textAlign == "justify" && totalWidth >= lineWidth || this.textAlign == "stretch" && this.fixedLineWidth > 0;
                 if (totalWidth >= lineWidth) {
                     var words = line.split(/\s+/), wordsWidth = this._getWidthOfWords(ctx, line, lineIndex), widthDiff = totalWidth - wordsWidth, numSpaces = words.length - 1, spaceWidth = widthDiff / numSpaces, leftOffset = 0;
                     for (var i = 0, len = words.length; i < len; i++) {
@@ -9556,7 +9552,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
                     this._renderChars(method, ctx, line, left + leftOffset, top, lineIndex, this.fixedLineWidth);
                 }
             } else {
-                this._renderChars(method, ctx, line, left, top, lineIndex);
+                this._renderChars(method, ctx, line, left, top, lineIndex, this.fixedLineWidth);
             }
         },
         _renderTextStroke: function(ctx) {
@@ -9959,12 +9955,17 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass({
             var cursorLocation = this.get2DCursorLocation(), lineIndex = cursorLocation.lineIndex, charIndex = cursorLocation.charIndex, charHeight = this.getCurrentCharFontSize(lineIndex, charIndex), leftOffset = lineIndex === 0 && charIndex === 0 ? this._getCachedLineOffset(lineIndex) : boundaries.leftOffset;
             ctx.fillStyle = this.getCurrentCharColor(lineIndex, charIndex);
             ctx.globalAlpha = this.__isMousedown ? 1 : this._currentCursorOpacity;
-            if (this.fixedLineWidth > 0) {
+            if (this.textAlign == "stretch" && this.fixedLineWidth > 0) {
                 boundaries.left = 0;
                 leftOffset = 0;
                 if (this.text.length <= 0) {
                     leftOffset = -this.fixedLineWidth / 2;
                 } else {
+                    leftOffset = this.fixedLineWidth / 2;
+                }
+            } else if (this.fixedLineWidth > 0) {
+                if (leftOffset > this.fixedLineWidth) {
+                    boundaries.left = 0;
                     leftOffset = this.fixedLineWidth / 2;
                 }
             }
