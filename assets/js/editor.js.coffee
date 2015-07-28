@@ -2,7 +2,7 @@ class Editor
 
   INTRO_CITIES = ["COLLEGE PARK", "NEW YORK", "LOS ANGELES", "CHICAGO"]
 
-  PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
+  PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback|faggot/i
 
   constructor: ($canvas, $controls) ->
     @photoAdded = false
