@@ -399,7 +399,7 @@ class Editor
     console.log "Loading file", fileDescriptor.name
     #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
-    $(".upload img").attr("src", "/img/btn-reset.png")
+    $(".upload img").attr("src", "/img/btn-replay.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>
