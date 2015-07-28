@@ -389,11 +389,15 @@ class Editor
             td = encodedData $twitter
             url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
             $twitter.attr(href: url)
+            $twitter.click ->
+              @logActionToAnalytics 'share_twitter'
 
             $facebook = $popup.find 'a.facebook'
             redir = window.location.origin + "/close.html"
             url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
             $facebook.attr(href: url)
+            $facebook.click ->
+              @logActionToAnalytics 'share_facebook'
 
             @popupSharing()
 
