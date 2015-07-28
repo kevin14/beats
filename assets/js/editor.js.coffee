@@ -1,13 +1,12 @@
 class Editor
 
-  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago"]#, "Brooklyn"]
+  INTRO_CITIES = ["College Park", "New York", "Los Angeles", "Chicago"]
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback/i
 
   constructor: ($canvas, $controls) ->
     @values =
       photo: 0
-      grain: 1
       contrast: 0.25
       invert: 0
 
@@ -43,7 +42,6 @@ class Editor
     sliderElement = $('.editor-range-control .range')[0]
     noUiSlider.create sliderElement,
       start: 0
-      #step: 0.1
       range: {min: 0, max: 1}
       connect: 'lower'
     @controlsRange = sliderElement.noUiSlider
@@ -83,7 +81,7 @@ class Editor
       lineHeight: 0.4
       fontSize: 260
       fontFamily: 'knockout'
-      editable: true
+      editable: false
       cursorWidth: 8
       cursorColor: '#ed1c24'
       hoverCursor: 'text'
@@ -198,9 +196,10 @@ class Editor
       $('#down').removeClass('hidden').show().click ->
         $('body').animate {scrollTop: $('#bottom').offset().top}, 750
       $('#beats-logo').show()
-      @setMode 'text'
-      @typeTextClear()
-      @focusTextField()
+      @setMode('text').done =>
+        @logoText.setText ''
+        @logoText.set editable: true
+        @focusTextField()
     deferred?.resolve()
 
   fixOrderingOnLoad: ->
@@ -243,34 +242,34 @@ class Editor
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
-    # console.log "focusTextField()"
+    console.log "focusTextField()"
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
 
   typeTextSeries: (textArray)->
-    # console.log "typeTextSeries()"
+    console.log "typeTextSeries()"
     @typeTextSeriesDeferred = $.Deferred()
     @typeTextSeriesArray = textArray
     @typeTextSeriesNext(true)
     @typeTextSeriesDeferred
 
   typeTextSeriesNext: (isFirst)->
-    # console.log "typeTextSeriesNext()"
     return if @typeTextCanceling
+    console.log "typeTextSeriesNext()"
     text = @typeTextSeriesArray.shift()
-    delay = 300
+    delay = 500
     if text?
       window.setTimeout =>
         unless isFirst
           $slide = $('#slides .slide').first()
           $slide.fadeOut 200, ->$(this).remove()
-        @typeText(text).done @typeTextSeriesNext.bind(@)
+        @typeTextImmediate(text).done @typeTextSeriesNext.bind(@)
       , delay
     else
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
 
   typeTextClear: ->
-    # console.log "typeTextClear()"
+    console.log "typeTextClear()"
     @logoText.exitEditing()
     @logoText.setSelectionStart 0
     @logoText.setSelectionEnd 0
@@ -279,8 +278,14 @@ class Editor
     @logoText.enterEditing()
     @canvasUpdateFunction()
 
+  typeTextImmediate: (text)->
+    @typeTextDeferred = $.Deferred()
+    @logoText.setText text.toUpperCase()
+    @canvas.renderAll()
+    @typeTextDeferred.resolve()
+
   typeText: (text)->
-    # console.log "typeText()"
+    console.log "typeText()"
     return unless @logoText? and
     @typeTextDeferred = $.Deferred()
     @typeTextClear()
@@ -292,18 +297,18 @@ class Editor
     console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
+    @typeTextClear()
+    @canvas.renderAll()
     @typeTextDeferred.reject()
     @typeTextSeriesDeferred.reject()
 
-
   typeTextQueueUpdate: ->
-    # console.log "typeTextQueueUpdate()"
+    console.log "typeTextQueueUpdate()"
     delay = 10 + Math.random()*20
-    delay = 0
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
-    # console.log "typeTextUpdate()"
+    console.log "typeTextUpdate()"
     return if @typeTextCanceling
     char = @autoTypeChars.shift()
     unless char? && @logoText?
