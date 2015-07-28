@@ -19269,15 +19269,14 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
       // lift the line by quarter of fontSize
       top -= this.fontSize * this._fontSizeFraction;
 
-      // short-circuit
-      if (this.textAlign !== 'justify' && this.textAlign !== 'stretch') {
-        return;
-      }
+      //// short-circuit
+      //if (this.textAlign !== 'justify' && this.textAlign !== 'stretch') {
+      //  return;
+      //}
 
       if (this.textAlign == 'justify') {
         var lineWidth = this._getLineWidth(ctx, lineIndex),
           totalWidth = this.width;
-        var shouldStretch = (this.textAlign == 'justify' && totalWidth >= lineWidth) || (this.textAlign == 'stretch' && this.fixedLineWidth > 0)
         if (totalWidth >= lineWidth) {
           // stretch the line
           var words = line.split(/\s+/),
@@ -19314,7 +19313,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
 
       }
       else {
-        this._renderChars(method, ctx, line, left, top, lineIndex);
+        this._renderChars(method, ctx, line, left, top, lineIndex, this.fixedLineWidth);
       }
     },
 
@@ -20176,13 +20175,19 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
       ctx.fillStyle = this.getCurrentCharColor(lineIndex, charIndex);
       ctx.globalAlpha = this.__isMousedown ? 1 : this._currentCursorOpacity;
 
-      if (this.fixedLineWidth > 0) {
+      if (this.textAlign == 'stretch' && this.fixedLineWidth > 0) {
         boundaries.left = 0;
         leftOffset = 0;
         if (this.text.length <= 0) {
           leftOffset = -this.fixedLineWidth/2;
         }
         else {
+          leftOffset = this.fixedLineWidth/2;
+        }
+      }
+      else if (this.fixedLineWidth > 0) {
+        if (leftOffset > this.fixedLineWidth) {
+          boundaries.left = 0;
           leftOffset = this.fixedLineWidth/2;
         }
       }
