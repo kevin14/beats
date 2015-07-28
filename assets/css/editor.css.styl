@@ -61,21 +61,29 @@ html, body
       opacity 0.5
 
   $m-canvas-scale = 0.35
+  $m-canvas-scale-small = 0.30
   .canvas-outer
     width ($canvas-size + $canvas-border*2)
     height @width
     padding $canvas-border
     margin 0 auto
-    @media (max-width: 500px)
+    @media (min-width: 341px) and (max-width: 500px)
       width ($canvas-size*$m-canvas-scale*2 + $canvas-border*2)
       height @width
+    @media (max-width: 340px)
+        width ($canvas-size*$m-canvas-scale-small*2 + $canvas-border*2)
+        height @width
+
 
     .canvas-container
       transform scale(0.5, 0.5)
       transform-origin top left
-      @media (max-width: 500px)
+      @media (min-width: 341px) and (max-width: 500px)
         transform-origin top left
         transform scale($m-canvas-scale, $m-canvas-scale)
+      @media (max-width: 340px)
+        transform-origin top left
+        transform scale($m-canvas-scale-small, $m-canvas-scale-small)
 
   .editor-controls
     //display none
