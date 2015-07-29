@@ -28,7 +28,7 @@ router.get('/feed', function(req, res, next) {
 
 router.get('/shane', function(req, res, next) {
 
-  res.send("Hey dude");
+  res.send("Hey dude number 2");
 
 });
 
