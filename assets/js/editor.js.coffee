@@ -70,7 +70,7 @@ class Editor
   initializeTextMode: (deferred)->
     # don't reinitialize
     return if @logoText?
-    console.log "Entering city entry Phase"
+    #console.log "Entering city entry Phase"
 
     grimePattern = new fabric.Pattern
       source: document.getElementById('img-pattern-grime')
@@ -134,8 +134,8 @@ class Editor
   initializePhotoMode: (deferred = null, animate = true)->
     # don't reinitialize
     return if @logo?
-    console.log "Entering photo phase"
-    console.log "Baking text image"
+    #console.log "Entering photo phase"
+    #console.log "Baking text image"
 
     # Unbind events and deselect text object
     @canvas.off 'selection:cleared'
@@ -219,7 +219,7 @@ class Editor
       @typeTextStop()
       $(document).off 'keydown'
     @typeTextSeries(INTRO_CITIES).always =>
-      console.log 'Intro over'
+      #console.log 'Intro over'
       $('#slides').delay(100).fadeOut 600, ->$(this).remove()
 #      $('#bottom').removeClass('hidden').show()
 #      $('#down').removeClass('hidden').show().click ->
@@ -258,7 +258,7 @@ class Editor
     oldMode = @mode
     if oldMode == newMode
       return deferred.resolve()
-    console.log "editor.mode = #{newMode}"
+    #console.log "editor.mode = #{newMode}"
     switch newMode
       when 'intro' then @initializeIntroMode(deferred)
       when 'photo' then @initializePhotoMode(deferred)
@@ -271,12 +271,12 @@ class Editor
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
-    console.log "focusTextField()"
+    #console.log "focusTextField()"
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
 
   typeTextSeries: (textArray)->
-    console.log "typeTextSeries()"
+    #console.log "typeTextSeries()"
     @typeTextSeriesDeferred = $.Deferred()
     @typeTextSeriesArray = textArray
     @typeTextSeriesNext(true)
@@ -284,7 +284,7 @@ class Editor
 
   typeTextSeriesNext: (isFirst)->
     return if @typeTextCanceling
-    console.log "typeTextSeriesNext()"
+    #console.log "typeTextSeriesNext()"
     text = @typeTextSeriesArray.shift()
     delay = 500
     if text?
@@ -298,7 +298,7 @@ class Editor
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
 
   typeTextClear: ->
-    console.log "typeTextClear()"
+    #console.log "typeTextClear()"
     @logoText.exitEditing()
     @logoText.setSelectionStart 0
     @logoText.setSelectionEnd 0
@@ -314,7 +314,7 @@ class Editor
     @typeTextDeferred.resolve()
 
   typeText: (text)->
-    console.log "typeText()"
+    #console.log "typeText()"
     return unless @logoText? and
     @typeTextDeferred = $.Deferred()
     @typeTextClear()
@@ -323,7 +323,7 @@ class Editor
     @typeTextDeferred
 
   typeTextStop: ->
-    console.log "typeTextStop()"
+    #console.log "typeTextStop()"
     @typeTextCanceling = true
     window.clearTimeout @interval
     @typeTextClear()
@@ -332,12 +332,12 @@ class Editor
     @typeTextSeriesDeferred.reject()
 
   typeTextQueueUpdate: ->
-    console.log "typeTextQueueUpdate()"
+    #console.log "typeTextQueueUpdate()"
     delay = 10 + Math.random()*20
     @interval = window.setTimeout @typeTextUpdate.bind(@), delay
 
   typeTextUpdate: ->
-    console.log "typeTextUpdate()"
+    #console.log "typeTextUpdate()"
     return if @typeTextCanceling
     char = @autoTypeChars.shift()
     unless char? && @logoText?
@@ -386,7 +386,7 @@ class Editor
           uploader.start().done (shareUrl)=>
             loader.resolve()
             @permalink = window.location.origin + shareUrl
-            console.log "Ready to share!", @permalink
+            #console.log "Ready to share!", @permalink
 
             $popup = $('#share-popup-src').addClass('ready')
 
@@ -429,20 +429,20 @@ class Editor
 
   setPhoto: (fileDescriptor) ->
     return unless fileDescriptor?
-    console.log "Loading file", fileDescriptor.name
+    #console.log "Loading file", fileDescriptor.name
     #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
     $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>
-      console.log "Loaded!"
+      #console.log "Loaded!"
 
       img = new Image()
       dataUrl = e.target.result
       img.src = dataUrl
       aspect = img.width/img.height
-      console.log "Set into an image tag of size #{img.width}x#{img.height}"
+      #console.log "Set into an image tag of size #{img.width}x#{img.height}"
       if img.width == img.height == 0
         loader.reject()
         console.error "Load fail. Retrying."
@@ -462,7 +462,7 @@ class Editor
             @photo.off 'moving'
             @canvas.remove @photo
 
-          console.log "Final dimensions #{photo.width}x#{photo.height}"
+          #console.log "Final dimensions #{photo.width}x#{photo.height}"
           @photo = photo
           @photo.set
             selectable: true
@@ -498,7 +498,7 @@ class Editor
           # Now that photo is loaded, try to parse EXIF out and rotate as needed
           if imgHeader? then inkjet.exif imgHeader, (err, metadata)=>
             if metadata?.Orientation?
-              console.log "Rotating from", metadata.Orientation.description
+              #console.log "Rotating from", metadata.Orientation.description
               switch metadata.Orientation.value
                 when 8 then @photo.setAngle -90
                 when 3 then @photo.setAngle -180
@@ -528,7 +528,7 @@ class Editor
     W = @canvas.width * OVERSCALE
     H = @canvas.height * OVERSCALE
     aspect = img.width/img.height
-    console.log "Loaded image at #{img.width}x#{img.height}"
+    #console.log "Loaded image at #{img.width}x#{img.height}"
     if img.width > W && img.height > H
       console.warn "Scaling down image"
       resizeCanvas = document.createElement 'canvas'
