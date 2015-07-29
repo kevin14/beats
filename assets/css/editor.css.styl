@@ -31,6 +31,13 @@ html, body
 .hidden
   display none
 
+.font-preloader
+  position fixed
+  top 0
+  left -9999px
+  z-index -998
+  opacity 0
+
 .editor
   position absolute
   width 100%
@@ -185,11 +192,19 @@ html, body
     #control-contrast + label:before
       background-image url(/img/editor/control-icon-contrast-2x.png)
 
+  .editor-actions
+    .button
+      margin-right 10px
+      &:last-child
+        margin-right 0
 
 // Change UI depending on state
 .editor
 
   //&.mode-intro
+  .editor-actions
+    .restart
+      display none
 
   &.mode-text
     .editor-controls
@@ -211,6 +226,8 @@ html, body
       //display block
     .button.upload
       display none
+    .button.restart
+      display inline-block
     .editor-image-controls
       display none
 

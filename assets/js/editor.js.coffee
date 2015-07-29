@@ -52,7 +52,15 @@ class Editor
       self.setValue.call self, parseFloat(values[0]), 'update'
 
     @initializeTextMode()
-    @setMode 'intro'
+
+    if window.location.search?.indexOf('skip=1') > -1
+      $('#slides').fadeOut 100, ->$(this).remove()
+      @setMode('text').done =>
+        @logoText.setText ''
+        @logoText.set editable: true
+        @focusTextField()
+    else
+      @setMode 'intro'
 
   #region EDITOR MODES -------------------------------------------------------------------------------------------------
 
@@ -66,8 +74,6 @@ class Editor
       repeat: 'repeat'
 
     @logoFrame = new fabric.Image document.getElementById('img-logo-frame'),
-      left: @canvas.width/2 - 768/4
-      top: @canvas.height - 824/2 - 40
       selectable: false
       evented: false
     @canvas.add @logoFrame
@@ -167,7 +173,7 @@ class Editor
       @canvas.insertAt @photo, 0
 
       # Animate logo to final position
-      duration = 1000
+      duration = 2000
       if @photoAdded
         toScale = 0.4
         toTop = 640/1000*@canvas.height
@@ -212,10 +218,10 @@ class Editor
     @typeTextSeries(INTRO_CITIES).always =>
       console.log 'Intro over'
       $('#slides').delay(100).fadeOut 600, ->$(this).remove()
-      $('#bottom').removeClass('hidden').show()
-      $('#down').removeClass('hidden').show().click ->
-        $('body').animate {scrollTop: $('#bottom').offset().top}, 750
-      $('#beats-logo').show()
+#      $('#bottom').removeClass('hidden').show()
+#      $('#down').removeClass('hidden').show().click ->
+#        $('body').animate {scrollTop: $('#bottom').offset().top}, 750
+#      $('#beats-logo').show()
       @setMode('text').done =>
         @logoText.setText ''
         @logoText.set editable: true

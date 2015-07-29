@@ -32,18 +32,21 @@ block content
         img.hidden#img-pattern-grime(src="/img/editor/pattern-grime.jpg")
         img.hidden#img-beats-watermark(src="/img/editor/beats-watermark-2x.png")
         img.hidden#img-bg(src="/img/bg-black-new.jpg")
+        div.font-preloader
+          span(style="font-family:'knockout'") FORCE FONT LOAD
 
       .editor-controls
         .editor-image-controls
-          //- input.editor-range-control(type="range", value=0.5, min=0, max=1, step=0.01)
           .editor-range-control
             .range
           form.editor-invert-control
             input#editor-invert-control-white(type="radio", name="invert", value="0", checked)
             label(for="editor-invert-control-white") White
+
             input#editor-invert-control-black(type="radio", name="invert", value="1")
             label(for="editor-invert-control-black") Black
-          .editor-types
+
+          form.editor-types
             input#control-photo(type="radio", name="group", value="photo")
             label(for="control-photo") Image
 
@@ -57,17 +60,16 @@ block content
           input#action-upload(type="file", accept="image/*")
           .button.upload
             img(src="/img/btn-addphoto.png")
-              
           .button.share
             img(src="/img/btn-share.png")
-          
           .button.download
             img(src="/img/btn-download.png")
-          
+          a.button.restart(href="/?skip=1")
+            img(src="/img/btn-restart.png")
 
       #share-popup-src.share-popup
         a.close
-        a.button.twitter(href="#", target="share", data-text="Straight Outta {CITY}", data-hashtags="soc,beats", data-popwidth="550", data-popheight="420")
+        a.button.twitter(href="#", target="share", data-text="Straight Outta {CITY}", data-hashtags="straightouttacompton", data-popwidth="550", data-popheight="420")
           img(src="/img/btn-twitter.png", height="45")
         a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
           img(src="/img/btn-facebook.png", height="45")
