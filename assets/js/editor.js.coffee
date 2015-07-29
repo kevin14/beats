@@ -392,7 +392,7 @@ class Editor
 
             encodedData = (src) =>
               cityText = @cityText
-              (key)-> encodeURI src.data(key).replace('{CITY}',cityText)
+              (key)-> encodeURIComponent src.data(key).replace('{CITY}',cityText)
 
             $twitter = $popup.find 'a.twitter'
             td = encodedData $twitter
