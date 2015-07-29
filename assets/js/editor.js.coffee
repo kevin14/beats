@@ -54,12 +54,15 @@ class Editor
     @initializeTextMode()
 
     if window.location.search?.indexOf('skip=1') > -1
+      # skip intro
+      @logActionToAnalytics 'restart'
       $('#slides').fadeOut 100, ->$(this).remove()
       @setMode('text').done =>
         @logoText.setText ''
         @logoText.set editable: true
         @focusTextField()
     else
+      # play intro
       @setMode 'intro'
 
   #region EDITOR MODES -------------------------------------------------------------------------------------------------
