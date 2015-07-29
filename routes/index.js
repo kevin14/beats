@@ -26,4 +26,10 @@ router.get('/feed', function(req, res, next) {
 
 });
 
+router.get('/shane', function(req, res, next) {
+
+  res.send("Hey dude");
+
+});
+
 module.exports = router;
