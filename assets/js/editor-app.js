@@ -182,9 +182,10 @@ function resizeMe() {
     WW = $(window).width();
     WH = $(window).height();
 
-    if(WH < 600 && WW > WH) {
-      $(".editor").height(600);
-      $("#top").height(600);
+    var threshhold = 568;
+    if(WH < threshhold) {
+      $(".editor").height(threshhold);
+      $("#top").height(threshhold);
       $("html,body").css("overflow-y", "auto");
     } else {
       $(".editor").height(WH);
@@ -193,4 +194,3 @@ function resizeMe() {
     }
 
 }
-
