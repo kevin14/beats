@@ -35,6 +35,11 @@ html
           
           
     script.
-      location.href = '/';
+      if (location.href.indexOf("#stay") != -1) {
+        //stay
+      } else {
+        location.href = '/';
+      }
+      
     
   
