@@ -12,6 +12,7 @@ if(dev.indexOf("development") != -1) {
       port: process.env.PORT || 3001
   };
 } else {
+  process.env.NODE_ENV = 'production';
   config = {
       baseUrl: "http://straightouttasomewhere.com",
       awsAccess: "AKIAIURK23YYWU5W5RNA",
