@@ -1,6 +1,6 @@
 class Editor
 
-  INTRO_CITIES = ["INGLEWOOD", "BROOKLYN", "COLLEGE PARK", "BROOKLYN"]
+  INTRO_CITIES = ["INGLEWOOD", "BROOKLYN", "COLLEGE PARK", "COMPTON"]
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback|faggot/i
 
@@ -114,7 +114,7 @@ class Editor
       cursorHeightPercent: 0.7
       cursorDeltaX: 0
       cursorDeltaY: -12
-      maxLength: 25
+      maxLength: 15
     @canvas.add @logoText
 
     @logoText.on 'changed', (e) =>
