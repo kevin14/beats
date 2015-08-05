@@ -38,6 +38,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
+/*
+if (app.get('env') === 'production') {
+    app.use( require('express-force-domain')('http://www.straightouttasomewhere.com') );
+}*/
+
+
 
 // Use connect-assets asset pipeline
 // @see https://github.com/adunkman/connect-assets
