@@ -71,6 +71,7 @@ var authMiddleware = auth.connect(basic);
 
 app.use('/', routes);
 app.use('/upload', upload);
+app.use('/s', share);
 app.use('/share', share);
 app.use('/admin', authMiddleware, admin);
 

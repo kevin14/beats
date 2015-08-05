@@ -26,7 +26,7 @@ class Uploader
   saveEntry: ->
     data = id: @guid, url: @imageUrl, city: @city
     $.post '/upload/save', data, (response)=>
-      @shareUrl = "/share/#{response}"
+      @shareUrl = "/s/#{response}"
       @allTasks.resolve @shareUrl
       # Just for debugging...
       # window.location = @shareUrl

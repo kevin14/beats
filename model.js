@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.ObjectId;
+var shortid = require('shortid');
 
 var uploadsSchema = mongoose.Schema({
+  _id             : {
+                      type: String,
+                      unique: true,
+                      'default': shortid.generate
+                    },
     'file_id'     : String,
     'city'        : String,
     'url'         : String,

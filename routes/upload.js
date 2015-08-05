@@ -27,7 +27,7 @@ router.post("/save", function(req, res) {
     });
 
     upload.save(function(){
-      res.send(id);
+      res.send(upload.id);
     });
 
 });

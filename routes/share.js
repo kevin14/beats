@@ -14,13 +14,13 @@ router.get("/", function(req, res) {
 
 router.get("/:id", function(req, res) {
     var id = req.params.id;
-    model.Uploads.findOne({'file_id': id}).exec(function(err, upload) {
+    model.Uploads.findOne({'_id': id}).exec(function(err, upload) {
       if(err) {
         console.log(err);
       }
 
       if(upload) {
-          res.render("share", {id: id, url: upload.url, baseUrl: config.baseUrl, location: upload.city});
+          res.render("share", {id: id, file_id: upload.file_id, url: upload.url, baseUrl: config.baseUrl, location: upload.city});
       }
       //console.log(upload);
       //var url = upload.url;
@@ -33,7 +33,7 @@ router.get("/:id", function(req, res) {
 
 router.get("/:id/wide", function(req, res) {
   var gm = require("gm"), im = gm.subClass({imageMagick: true});
-  model.Uploads.findOne({'file_id': req.params.id}).exec(function(err, upload) {
+  model.Uploads.findOne({'_id': req.params.id}).exec(function(err, upload) {
     if(err) {
       console.log(err);
     }
