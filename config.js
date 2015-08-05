@@ -14,7 +14,7 @@ if(dev.indexOf("development") != -1) {
 } else {
   process.env.NODE_ENV = 'production';
   config = {
-      baseUrl: "http://straightouttasomewhere.com",
+      baseUrl: "http://www.straightouttasomewhere.com",
       awsAccess: "AKIAIURK23YYWU5W5RNA",
       awsSecret: "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",
       s3bucket: "soc-assets",
