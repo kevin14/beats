@@ -38,10 +38,10 @@ router.get("/:id/wide", function(req, res) {
       console.log(err);
     }
     if(upload) {
-      console.log(upload.url);
+      //console.log(upload.url);
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
-      im(url).gravity('center').borderColor('#FFFFFF').border(527,0).resize(1000).stream('jpeg').pipe(res);
+      im(url).gravity('center').borderColor('#FFFFFF').resize(523).border(238,0).stream('jpeg').pipe(res);
     }
   });
 });
