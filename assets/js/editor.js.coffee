@@ -27,9 +27,7 @@ class Editor
     $controls.find('.share').click => @share()
 
     $(".upload").click ->
-      console.log('upload triggered')
-      $("#action-upload").trigger("click")
-      #$("input[type=file]").click()
+      $("input[type=file]").click()
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
 
