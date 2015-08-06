@@ -26,7 +26,7 @@ class Editor
 
     $controls.find('.share').click => @share()
 
-    $(".upload.button").click ->
+    $(".upload").click ->
       $("#action-upload").click()
       #$("input[type=file]").click()
     $controls.find('input[type=file]').change ->
