@@ -40,8 +40,8 @@ router.get("/:id/wide", function(req, res) {
     if(upload) {
       console.log(upload.url);
       url = upload.url.replace('https://','http://');
-      res.set('Content-Type', 'image/png');
-      im(url).gravity('center').borderColor('transparent').border(527,0).stream('png').pipe(res);
+      res.set('Content-Type', 'image/jpeg');
+      im(url).gravity('center').borderColor('transparent').border(527,0).stream('jpeg').pipe(res);
     }
   });
 });
