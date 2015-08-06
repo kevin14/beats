@@ -11,6 +11,7 @@
     "imagesloaded": "*",
     "nouislider": "~8.0.2",
     "buzz": "~1.1.10",
-    "inkjet": "~1.2.0"
+    "inkjet": "~1.2.0",
+    "fastclick": "~1.0.6"
   }
 }

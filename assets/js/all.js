@@ -5,6 +5,7 @@
 //= require nouislider/distribute/nouislider
 //= require featherlight/release/featherlight.min
 //= require inkjet/dist/inkjet
+//= require fastclick/lib/fastclick
 
 //= require utils
 //= require editor

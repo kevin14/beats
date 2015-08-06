@@ -19,6 +19,8 @@ $(document).ready(function(){
     $('html').addClass('ios');
   }
 
+  FastClick.attach(document.body);
+
   editorFunctions();
   initSounds();
 
