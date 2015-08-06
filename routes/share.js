@@ -21,6 +21,8 @@ router.get("/:id", function(req, res) {
 
       if(upload) {
           res.render("share", {id: id, file_id: upload.file_id, url: upload.url, baseUrl: config.baseUrl, location: upload.city});
+      } else {
+        res.redirect('/');
       }
       //console.log(upload);
       //var url = upload.url;
@@ -42,6 +44,8 @@ router.get("/:id/wide", function(req, res) {
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
       im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
+    } else {
+      res.redirect('/');
     }
   });
 });
