@@ -27,8 +27,12 @@ class Editor
     $controls.find('.share').click => @share()
 
     $(".upload").click (e)->
-      console.log "click upload"
-      $("input[type=file]").trigger(e).click()
+      # console.log "click upload"
+      $input = $("input[type=file]")
+      if $('html').is('.ios')
+        $input.trigger(e).click()
+      else
+        $input.click()
     $controls.find('input[type=file]').change ->
       self.setPhoto.call self, this.files[0]
 
@@ -58,14 +62,11 @@ class Editor
     if window.location.search?.indexOf('skip=1') > -1
       # skip intro
       @logActionToAnalytics 'restart'
-      $('#slides').fadeOut 100, ->$(this).remove()
-      @setMode('text').done =>
-        @logoText.setText ''
-        @logoText.set editable: true
-        @focusTextField()
-    else
-      # play intro
-      @setMode 'intro'
+      # $('#slides').fadeOut 100, ->$(this).remove()
+      INTRO_CITIES = []
+
+    # play intro
+    @setMode 'intro'
 
   #region EDITOR MODES -------------------------------------------------------------------------------------------------
 
@@ -256,24 +257,26 @@ class Editor
     deferred
 
   setMode: (newMode)->
+    console.log "setMode #{newMode}"
     deferred = new $.Deferred()
     oldMode = @mode
     if oldMode == newMode
-      return deferred.resolve()
+      deferred.resolve()
+      return deferred
     #console.log "editor.mode = #{newMode}"
     switch newMode
       when 'intro' then @initializeIntroMode(deferred)
       when 'photo' then @initializePhotoMode(deferred)
       when 'done' then @finalizeForDoneMode(deferred)
       else deferred.resolve()
-    $('.editor').removeClass("mode-#{oldMode}").addClass("mode-#{newMode}")
+    window.setTimeout (->$('.editor').removeClass().addClass("editor mode-#{newMode}")), 1000
     @mode = newMode
     deferred
 
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
-    #console.log "focusTextField()"
+    console.log "focusTextField()"
     @canvas.setActiveObject @logoText
     @logoText.enterEditing()
 
@@ -300,8 +303,8 @@ class Editor
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
 
   typeTextClear: ->
-    #console.log "typeTextClear()"
-    @logoText.exitEditing()
+    console.log "typeTextClear()"
+    @logoText.exitEditing() if @logoText.isEditing
     @logoText.setSelectionStart 0
     @logoText.setSelectionEnd 0
     @logoText.setText ''
@@ -370,7 +373,9 @@ class Editor
   downloadLocal: ->
     @logActionToAnalytics 'download'
     @setMode('done').done =>
+      # console.log "setmode done is done"
       @captureImageDeferred().done (blob)->
+        # console.log "image is captured is done, blob is #{blob}"
         saveAs(blob, 'StraightOuttaCompton.jpg')
 
   share: ->
