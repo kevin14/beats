@@ -60,20 +60,15 @@ router.get("/:id/wide", function(req, res) {
       console.log(err);
     }
     if(upload) {
-      res.redirect(upload.url);
-      return;
+      //res.redirect(upload.url);
+      //return;
 
-      
-      //upload.url = "https://soc-assets.s3.amazonaws.com/bd85039e-f608-e86e-36f3-4e5ce2a6dce2.jpg";
-      //console.log(upload.url);
-
-      console.log("******* RESIZING IMAGE ********");
+      console.log("******* RESIZING IMAGE *********");
 
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
       console.log(url);
 
-      //console.log(url);
       im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
       console.log("******* IMAGE RESZIZED ********");
     } else {
