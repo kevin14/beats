@@ -60,8 +60,8 @@ router.get("/:id/wide", function(req, res) {
       console.log(err);
     }
     if(upload) {
-      //res.redirect(upload.url);
-      //return;
+      res.redirect(upload.url);
+      return;
       //upload.url = "https://soc-assets.s3.amazonaws.com/bd85039e-f608-e86e-36f3-4e5ce2a6dce2.jpg";
       //console.log(upload.url);
 
