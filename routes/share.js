@@ -41,7 +41,7 @@ router.get("/:id/wide", function(req, res) {
       console.log(err);
     }
     if(upload) {
-      res.redirect(url);
+      res.redirect(upload.url);
       return;
 
       //console.log(upload.url);
