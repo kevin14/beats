@@ -12,6 +12,22 @@ router.get("/", function(req, res) {
     res.send("what");
 });
 
+router.get("/wide", function(req, res) {
+
+  var gm = require("gm"), im = gm.subClass({imageMagick: true});
+
+  url = "https://soc-assets.s3.amazonaws.com/bd85039e-f608-e86e-36f3-4e5ce2a6dce2.jpg";
+      //console.log(upload.url);
+  url = url.replace('https://','http://');
+  res.set('Content-Type', 'image/jpeg');
+
+      //console.log(url);
+  im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
+
+});
+
+
+
 router.get("/:id", function(req, res) {
     var id = req.params.id;
     model.Uploads.findOne({'_id': id}).exec(function(err, upload) {
@@ -33,6 +49,9 @@ router.get("/:id", function(req, res) {
     });
 });
 
+
+
+
 router.get("/:id/wide", function(req, res) {
 
   var gm = require("gm"), im = gm.subClass({imageMagick: true});
@@ -43,10 +62,12 @@ router.get("/:id/wide", function(req, res) {
     if(upload) {
       res.redirect(upload.url);
       return;
-
+      //upload.url = "https://soc-assets.s3.amazonaws.com/bd85039e-f608-e86e-36f3-4e5ce2a6dce2.jpg";
       //console.log(upload.url);
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
+
+
       //console.log(url);
       im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
     } else {
@@ -54,6 +75,9 @@ router.get("/:id/wide", function(req, res) {
     }
   });
 });
+
+
+
 
 
 module.exports = router;
