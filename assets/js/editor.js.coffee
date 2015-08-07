@@ -63,7 +63,7 @@ class Editor
       # skip intro
       @logActionToAnalytics 'restart'
       # $('#slides').fadeOut 100, ->$(this).remove()
-      INTRO_CITIES = []
+      INTRO_CITIES = [" "]
 
     # play intro
     @setMode 'intro'
