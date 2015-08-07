@@ -43,6 +43,7 @@ router.get("/:id/wide", function(req, res) {
       //console.log(upload.url);
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
+      console.log(url);
       im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
     } else {
       res.redirect('/');
