@@ -8,6 +8,8 @@ $base-letter-spacing = 0.05em
 $canvas-size = 423px
 $canvas-border = 5px
 
+$url = "https://soc-assets.s3.amazonaws.com/assets"
+
 html, body
   border 0
   margin 0
@@ -188,12 +190,12 @@ html, body
         background-position -25px 0
 
     #control-photo + label:before
-      background-image url(/img/editor/control-icon-image-2x.png)
+      background-image url($url/img/editor/control-icon-image-2x.png)
     #control-logo + label:before
     #control-invert + label:before
-      background-image url(/img/editor/control-icon-logo-2x.png)
+      background-image url($url/img/editor/control-icon-logo-2x.png)
     #control-contrast + label:before
-      background-image url(/img/editor/control-icon-contrast-2x.png)
+      background-image url($url/img/editor/control-icon-contrast-2x.png)
 
   .editor-actions
     .button
@@ -247,7 +249,7 @@ html, body
 .share-popup
   display none
   text-align center
-  background-image url(/img/share-bg.jpg)
+  background-image url($url/img/share-bg.jpg)
   background-size cover
   padding 128px 0
   //&:not(.ready) .button
@@ -301,19 +303,19 @@ html, body
     background-size cover
 
   .slide1
-    background-image url(/img/intro/intro-bg1.jpg)
+    background-image url($url/img/intro/intro-bg1.jpg)
     z-index 6
   .slide2
-    background-image url(/img/intro/intro-bg2.jpg)
+    background-image url($url/img/intro/intro-bg2.jpg)
     z-index 5
   .slide3
-    background-image url(/img/intro/intro-bg3.jpg)
+    background-image url($url/img/intro/intro-bg3.jpg)
     z-index 4
   .slide4
-    background-image url(/img/intro/intro-bg4.jpg)
+    background-image url($url/img/intro/intro-bg4.jpg)
     z-index 3
   .slide5
-    background-image url(/img/intro/intro-bg5.jpg)
+    background-image url($url/img/intro/intro-bg5.jpg)
     z-index 2
 
 

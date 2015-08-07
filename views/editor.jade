@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  
+  - var url = "https://soc-assets.s3.amazonaws.com/assets"
 
   #top
     #theaters
@@ -51,23 +53,23 @@ block content
         form.editor-actions
           input#action-upload(type="file", accept="image/*")
           .button.upload
-            img(src="/img/btn-addphoto.png")
+            img(src="#{url}/img/btn-addphoto.png")
           .button.share
-            img(src="/img/btn-share.png")
+            img(src="#{url}/img/btn-share.png")
           .button.download
-            img(src="/img/btn-download.png")
+            img(src="#{url}/img/btn-download.png")
           a.button.restart(href="/?skip=1")
-            img(src="/img/btn-restart.png")
+            img(src="#{url}/img/btn-restart.png")
 
       #share-popup-src.share-popup
         a.close
         a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from?", data-hashtags="BeatsByDre", data-popwidth="550", data-popheight="420")
-          img(src="/img/btn-twitter.png", height="45")
+          img(src="#{url}/img/btn-twitter.png", height="45")
         a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
-          img(src="/img/btn-facebook.png", height="45")
+          img(src="#{url}/img/btn-facebook.png", height="45")
 
   a#beats-logo(href="/")
-    img(src="/img/beats-logo.png")
+    img(src="#{url}/img/beats-logo.png")
 
   #loader
-    img(src="/img/loader.gif")
+    img(src="#{url}/img/loader.gif")
