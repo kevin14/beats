@@ -218,9 +218,6 @@ class Editor
       deferred?.resolve()
 
   initializeIntroMode: (deferred)->
-    $(document).on 'keydown', =>
-      @typeTextStop()
-      $(document).off 'keydown'
     @typeTextSeries(INTRO_CITIES).always =>
       #console.log 'Intro over'
       $('#slides').delay(100).fadeOut 600, ->$(this).remove()
@@ -257,7 +254,7 @@ class Editor
     deferred
 
   setMode: (newMode)->
-    console.log "setMode #{newMode}"
+    # console.log "setMode #{newMode}"
     deferred = new $.Deferred()
     oldMode = @mode
     if oldMode == newMode
@@ -276,9 +273,12 @@ class Editor
   #region INTRO --------------------------------------------------------------------------------------------------------
 
   focusTextField: ->
-    console.log "focusTextField()"
-    @canvas.setActiveObject @logoText
-    @logoText.enterEditing()
+    # console.log "focusTextField()"
+    if @canvas.getActiveObject()?.type == 'i-text' and @logoText?.isEditing
+      $('textarea').trigger('focus')
+    else
+      @canvas.setActiveObject @logoText
+      @logoText.enterEditing()
 
   typeTextSeries: (textArray)->
     #console.log "typeTextSeries()"
@@ -303,7 +303,7 @@ class Editor
       window.setTimeout (=>@typeTextSeriesDeferred.resolve()), delay
 
   typeTextClear: ->
-    console.log "typeTextClear()"
+    # console.log "typeTextClear()"
     @logoText.exitEditing() if @logoText.isEditing
     @logoText.setSelectionStart 0
     @logoText.setSelectionEnd 0
@@ -333,8 +333,8 @@ class Editor
     window.clearTimeout @interval
     @typeTextClear()
     @canvas.renderAll()
-    @typeTextDeferred.reject()
-    @typeTextSeriesDeferred.reject()
+    @typeTextDeferred?.reject()
+    @typeTextSeriesDeferred?.reject()
 
   typeTextQueueUpdate: ->
     #console.log "typeTextQueueUpdate()"
@@ -632,3 +632,8 @@ GrayscaleContrastFilter.fromObject = (o)->new GrayscaleContrastFilter(o)
 # To behave better, we should instead execute this after a certain set of required images are loaded
 $(window).load ->
   Editor._instance = new Editor $('#canvas'), $('.editor-controls')
+  # $(window).on 'keydown', (e)->
+  #   key = String.fromCharCode(e.keyCode)
+  #   rightTarget = HTMLTextAreaElement.prototype.isPrototypeOf e.target
+  #   console.warn "Wrong target #{key}" unless rightTarget
+
