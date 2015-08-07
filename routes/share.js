@@ -34,16 +34,20 @@ router.get("/:id", function(req, res) {
 });
 
 router.get("/:id/wide", function(req, res) {
+
   var gm = require("gm"), im = gm.subClass({imageMagick: true});
   model.Uploads.findOne({'_id': req.params.id}).exec(function(err, upload) {
     if(err) {
       console.log(err);
     }
     if(upload) {
+      res.redirect(url);
+      return;
+
       //console.log(upload.url);
       url = upload.url.replace('https://','http://');
       res.set('Content-Type', 'image/jpeg');
-      console.log(url);
+      //console.log(url);
       im(url).gravity('center').borderColor('#FFFFFF').resize(630).border(285,0).stream('jpeg').pipe(res);
     } else {
       res.redirect('/');
