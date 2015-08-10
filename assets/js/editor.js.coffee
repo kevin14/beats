@@ -260,6 +260,11 @@ class Editor
     if oldMode == newMode
       deferred.resolve()
       return deferred
+
+
+    if newMode != "intro"
+      $("#bottom").show()
+      $("#down").show()
     #console.log "editor.mode = #{newMode}"
     switch newMode
       when 'intro' then @initializeIntroMode(deferred)
@@ -376,7 +381,16 @@ class Editor
       # console.log "setmode done is done"
       @captureImageDeferred().done (blob)->
         # console.log "image is captured is done, blob is #{blob}"
-        saveAs(blob, 'StraightOuttaCompton.jpg')
+        #userAgent = window.navigator.userAgent.toLowerCase()
+        #isMobile = /iphone|ipod|ipad|android|mobile/.test( userAgent )
+        #if isMobile
+        #    reader = new (window.FileReader)
+        #    reader.readAsDataURL blob
+        #    reader.onloadend = ->
+        #      base64data = reader.result
+        #      location.href = base64data
+        #else
+            saveAs(blob, 'StraightOuttaSomewhere.jpg')
 
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
@@ -636,4 +650,3 @@ $(window).load ->
   #   key = String.fromCharCode(e.keyCode)
   #   rightTarget = HTMLTextAreaElement.prototype.isPrototypeOf e.target
   #   console.warn "Wrong target #{key}" unless rightTarget
-
