@@ -53,7 +53,9 @@ block content
         form.editor-actions
           input#action-upload(type="file", accept="image/*")
           .button.upload
-            img(src="#{url}/img/btn-addphoto.png")
+            img(src="/img/btn-addphoto-big.png")
+              
+          a.donthave(href="#") I Don't Have A Photo
           .button.share
             img(src="#{url}/img/btn-share.png")
           .button.download
@@ -92,7 +94,7 @@ block content
     a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy
     a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
 
-  a#beats-logo(href="/")
+  a#beats-logo(href="http://beatsbydre.com")
     img(src="#{url}/img/beats-logo.png")
 
   #loader

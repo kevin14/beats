@@ -23,7 +23,10 @@ class Editor
     # Hook up editor control events
 
     $controls.find('.download').click => @downloadLocal()
-
+    $controls.find('.donthave').click =>
+      $(".donthave").hide()
+      @setMode('nophoto').done =>
+        #
     $controls.find('.share').click => @share()
 
     $(".upload").click (e)->
@@ -122,6 +125,14 @@ class Editor
 
     @logoText.on 'changed', (e) =>
       newText = @logoText.text
+
+      if newText != ""
+        $(".upload").animate({opacity: 1})
+        $(".donthave").animate({opacity: 1})
+      else
+        $(".upload").animate({opacity: 0})
+        $(".donthave").animate({opacity: 1})
+
       tempText = newText.replace(/\s+/g, '')
       if PROFANITIES.test tempText
         @typeTextClear()
@@ -269,6 +280,7 @@ class Editor
       $("#legal").show()
     #console.log "editor.mode = #{newMode}"
     switch newMode
+      when 'nophoto' then @initializePhotoMode(deferred)
       when 'intro' then @initializeIntroMode(deferred)
       when 'photo' then @initializePhotoMode(deferred)
       when 'done' then @finalizeForDoneMode(deferred)
@@ -455,7 +467,7 @@ class Editor
     #console.log "Loading file", fileDescriptor.name
     #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
-    $(".upload img").attr("src", "/img/btn-changephoto.png")
+    #$(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>
