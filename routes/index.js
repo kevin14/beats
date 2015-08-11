@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
     type: "photo",
     photo: "http://soc-assets.s3.amazonaws.com/content/compton.jpg",
     title: "Compton",
-    text: 'The first Dr. Dre album in sixteen years. Available now only on Apple Music: <br /><br /><a href="https://itun.es/us/GWLg9" target="_blank">https://itun.es/us/GWLg9</a>'
+    text: 'The first Dr. Dre album in sixteen years. Available now only on <a href="https://itun.es/us/GWLg9" target="_blank">Apple Music</a>'
   },{
     type: "video",
     videoId: "-F5WcFPDzko",
