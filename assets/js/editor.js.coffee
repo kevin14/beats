@@ -122,7 +122,8 @@ class Editor
 
     @logoText.on 'changed', (e) =>
       newText = @logoText.text
-      if PROFANITIES.test newText
+      tempText = newText.replace(/\s+/g, '')
+      if PROFANITIES.test tempText
         @typeTextClear()
       else
         window.reactToKeypress(newText.length < @cityText.length)
