@@ -8,10 +8,10 @@ block content
     #theaters
       a(href="http://straightouttacompton.com", target="_blank") Straight Outta Compton in Theaters August 14
 
-    #legal
-      a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy
-      a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
-
+    a#down
+      img(src="/img/arrow-down.png") 
+      
+      
     #slides
       .slide.slide1(data-city="College Park")
       .slide.slide2(data-city="New York")
@@ -67,6 +67,30 @@ block content
           img(src="#{url}/img/btn-twitter.png", height="45")
         a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
           img(src="#{url}/img/btn-facebook.png", height="45")
+
+  #bottom
+    ul.cf
+      each post in posts
+        li
+          if post.type == "video"
+            a.video-link(href="#", data-video="#{post.videoId}")
+              img.bg-img(src="#{post.photo}")
+              .over
+                .over-inner
+                  .over-cell.video
+                    img.play(src="/img/play.png")
+                    h3!= post.title
+          else
+            img.bg-img(src="#{post.photo}")
+            .over
+              .over-inner
+                .over-cell
+                  h3!= post.title
+                  p!= post.text
+
+  #legal
+    a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy
+    a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
 
   a#beats-logo(href="/")
     img(src="#{url}/img/beats-logo.png")
