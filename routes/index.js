@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     type: "video",
     videoId: "-F5WcFPDzko",
     photo: "http://soc-assets.s3.amazonaws.com/content/trailer.jpg",
-    title: "Straight Outta Compton in theatres August 14."
+    title: "Straight Outta Compton in theatres August 14"
   },{
     type: "video",
     videoId: "v0xd9W-7lEc",
