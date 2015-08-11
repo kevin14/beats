@@ -86,7 +86,7 @@ block content
               .over-inner
                 .over-cell
                   h3 #{post.title}
-                  p #{post.text}
+                  p!= post.text
 
   #legal
     a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy

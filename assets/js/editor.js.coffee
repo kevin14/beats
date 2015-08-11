@@ -265,6 +265,7 @@ class Editor
     if newMode != "intro"
       $("#bottom").show()
       $("#down").show()
+      $("#legal").show()
     #console.log "editor.mode = #{newMode}"
     switch newMode
       when 'intro' then @initializeIntroMode(deferred)
