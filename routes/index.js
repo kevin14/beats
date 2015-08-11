@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
     type: "video",
     videoId: "v0xd9W-7lEc",
     photo: "http://soc-assets.s3.amazonaws.com/content/dre.jpg",
-    title: "We wanted to come out and make a statement."
+    title: '<em>"We wanted to come out and make a statement."</em><br />Dr Dre and Ice Cube on what it means to be #StraightOuttaCompton'
   }];
 
   res.render('editor', { title: 'COMPTON',posts: results });
