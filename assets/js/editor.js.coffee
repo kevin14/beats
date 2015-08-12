@@ -127,11 +127,17 @@ class Editor
       newText = @logoText.text
 
       if newText != ""
-        $(".upload").animate({opacity: 1})
-        $(".donthave").animate({opacity: 1})
+        #$(".upload").show()
+        #$(".donthave").show()
+        $(".upload").animate {opacity: 1}, (e) ->
+          $(this).css("opacity", "inherit")
+        $(".donthave").animate {opacity: 1}, (e) ->
+          $(this).css("opacity", "inherit")
       else
+        #$(".upload").hide()
+        #$(".donthave").hide()
         $(".upload").animate({opacity: 0})
-        $(".donthave").animate({opacity: 1})
+        $(".donthave").animate({opacity: 0})
 
       tempText = newText.replace(/\s+/g, '')
       if PROFANITIES.test tempText
@@ -467,7 +473,7 @@ class Editor
     #console.log "Loading file", fileDescriptor.name
     #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
-    #$(".upload img").attr("src", "/img/btn-changephoto.png")
+    $(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>

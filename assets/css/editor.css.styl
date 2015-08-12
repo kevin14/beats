@@ -51,7 +51,8 @@ html, body
   justify-content center
 
   .button
-    cursor pointer
+
+    cursor pointer !important
     display inline-block
     //background url(/img/button-bg.jpg) 100% 100%
     //width (320/2)px
@@ -236,7 +237,7 @@ html, body
 
   &.mode-photo
     .upload
-      display none
+      display inline
     .donthave
       display none
     .download
@@ -306,9 +307,9 @@ html, body
   .button
     margin 0 20px
     &:hover
-      opacity 0.9
+      opacity 0.9  !important
     &:active
-      opacity 0.5
+      opacity 0.5 !important;
 
     @media (max-width: 500px)
       display block
