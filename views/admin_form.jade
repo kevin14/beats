@@ -1,0 +1,78 @@
+extends admin_layout
+
+block content
+  h1 Add A Post
+
+  h3 type
+    select#type(name="form-type")
+      option text 
+      option video  
+
+  h3 photo         
+    input(type="text" name="form-photo" val="" placeholder="http://")
+  
+  
+  h3.vidonly Video Id        
+    input.vidonly(type="text" name="form-videoid" val="" placeholder="Ex: 30dk32l_21") 
+    
+  .lang  
+    h3 English
+    h4 Title:
+    input(type="text" name="form-title_en" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_en" placeholder="Check out this article...")
+    
+  .lang  
+    h3 French
+    h4 Title:
+    input(type="text" name="form-title_fr" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_fr" placeholder="Check out this article...")  
+  
+  .lang  
+    h3 German
+    h4 Title:
+    input(type="text" name="form-title_de" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_de" placeholder="Check out this article...")  
+  
+  .lang  
+    h3 Japanese
+    h4 Title:
+    input(type="text" name="form-title_jp" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_jp" placeholder="Check out this article...") 
+  
+  .lang  
+    h3 Chinese Traditional
+    h4 Title:
+    input(type="text" name="form-title_ct" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_ct" placeholder="Check out this article...") 
+      
+  .lang  
+    h3 Chinese Simplified
+    h4 Title:
+    input(type="text" name="form-title_cs" val="" placeholder="Compton") 
+    h4.novid Text:
+    textarea.novid(name="form-text_cs" placeholder="Check out this article...")  
+    
+      
+  if post
+    a.delete(href="/admin/content/delete/#{post.id}") Delete
+
+  script(src="//code.jquery.com/jquery-1.11.3.min.js")
+  script(src="//code.jquery.com/jquery-migrate-1.2.1.min.js")
+  script.
+    $(document).ready(function(){
+    $(".vidonly").hide();
+      $("#type").on("change", function(){
+        if($( "#type option:selected" ).val() == "video") {
+          $(".novid").hide();
+          $(".vidonly").show();
+        } else {
+          $(".novid").show();
+          $(".vidonly").hide();
+        }
+      });
+    });

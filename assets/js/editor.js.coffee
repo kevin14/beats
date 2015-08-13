@@ -129,14 +129,16 @@ class Editor
       if newText != ""
         #$(".upload").show()
         #$(".donthave").show()
-        $(".upload").animate {opacity: 1}, (e) ->
-          $(this).css("opacity", "inherit")
+        #$(".upload").animate {opacity: 1}, (e) ->
+        $(".upload").addClass("showanimation")
+          #$(this).css("opacity", " ")
         $(".donthave").animate {opacity: 1}, (e) ->
-          $(this).css("opacity", "inherit")
+          #$(this).css("opacity", " ")
       else
         #$(".upload").hide()
         #$(".donthave").hide()
-        $(".upload").animate({opacity: 0})
+        $(".upload").removeClass("showanimation")
+        #$(".upload").animate({opacity: 0})
         $(".donthave").animate({opacity: 0})
 
       tempText = newText.replace(/\s+/g, '')
@@ -402,7 +404,7 @@ class Editor
       @captureImageDeferred().done (blob)->
         # console.log "image is captured is done, blob is #{blob}"
         #userAgent = window.navigator.userAgent.toLowerCase()
-        #isMobile = /iphone|ipod|ipad|android|mobile/.test( userAgent )
+        #isMobile = /twitter|facebook|fbav|fbdv|fbsv|fban/.test( userAgent )
         #if isMobile
         #    reader = new (window.FileReader)
         #    reader.readAsDataURL blob

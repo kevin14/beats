@@ -4,8 +4,48 @@ html
     != LRScript
     title= title
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1", user-scalable="no")
-    link(rel="stylesheet", href="/font/fonts.css")
-    link(rel='stylesheet', href='/css/admin_style.css')
-    block head
+
+    style.
+      html, body {
+        margin: 0px;
+        padding: 10px;
+        font-size: 14px;
+        line-height: 16px;
+        font-family: "Helvetica";
+      }
+      
+      h1 {
+        font-size: 42px;
+        text-transform: uppercase;
+        }
+
+
+      .paging {
+        font-size: 11px;
+        color: #999;
+        }
+        
+      .lang {
+        background: #eee;
+        padding: 10px;
+        margin-bottom: 10px;
+        }
+
+      .delete {
+        color: #f00;
+        font-size: 12px;
+        }
+        
+      input[type=text]  {
+        width: 500px;
+        font-size: 14px;
+      }
+        
+      textarea {
+        font-size: 14px;
+        width: 500px;
+        height: 100px;
+      }
+      
   body
     block content

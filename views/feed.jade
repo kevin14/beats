@@ -3,7 +3,7 @@ extends layout
 block content
 
  
-  #bottom
+  #bottom(style="display: block !important;")
       ul.cf
         each post in posts
           li
@@ -14,12 +14,11 @@ block content
                   .over-inner
                     .over-cell.video
                       img.play(src="/img/play.png")
-                      h3 #{post.title}
+                      h3!= post.title
             else
               img.bg-img(src="#{post.photo}")
-              if post.text != null
-                .over
-                  .over-inner
-                    .over-cell
-                      h3 #{post.title}
-                      p #{post.text}
+              .over
+                .over-inner
+                  .over-cell
+                    h3!= post.title
+                    p!= post.text

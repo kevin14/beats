@@ -1,0 +1,9 @@
+extends admin_layout
+
+block content
+  a(href="content/add")
+    img.bg-img(src="/img/plus.png" style="height: 300px;")
+  each post in posts
+    a(href="content/edit/#{post.id}")
+      img.bg-img(src="#{post.photo}" style="height: 300px;")
+  

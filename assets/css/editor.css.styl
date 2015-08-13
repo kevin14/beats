@@ -40,6 +40,8 @@ html, body
   z-index -998
   opacity 0
 
+
+
 .editor
   position absolute
   width 100%
@@ -366,6 +368,12 @@ html, body
     background-image url($url/img/intro/intro-bg5.jpg)
     z-index 2
 
+
+.showanimation
+  opacity 1 !important
+
+  &:hover
+    opacity 0.9 !important
 
 // Try to position fake textbox on screen so iOS doesn't scroll away
 textarea.fabric-hidden-input
