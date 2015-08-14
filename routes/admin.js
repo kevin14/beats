@@ -52,39 +52,9 @@ router.get("/content/edit/:id", function(req, res) {
 
 router.get("/content/add", function(req, res) {
   //list first perPage
-
   res.render("admin_form", {title: "Add", post: null});
 });
 
-
-
-// Needs proper implementation to upload to S3 then store on Mongodb
-router.get("/content/addvideo/:id", function(req, res) {
-  var upload = new model.Posts({
-      photo: "/img/grid/3.jpg",
-      type: "video",
-      title: "Exclusive Trailer",
-      videoId: "z-ogfyLTkdQ",
-    });
-
-    upload.save(function(){
-      res.send(id);
-    });
-});
-
-// Needs proper implementation to upload to S3 then store on Mongodb
-router.get("/content/addphoto/:id", function(req, res) {
-  var upload = new model.Posts({
-      photo: "/img/grid/9.jpg",
-      type: "text",
-      title: "Test123",
-      text: "Lorem ipsum get down get down sit amizzle, for sure adipiscing go to hizzle. Nullam sapizzle velizzle, shizzle my nizzle crocodizzle volutpizzle, suscipit fo shizzle mah nizzle fo rizzle, mah home g-dizzle, gravida izzle, break it down"
-    });
-
-    upload.save(function(){
-      res.send(id);
-    });
-});
 
 router.get("/content/delete/:id", function(req, res) {
     var id = req.params.id;
@@ -207,6 +177,70 @@ router.post("/content/add/save", function(req, res) {
 
 
 });
+
+
+router.post("/content/edit/save", function(req, res) {
+    var id = req.body.id;
+    var type = req.body.form_type;
+    var photo = req.body.form_photo;
+
+    model.Posts.findById(id, function(err, result){
+      if(type)
+        result.type = type;
+
+      if(photo)
+        result.photo = photo;
+
+      if(req.body.videoid)
+          result.videoId = req.body.videoid;
+
+      //en
+      if(req.body.form_title_en)
+          result.title_en = req.body.form_title_en;
+      if(req.body.form_text_en)
+          result.text_en = req.body.form_text_en;
+
+      //fr
+      if(req.body.form_title_fr)
+          result.title_fr = req.body.form_title_fr;
+      if(req.body.form_text_fr)
+          result.text_fr = req.body.form_text_fr;
+
+      //de
+      if(req.body.form_title_de)
+          result.title_de = req.body.form_title_de;
+      if(req.body.form_text_fr)
+          result.text_de = req.body.form_text_de;
+
+      //jp
+      if(req.body.form_title_jp)
+          result.title_jp = req.body.form_title_jp;
+      if(req.body.form_text_jp)
+          result.text_jp = req.body.form_text_jp;
+
+      //ct
+      if(req.body.form_title_ct)
+          result.title_ct = req.body.form_title_ct;
+      if(req.body.form_text_ct)
+          result.text_ct = req.body.form_text_ct;
+
+      //cs
+      if(req.body.form_title_cs)
+          result.title_cs = req.body.form_title_cs;
+      if(req.body.form_text_cs)
+          result.text_cs = req.body.form_text_cs;
+
+      result.save(function(err) {
+        res.redirect("/admin/content");
+      });
+
+    });
+
+
+
+});
+
+
 
 
 

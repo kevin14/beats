@@ -10,7 +10,7 @@ var dev = "__development__";
   cs = chinese simplified
 
 */
-var language = "fr";
+var language = "en";
 
 
 
