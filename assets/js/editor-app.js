@@ -184,7 +184,7 @@ function resizeMe() {
     WW = $(window).width();
     WH = $(window).height();
 
-    var threshhold = 568;
+    var threshhold = 548;
     if(WH < threshhold) {
       $(".editor").height(threshhold);
       $("#top").height(threshhold);
