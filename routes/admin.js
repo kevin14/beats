@@ -65,7 +65,8 @@ router.get("/content/delete/:id", function(req, res) {
 
 router.get("/posts", function(req, res) {
   //list first perPage
-
+  res.send("disabled");
+  return;
   model.Uploads.count({}).exec(function(e, n) {
     model.Uploads.find({}).limit(perPage).sort({created_at: -1}).exec(function(err, posts) {
       if(err) {
