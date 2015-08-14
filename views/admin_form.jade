@@ -115,12 +115,12 @@ block content
       h3 Chinese Simplified
       h4 Title:
       if post
-        input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton") 
+        input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton")
       else
         input(type="text" name="form_title_cs" value="" placeholder="Compton")
       h4.novid Text:
       if post
-        textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}  
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}
       else
         textarea.novid(name="form_text_cs" placeholder="Check out this article...")
     
