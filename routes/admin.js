@@ -192,8 +192,8 @@ router.post("/content/edit/save", function(req, res) {
       if(photo)
         result.photo = photo;
 
-      if(req.body.videoid)
-          result.videoId = req.body.videoid;
+      if(req.body.form_videoid)
+          result.videoId = req.body.form_videoid;
 
       //en
       if(req.body.form_title_en)

@@ -89,21 +89,21 @@ block content
       if post
         input(type="text" name="form_title_jp" value="#{post.title_jp}" placeholder="Compton") 
       else
-        input(type="text" name="form_title_jp" value="" placeholder="Compton") 
+        input(type="text" name="form_title_jp" value="" placeholder="Compton")
         
       h4.novid Text:
       if post
-        textarea.novid(name="form_text_jp" placeholder="Check out this article...") #{post.text_jp} 
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...") #{post.text_jp}
       else
-        textarea.novid(name="form_text_jp" placeholder="Check out this article...") 
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...")
         
     .lang  
       h3 Chinese Traditional
       h4 Title:
       if post
-        input(type="text" name="form_title_ct" value="#{post.title_ct}" placeholder="Compton") 
+        input(type="text" name="form_title_ct" value="#{post.title_ct}" placeholder="Compton")
       else 
-        input(type="text" name="form_title_ct" value="" placeholder="Compton") 
+        input(type="text" name="form_title_ct" value="" placeholder="Compton")
         
       h4.novid Text:
       if post
@@ -117,12 +117,12 @@ block content
       if post
         input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton") 
       else
-        input(type="text" name="form_title_cs" value="" placeholder="Compton") 
+        input(type="text" name="form_title_cs" value="" placeholder="Compton")
       h4.novid Text:
       if post
         textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}  
       else
-        textarea.novid(name="form_text_cs" placeholder="Check out this article...") 
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...")
     
     
     input(type="submit" value="Save Post")
@@ -137,7 +137,7 @@ block content
   script(src="/js/s3upload.js")
   script.
     $(document).ready(function(){
-    $(".vidonly").hide();
+      //$(".vidonly").hide();
       $("#type").on("change", function(){
         if($( "#type option:selected" ).val() == "video") {
           $(".novid").hide();
