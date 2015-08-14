@@ -36,49 +36,93 @@ block content
     
     h3.vidonly Video Id   
       if post
-      input.vidonly(type="text" name="form_videoid" value="#{post.videoId}" placeholder="Ex: 30dk32l_21") 
+        if post.videoId
+          input.vidonly(type="text" name="form_videoid" value="#{post.videoId}" placeholder="Ex: 30dk32l_21") 
+        else 
+          input.vidonly(type="text", name="form_videoid", value="", placeholder="Ex: 30dk32l_21") 
+      else
+        input.vidonly(type="text", name="form_videoid", value="", placeholder="Ex: 30dk32l_21") 
       
     .lang  
       h3 English
       h4 Title:
-      input(type="text" name="form_title_en" value="#{post.title_en}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_en" value="#{post.title_en}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_en" value="" placeholder="Compton")
       h4.novid Text:
-      textarea.novid(name="form_text_en" placeholder="Check out this article...") #{post.text_en}
-      
+      if post
+        textarea.novid(name="form_text_en" placeholder="Check out this article...") #{post.text_en}
+      else
+        textarea.novid(name="form_text_en" placeholder="Check out this article...")
+        
     .lang  
       h3 French
       h4 Title:
-      input(type="text" name="form_title_fr" value="#{post.title_fr}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_fr" value="#{post.title_fr}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_fr" value="" placeholder="Compton") 
       h4.novid Text:
-      textarea.novid(name="form_text_fr" placeholder="Check out this article...") #{post.text_fr}
-    
+      if post
+        textarea.novid(name="form_text_fr" placeholder="Check out this article...") #{post.text_fr}
+      else
+        textarea.novid(name="form_text_fr" placeholder="Check out this article...")
+        
     .lang  
       h3 German
       h4 Title:
-      input(type="text" name="form_title_de" value="#{post.title_de}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_de" value="#{post.title_de}" placeholder="Compton")
+      else
+        input(type="text" name="form_title_de" value="" placeholder="Compton")
+          
       h4.novid Text:
-      textarea.novid(name="form_text_de" placeholder="Check out this article...") #{post.text_de}
-    
+      if post
+        textarea.novid(name="form_text_de" placeholder="Check out this article...") #{post.text_de}
+      else
+        textarea.novid(name="form_text_de" placeholder="Check out this article...")
+        
     .lang  
       h3 Japanese
       h4 Title:
-      input(type="text" name="form_title_jp" value="#{post.title_jp}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_jp" value="#{post.title_jp}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_jp" value="" placeholder="Compton") 
+        
       h4.novid Text:
-      textarea.novid(name="form_text_jp" placeholder="Check out this article...") #{post.text_jp} 
-    
+      if post
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...") #{post.text_jp} 
+      else
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...") 
+        
     .lang  
       h3 Chinese Traditional
       h4 Title:
-      input(type="text" name="form_title_ct" value="#{post.title_ct}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_ct" value="#{post.title_ct}" placeholder="Compton") 
+      else 
+        input(type="text" name="form_title_ct" value="" placeholder="Compton") 
+        
       h4.novid Text:
-      textarea.novid(name="form_text_ct" placeholder="Check out this article...") #{post.text_ct} 
+      if post
+        textarea.novid(name="form_text_ct" placeholder="Check out this article...") #{post.text_ct}
+      else 
+        textarea.novid(name="form_text_ct" placeholder="Check out this article...")
         
     .lang  
       h3 Chinese Simplified
       h4 Title:
-      input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton") 
+      if post
+        input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_cs" value="" placeholder="Compton") 
       h4.novid Text:
-      textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}  
+      if post
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}  
+      else
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...") 
     
     
     input(type="submit" value="Save Post")
