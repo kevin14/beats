@@ -8,7 +8,7 @@ $base-letter-spacing = 0.05em
 $canvas-size = 423px
 $canvas-border = 5px
 
-$url = "https://soc-assets.s3.amazonaws.com/assets"
+$url = ""
 
 html, body
   border 0
@@ -239,12 +239,14 @@ html, body
 
   &.mode-photo
     .upload
-      display inline
+      display none
     .donthave
       display none
     .download
       display inline
     .share
+      display inline
+    .restart
       display inline
     .editor-controls
       opacity 1
@@ -264,6 +266,8 @@ html, body
       display inline
     .share
       display inline
+    .restart
+      display inline
     .editor-controls
       opacity 1
       //display block
@@ -280,8 +284,12 @@ html, body
       display none
     .donthave
       display none
+    .download
+      display inline
+    .share
+      display inline
     .button.restart
-      display inline-block
+      display inline
     .editor-image-controls
       display none
 
@@ -333,6 +341,7 @@ html, body
   width 100%
 
   #slides
+    display none
     position absolute
     width 100%
     height 100%

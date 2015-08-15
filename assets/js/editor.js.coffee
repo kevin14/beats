@@ -20,9 +20,21 @@ class Editor
 
     self = @
 
+    if window.location.search?.indexOf('skip=1') > -1
+      # skip intro
+      $("#slides").hide()
+      @logActionToAnalytics 'restart'
+      # $('#slides').fadeOut 100, ->$(this).remove()
+      INTRO_CITIES = [" "]
+    else
+      $("#slides").show()
+
+
     # Hook up editor control events
 
     $controls.find('.download').click => @downloadLocal()
+    $controls.find('.restart').click =>
+      location.href = "/?skip=1"
     $controls.find('.donthave').click =>
       $(".donthave").hide()
       @setMode('nophoto').done =>
@@ -61,12 +73,6 @@ class Editor
       self.setValue.call self, parseFloat(values[0]), 'update'
 
     @initializeTextMode()
-
-    if window.location.search?.indexOf('skip=1') > -1
-      # skip intro
-      @logActionToAnalytics 'restart'
-      # $('#slides').fadeOut 100, ->$(this).remove()
-      INTRO_CITIES = [" "]
 
     # play intro
     @setMode 'intro'
@@ -277,9 +283,9 @@ class Editor
     # console.log "setMode #{newMode}"
     deferred = new $.Deferred()
     oldMode = @mode
-    if oldMode == newMode
-      deferred.resolve()
-      return deferred
+    #if oldMode == newMode
+    #  deferred.resolve()
+    #  return deferred
 
 
     if newMode != "intro"
@@ -288,7 +294,7 @@ class Editor
       $("#legal").show()
     #console.log "editor.mode = #{newMode}"
     switch newMode
-      when 'nophoto' then @initializePhotoMode(deferred)
+      when 'nophoto' then @finalizeForDoneMode(deferred)
       when 'intro' then @initializeIntroMode(deferred)
       when 'photo' then @initializePhotoMode(deferred)
       when 'done' then @finalizeForDoneMode(deferred)
@@ -398,60 +404,72 @@ class Editor
     ga?('send', 'event', 'action', label)
 
   downloadLocal: ->
+    #console.log("download")
     @logActionToAnalytics 'download'
-    @setMode('done').done =>
-      # console.log "setmode done is done"
-      @captureImageDeferred().done (blob)->
-        # console.log "image is captured is done, blob is #{blob}"
-        #userAgent = window.navigator.userAgent.toLowerCase()
-        #isMobile = /twitter|facebook|fbav|fbdv|fbsv|fban/.test( userAgent )
-        #if isMobile
-        #    reader = new (window.FileReader)
-        #    reader.readAsDataURL blob
-        #    reader.onloadend = ->
-        #      base64data = reader.result
-        #      location.href = base64data
-        #else
-            saveAs(blob, 'StraightOuttaSomewhere.jpg')
+    $(".editor-image-controls").slideUp()
+    #@setMode('done').done =>
+    #console.log('mode set to done')
+    # console.log "setmode done is done"
+    @captureImageDeferred().done (blob)->
+      #console.log("blob done")
+      # console.log "image is captured is done, blob is #{blob}"
+      #userAgent = window.navigator.userAgent.toLowerCase()
+      #isMobile = /twitter|facebook|fbav|fbdv|fbsv|fban/.test( userAgent )
+      #if isMobile
+      #    reader = new (window.FileReader)
+      #    reader.readAsDataURL blob
+      #    reader.onloadend = ->
+      #      base64data = reader.result
+      #      location.href = base64data
+      #else
+      saveAs(blob, 'StraightOuttaSomewhere.jpg')
 
   share: ->
     if @isSharingBusy then return else @isSharingBusy = true
+
+    $(".editor-image-controls").slideUp()
 
     @logActionToAnalytics 'share'
     if @permalink?
       @popupSharing()
     else
       loader = @getLoader()
-      @setMode('done').done =>
-        @captureImageDeferred().done (blob)=>
-          @cityText = @cityText.toTitleCase()
-          uploader = new Uploader(blob, @cityText)
-          uploader.start().done (shareUrl)=>
-            loader.resolve()
-            @permalink = window.location.origin + shareUrl
-            #console.log "Ready to share!", @permalink
+      #@setMode('done').done =>
+      @captureImageDeferred().done (blob)=>
+        @cityText = @cityText.toTitleCase()
+        uploader = new Uploader(blob, @cityText)
+        uploader.start().done (shareUrl)=>
+          loader.resolve()
+          @permalink = window.location.origin + shareUrl
+          #console.log "Ready to share!", @permalink
 
-            $popup = $('#share-popup-src').addClass('ready')
+          $popup = $('#share-popup-src').addClass('ready')
 
-            encodedData = (src) =>
-              cityText = @cityText
-              (key)-> encodeURIComponent src.data(key).replace('{CITY}',cityText)
+          #encodedData = (src) =>
+          cityText = @cityText
+          #  console.log("city text: " + cityText)
+          #  console.log(src.data)
+          #  (key)-> encodeURIComponent src.data(key).replace('{CITY}',cityText)
 
-            $twitter = $popup.find 'a.twitter'
-            td = encodedData $twitter
-            url = "https://twitter.com/intent/tweet?text=#{td 'text'}&hashtags=#{td 'hashtags'}&url=#{encodeURI @permalink}"
-            $twitter.attr(href: url)
-            $twitter.click =>
-              @logActionToAnalytics 'share_twitter'
+          $twitter = $popup.find 'a.twitter'
+          #td = encodedData $twitter
 
-            $facebook = $popup.find 'a.facebook'
-            redir = window.location.origin + "/close.html"
-            url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
-            $facebook.attr(href: url)
-            $facebook.click =>
-              @logActionToAnalytics 'share_facebook'
+          twitterString = "I'm #StraightOutta {CITY}. Where you from? #BeatsByDre"
+          twitterString = encodeURIComponent twitterString.replace('{CITY}',cityText)
 
-            @popupSharing()
+          url = "https://twitter.com/intent/tweet?text=#{twitterString}&url=#{encodeURI @permalink}"
+          $twitter.attr(href: url)
+          $twitter.click =>
+            @logActionToAnalytics 'share_twitter'
+
+          $facebook = $popup.find 'a.facebook'
+          redir = window.location.origin + "/close.html"
+          url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+          $facebook.attr(href: url)
+          $facebook.click =>
+            @logActionToAnalytics 'share_facebook'
+
+          @popupSharing()
 
   popupSharing: ->
     $.featherlight $('#share-popup-src'),
@@ -475,7 +493,7 @@ class Editor
     #console.log "Loading file", fileDescriptor.name
     #console.dir fileDescriptor
     @logActionToAnalytics 'add-photo'
-    $(".upload img").attr("src", "/img/btn-changephoto.png")
+    #$(".upload img").attr("src", "/img/btn-changephoto.png")
     loader = @getLoader()
     reader = new FileReader()
     reader.onload = (e)=>

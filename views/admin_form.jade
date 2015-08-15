@@ -135,9 +135,15 @@ block content
   script(src="//code.jquery.com/jquery-1.11.3.min.js")
   script(src="//code.jquery.com/jquery-migrate-1.2.1.min.js")
   script(src="/js/s3upload.js")
+  if post
+    if post.type == "video"
+      script.
+        $(document).ready(function(){
+          $(".vidonly").show();
+          $(".novid").hide();
+        });
   script.
     $(document).ready(function(){
-      //$(".vidonly").hide();
       $("#type").on("change", function(){
         if($( "#type option:selected" ).val() == "video") {
           $(".novid").hide();
@@ -162,7 +168,7 @@ block content
         //var preview_elem = document.getElementById("preview");
         var s3upload = new S3Upload({
             file_dom_selector: 'files',
-            s3_sign_put_url: '/upload/sign_s3',
+            s3_sign_put_url: '/admin/sign_admin_s3',
             s3_object_name: $("#files").val().split('\\').pop(),
             onProgress: function(percent, message) {
                 console.log('Upload progress: ' + percent + '% ' + message);
