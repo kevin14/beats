@@ -100,9 +100,9 @@ class Editor
       textAlign: 'center'
       fill: grimePattern
       left: @canvas.width/2
-      top: 580
+      top: 556
       lineHeight: 1
-      fontSize: 260
+      fontSize: 300
       fontFamily: 'knockout'
       editable: false
       cursorWidth: 8
