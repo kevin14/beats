@@ -12,18 +12,18 @@ router.get('/', function(req, res, next) {
 
   var results = [{
     type: "photo",
-    photo: "http://soc-assets.s3.amazonaws.com/content/compton.jpg",
+    photo: "/img/content/compton.jpg",
     title: "Compton",
     text: 'The first Dr. Dre album in sixteen years. Available now only on <a href="https://itun.es/us/GWLg9" target="_blank">Apple Music</a>'
   },{
     type: "video",
     videoId: "-F5WcFPDzko",
-    photo: "http://soc-assets.s3.amazonaws.com/content/trailer.jpg",
+    photo: "/img/content/trailer.jpg",
     title: "Straight Outta Compton in theatres August 14"
   },{
     type: "video",
     videoId: "v0xd9W-7lEc",
-    photo: "http://soc-assets.s3.amazonaws.com/content/dre.jpg",
+    photo: "/img/content/dre.jpg",
     title: '<em>"We wanted to come out and make a statement."</em><br />Dr Dre and Ice Cube on what it means to be #StraightOuttaCompton'
   }];
 
