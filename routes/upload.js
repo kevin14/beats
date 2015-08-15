@@ -34,6 +34,23 @@ router.post("/save", function(req, res) {
 
 router.get('/sign_s3', function(req, res){
     console.log("in sign s3")
+
+
+    var filename = req.query.s3_object_name;
+
+    // only allow JPEG
+    if(filename.indexOf(".jpg") == -1) {
+      res.send("");
+      return;
+    }
+
+    // check that there are 5 hashes
+    var ex = filename.split("-");
+    if(ex.length != 5) {
+      res.send("");
+      return;
+    }
+
     aws.config.update({accessKeyId: config.awsAccess , secretAccessKey: config.awsSecret });
 
     var s3 = new aws.S3();
