@@ -40,6 +40,8 @@ html, body
   z-index -998
   opacity 0
 
+
+
 .editor
   position absolute
   width 100%
@@ -51,7 +53,8 @@ html, body
   justify-content center
 
   .button
-    cursor pointer
+
+    cursor pointer !important
     display inline-block
     //background url(/img/button-bg.jpg) 100% 100%
     //width (320/2)px
@@ -70,7 +73,7 @@ html, body
       opacity 0.5
 
   $m-canvas-scale = 0.35
-  $m-canvas-scale-small = 0.22
+  $m-canvas-scale-small = 0.30
   .canvas-outer
     width ($canvas-size + $canvas-border*2)
     height @width
@@ -205,8 +208,27 @@ html, body
 // Change UI depending on state
 .editor
 
+  .donthave
+    opacity 0
+    display block
+    color #666
+    padding-top 15px
+    text-transform uppercase
+    font-size 20px
+    text-decoration none
+    letter-spacing 2px
+
+    &:hover
+      color #999
+
   //&.mode-intro
   .editor-actions
+    .upload
+      opacity 0
+    .download
+      display none
+    .share
+      display none
     .restart
       display none
 
@@ -216,11 +238,41 @@ html, body
       //display block
 
   &.mode-photo
+    .upload
+      display none
+    .donthave
+      display none
+    .download
+      display inline
+    .share
+      display inline
+    .restart
+      display inline
     .editor-controls
       opacity 1
       //display block
     .editor-image-controls
       display block
+    .canvas-outer
+      background white
+
+
+  &.mode-nophoto
+    .upload
+      display none
+    .donthave
+      display none
+    .download
+      display inline
+    .share
+      display inline
+    .restart
+      display inline
+    .editor-controls
+      opacity 1
+      //display block
+    .editor-image-controls
+      display none
     .canvas-outer
       background white
 
@@ -230,8 +282,14 @@ html, body
       //display block
     .button.upload
       display none
+    .donthave
+      display none
+    .download
+      display inline
+    .share
+      display inline
     .button.restart
-      display inline-block
+      display inline
     .editor-image-controls
       display none
 
@@ -257,11 +315,11 @@ html, body
   //  opacity 0.25
   //  pointer-events none
   .button
-    margin 0 10px
+    margin 0 20px
     &:hover
-      opacity 0.9
+      opacity 0.9  !important
     &:active
-      opacity 0.5
+      opacity 0.5 !important;
 
     @media (max-width: 500px)
       display block
@@ -283,6 +341,7 @@ html, body
   width 100%
 
   #slides
+    display none
     position absolute
     width 100%
     height 100%
@@ -318,6 +377,12 @@ html, body
     background-image url($url/img/intro/intro-bg5.jpg)
     z-index 2
 
+
+.showanimation
+  opacity 1 !important
+
+  &:hover
+    opacity 0.9 !important
 
 // Try to position fake textbox on screen so iOS doesn't scroll away
 textarea.fabric-hidden-input

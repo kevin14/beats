@@ -21,9 +21,32 @@ exports.Uploads = uploads;
 var postsSchema = mongoose.Schema({
     photo         : String,
     type          : String,
-    title         : String,
-    text          : String,
     videoId       : String,
+
+    // english
+    title_en      : String,
+    text_en       : String,
+
+    // german
+    title_de      : String,
+    text_de       : String,
+
+    // french
+    title_fr      : String,
+    text_fr       : String,
+
+    // japanese
+    title_jp      : String,
+    text_jp       : String,
+
+    // chinese simplified
+    title_cs      : String,
+    text_cs       : String,
+
+    // chinese traditional
+    title_ct      : String,
+    text_ct       : String,
+
     'created_at'  : { type: Date, default: Date.now }
 });
 

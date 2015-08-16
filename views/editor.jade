@@ -2,7 +2,6 @@ extends layout
 
 block content
   
-
   - var url = ""
 
   #top
@@ -54,47 +53,76 @@ block content
         form.editor-actions
           input#action-upload(type="file", accept="image/*")
           .button.upload
-            img(src="#{url}/img/btn-addphoto.png")
+            img(src="/img/btn-addphoto-big.png")
+              
+          a.donthave(href="#") I Don't Have A Photo
+          
           .button.share
             img(src="#{url}/img/btn-share.png")
           .button.download
             img(src="#{url}/img/btn-download.png")
-          a.button.restart(href="/?skip=1")
-            img(src="#{url}/img/btn-restart.png")
+          .button.restart(href="/?skip=1")
+            img(src="#{url}/img/btn-restart2.png")
 
       #share-popup-src.share-popup
         a.close
-        a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from?", data-hashtags="BeatsByDre", data-popwidth="550", data-popheight="420")
+        a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
           img(src="#{url}/img/btn-twitter.png", height="45")
         a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
           img(src="#{url}/img/btn-facebook.png", height="45")
 
   #bottom
     ul.cf
-      each post in posts
-        li
-          if post.type == "video"
-            a.video-link(href="#", data-video="#{post.videoId}")
+      if posts
+        each post in posts
+          li
+            if post.type == "video"
+              a.video-link(href="#", data-video="#{post.videoId}")
+                img.bg-img(src="#{post.photo}")
+                .over
+                  .over-inner
+                    .over-cell.video
+                      img.play(src="/img/play.png")
+                      h3!= post.title
+            else
               img.bg-img(src="#{post.photo}")
-              .over
-                .over-inner
-                  .over-cell.video
-                    img.play(src="/img/play.png")
-                    h3!= post.title
-          else
-            img.bg-img(src="#{post.photo}")
-            .over
-              .over-inner
-                .over-cell
-                  h3!= post.title
-                  p!= post.text
+              if post.title 
+                .over
+                  .over-inner
+                    .over-cell
+                      h3!= post.title
+                      p!= post.text
 
   #legal
     a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy
     a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
 
-  a#beats-logo(href="/")
+  a#beats-logo(href="http://beatsbydre.com")
     img(src="#{url}/img/beats-logo.png")
 
   #loader
     img(src="#{url}/img/loader.gif")
+      
+  //
+    Start of DoubleClick Floodlight Tag: Please do not remove
+    Activity name of this tag: Straight Outta Compton Microsite
+    URL of the webpage where the tag is expected to be placed: http://www.straightouttasomewhere.com/
+    This tag must be placed between the <body> and </body> tags, as close as possible to the opening tag.
+    Creation Date: 08/11/2015
+  script#DoubleClickFloodlightTag2647454(type='text/javascript').
+    //<![CDATA[
+    var axel = Math.random() + "";
+    var a = axel * 10000000000000;
+    var newIFrame=document.createElement('iframe');
+    newIFrame.src='https://4510511.fls.doubleclick.net/activityi;src=4510511;type=socmi0;cat=strai0;ord=' + a + '?';
+    newIFrame.width="1";
+    newIFrame.style.display = "none";
+    newIFrame.frameBorder="0";
+    newIFrame.height="1";
+    var scriptNode=document.getElementById('DoubleClickFloodlightTag2647454');
+    scriptNode.parentNode.insertBefore(newIFrame,scriptNode);
+    //]]>
+  noscript
+    iframe(src='https://4510511.fls.doubleclick.net/activityi;src=4510511;type=socmi0;cat=strai0;ord=1?', width='1', height='1', frameborder='0', style='display:none')
+  // End of DoubleClick Floodlight Tag: Please do not remove
+      

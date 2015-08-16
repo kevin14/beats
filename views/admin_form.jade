@@ -1,0 +1,190 @@
+extends admin_layout
+
+block content
+  h1!= title
+
+  if title == "Edit"
+    - var url = "/admin/content/edit/save"
+  else 
+    - var url = "/admin/content/add/save"
+  
+  form(action="#{url}", method="post")
+    if title == "Edit"
+      input(type="hidden", name="id", value="#{post.id}")
+    
+    h3 type
+      select#type(name="form_type")
+        if post
+          if post.type == "photo"
+            option(selected="selected") photo
+            option video 
+          else 
+            option photo 
+            option(selected="selected") video
+        else
+          option photo 
+          option video  
+
+    h3 photo         
+      input(id="files", type="file")
+      br
+      if post
+        input(name="form_photo", type="text", placeholder="Image URL" value="#{post.photo}" class="background-image input-lg form-control")  
+      else
+        input(name="form_photo", type="text", placeholder="Image URL" class="background-image input-lg form-control") 
+            
+    
+    h3.vidonly Video Id   
+      if post
+        if post.videoId
+          input.vidonly(type="text" name="form_videoid" value="#{post.videoId}" placeholder="Ex: 30dk32l_21") 
+        else 
+          input.vidonly(type="text", name="form_videoid", value="", placeholder="Ex: 30dk32l_21") 
+      else
+        input.vidonly(type="text", name="form_videoid", value="", placeholder="Ex: 30dk32l_21") 
+      
+    .lang  
+      h3 English
+      h4 Title:
+      if post
+        input(type="text" name="form_title_en" value="#{post.title_en}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_en" value="" placeholder="Compton")
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_en" placeholder="Check out this article...") #{post.text_en}
+      else
+        textarea.novid(name="form_text_en" placeholder="Check out this article...")
+        
+    .lang  
+      h3 French
+      h4 Title:
+      if post
+        input(type="text" name="form_title_fr" value="#{post.title_fr}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_fr" value="" placeholder="Compton") 
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_fr" placeholder="Check out this article...") #{post.text_fr}
+      else
+        textarea.novid(name="form_text_fr" placeholder="Check out this article...")
+        
+    .lang  
+      h3 German
+      h4 Title:
+      if post
+        input(type="text" name="form_title_de" value="#{post.title_de}" placeholder="Compton")
+      else
+        input(type="text" name="form_title_de" value="" placeholder="Compton")
+          
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_de" placeholder="Check out this article...") #{post.text_de}
+      else
+        textarea.novid(name="form_text_de" placeholder="Check out this article...")
+        
+    .lang  
+      h3 Japanese
+      h4 Title:
+      if post
+        input(type="text" name="form_title_jp" value="#{post.title_jp}" placeholder="Compton") 
+      else
+        input(type="text" name="form_title_jp" value="" placeholder="Compton")
+        
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...") #{post.text_jp}
+      else
+        textarea.novid(name="form_text_jp" placeholder="Check out this article...")
+        
+    .lang  
+      h3 Chinese Traditional
+      h4 Title:
+      if post
+        input(type="text" name="form_title_ct" value="#{post.title_ct}" placeholder="Compton")
+      else 
+        input(type="text" name="form_title_ct" value="" placeholder="Compton")
+        
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_ct" placeholder="Check out this article...") #{post.text_ct}
+      else 
+        textarea.novid(name="form_text_ct" placeholder="Check out this article...")
+        
+    .lang  
+      h3 Chinese Simplified
+      h4 Title:
+      if post
+        input(type="text" name="form_title_cs" value="#{post.title_cs}" placeholder="Compton")
+      else
+        input(type="text" name="form_title_cs" value="" placeholder="Compton")
+      h4.novid Text:
+      if post
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...") #{post.text_cs}
+      else
+        textarea.novid(name="form_text_cs" placeholder="Check out this article...")
+    
+    
+    input(type="submit" value="Save Post")
+      
+  if post
+    br
+    br
+    a.delete(href="/admin/content/delete/#{post.id}") Delete Forever!!!!!
+
+  script(src="//code.jquery.com/jquery-1.11.3.min.js")
+  script(src="//code.jquery.com/jquery-migrate-1.2.1.min.js")
+  script(src="/js/s3upload.js")
+  if post
+    if post.type == "video"
+      script.
+        $(document).ready(function(){
+          $(".vidonly").show();
+          $(".novid").hide();
+        });
+  script.
+    $(document).ready(function(){
+      $("#type").on("change", function(){
+        if($( "#type option:selected" ).val() == "video") {
+          $(".novid").hide();
+          $(".vidonly").show();
+        } else {
+          $(".novid").show();
+          $(".vidonly").hide();
+        }
+      });
+    });
+    
+    (function() {
+        var input_element = document.getElementById("files");
+        input_element.onchange = s3_upload;
+    })();
+
+
+
+    function s3_upload(){
+        //var status_elem = document.getElementById("status");
+        //var url_elem = document.getElementById("avatar_url");
+        //var preview_elem = document.getElementById("preview");
+        var s3upload = new S3Upload({
+            file_dom_selector: 'files',
+            s3_sign_put_url: '/admin/sign_admin_s3',
+            s3_object_name: $("#files").val().split('\\').pop(),
+            onProgress: function(percent, message) {
+                console.log('Upload progress: ' + percent + '% ' + message);
+                $(".background-image").val(percent+"%");
+            },
+            onFinishS3Put: function(public_url) {
+                console.log(public_url);
+                $(".background-image").val(public_url);
+                
+            },
+            onError: function(status) {
+                //status_elem.innerHTML = 'Upload error: ' + status;
+                alert("upload error: " + status);
+            }
+        });
+    }
+
+    
+    
