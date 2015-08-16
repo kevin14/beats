@@ -62,7 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var basic = auth.basic({
         realm: "Secret Place.",
     }, function (username, password, callback) { // Custom authentication method.
-        callback(username === "north" && password === "kingdom");
+        callback(username === "mango" && password === "baxter3107958019");
     }
 );
 
