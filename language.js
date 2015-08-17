@@ -88,7 +88,45 @@ language.japanese = {
   TERMS: "利用規約",
   TERMS_URL: "http://jp.beatsbydre.com/%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88/terms-of-use.html"
 };
-language.chineseSimplified = {};
-language.chineseTraditional = {};
+language.chineseSimplified = {
+  CODE: "cs",
+  MOVIE_LINE: "",
+  ADD_PHOTO: "上传照片",
+  DONTHAVE: "I Don't Have A Photo",
+  SHARE: "分享",
+  DOWNLOAD: "下载图片",
+  START_OVER: "Start Over",
+  IMAGE: "调整图片",
+  CONTRAST: "调整对比度",
+  LOGO_COLOR: "Logo颜色",
+  WHITE: "白色",
+  BLACK: "黑色",
+  TWITTER: "Twitter",
+  FACEBOOK: "Facebook",
+  PRIVACY: "隐私保护",
+  PRIVACY_URL: "http://www.beatsbydre.com/support/privacy-policy.html",
+  TERMS: "使用条款",
+  TERMS_URL: "http://www.beatsbydre.com/support/terms-of-use.html"
+};
+language.chineseTraditional = {
+  CODE: "ct",
+  MOVIE_LINE: "",
+  ADD_PHOTO: "上傳照片",
+  DONTHAVE: "I Don't Have A Photo",
+  SHARE: "分享",
+  DOWNLOAD: "下載圖片",
+  START_OVER: "Start Over",
+  IMAGE: "調整圖片",
+  CONTRAST: "調整對比度",
+  LOGO_COLOR: "Logo顏色",
+  WHITE: "白色",
+  BLACK: "黑色",
+  TWITTER: "Twitter",
+  FACEBOOK: "Facebook",
+  PRIVACY: "隱私保護",
+  PRIVACY_URL: "http://www.beatsbydre.com/support/privacy-policy.html",
+  TERMS: "使用條款",
+  TERMS_URL: "http://www.beatsbydre.com/support/terms-of-use.html"
+};
 
 module.exports = language;
