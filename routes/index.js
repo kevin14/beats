@@ -11,23 +11,6 @@ router.get('/', function(req, res, next) {
 
   model.Posts.find({}).sort({created_at: -1}).exec(function(err, results) {
     if(!err && results) {
-/*
-  var results = [{
-    type: "photo",
-    photo: "/img/content/compton.jpg",
-    title: "Compton",
-    text: 'The first Dr. Dre album in sixteen years. Available now only on <a href="https://itun.es/us/GWLg9" target="_blank">Apple Music</a>'
-  },{
-    type: "video",
-    videoId: "-F5WcFPDzko",
-    photo: "/img/content/trailer.jpg",
-    title: "Straight Outta Compton in theatres August 14"
-  },{
-    type: "video",
-    videoId: "v0xd9W-7lEc",
-    photo: "/img/content/dre.jpg",
-    title: '<em>"We wanted to come out and make a statement."</em><br />Dr Dre and Ice Cube on what it means to be #StraightOuttaCompton'
-  }];*/
 
     for(var x = 0 ; x < results.length ; x++) {
       console.log(config.language);
@@ -120,6 +103,17 @@ router.get('/feed', function(req, res, next) {
   });
 
 });
+
+
+router.get("/cn", function(req, res) {
+    res.redirect("http://straightoutta.cn");
+});
+
+router.get("/cn/mobile", function(req, res) {
+    res.send("wechat");
+});
+
+
 
 
 module.exports = router;

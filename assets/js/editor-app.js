@@ -196,3 +196,11 @@ function resizeMe() {
     }
 
 }
+
+var hostname = window.location.hostname;
+jQuery("#bottom a").click(function(e){
+  if(jQuery(this).attr("href").indexOf(hostname)== -1){
+    //alert(jQuery(this).attr("href"));
+    ga('send', 'event', {'eventCategory': "Outbound Links", 'eventAction': "OnClick", 'eventLabel': jQuery(this).attr("href")});
+  }
+});
