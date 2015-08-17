@@ -19,6 +19,11 @@ var upload = require('./routes/upload');
 var share = require('./routes/share');
 var admin = require('./routes/admin');
 
+var locale = require("locale");
+// zh_cn  (simplified)
+// zh_tw, zh_hk  (traditional)
+var supported = ["en", "en_gb", "fr", "de", "ja", "zh", "zh_cn", "zh_tw", "zh_hk"];
+
 var config = require('./config');
 
 console.log("port is: " + config.port);
@@ -33,6 +38,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
+app.use(locale(supported));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

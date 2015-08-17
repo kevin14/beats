@@ -3,53 +3,71 @@ var router = express.Router();
 
 var mongoose = require("mongoose");
 var model = require("../model");
+var language = require("../language");
 
 var config = require("../config");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
+  console.log("MY LANGUAGE: " + req.headers["accept-language"]);
+  console.log("we will use: " + req.locale);
+
+  var currentLang;
   model.Posts.find({}).sort({created_at: -1}).exec(function(err, results) {
     if(!err && results) {
 
     for(var x = 0 ; x < results.length ; x++) {
-      console.log(config.language);
-      switch(config.language) {
-        case "en":
-          results[x].title = results[x].title_en;
-          results[x].text = results[x].text_en;
-
-          break;
-
+      switch(req.locale) {
         case "de":
+          currentLang = language.german;
           results[x].title = results[x].title_de;
           results[x].text = results[x].text_de;
           break;
 
         case "fr":
+          currentLang = language.french;
           results[x].title = results[x].title_fr;
           results[x].text = results[x].text_fr;
           break;
 
-        case "jp":
+        case "ja":
+          currentLang = language.japanese;
           results[x].title = results[x].title_jp;
           results[x].text = results[x].text_jp;
           break;
 
-        case "cs":
+        case "zh",  "zh_cn":
+          currentLang = language.chineseSimplified;
           results[x].title = results[x].title_cs;
           results[x].text = results[x].text_cs;
           break;
 
-        case "ct":
+        case "zh_tw", "zh_hk":
+          currentLang = language.chineseTraditional;
           results[x].title = results[x].title_ct;
           results[x].text = results[x].text_ct;
           break;
+
+        case "en_gb":
+          currentLang = language.englishUK;
+          results[x].title = results[x].title_en;
+          results[x].text = results[x].text_en;
+          break;
+
+        default:
+          currentLang = language.english;
+          results[x].title = results[x].title_en;
+          results[x].text = results[x].text_en;
+          break;
+
+
       }
     }
 
-    res.render('editor', { title: 'COMPTON',posts: results });
+    console.log(currentLang);
 
+    res.render('editor', { title: 'COMPTON', posts: results, language: currentLang });
 
     }
   });

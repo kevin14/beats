@@ -6,7 +6,7 @@ block content
 
   #top
     #theaters
-      a(href="http://straightouttacompton.com", target="_blank") Straight Outta Compton in Theaters Now
+      a(href="http://straightouttacompton.com", target="_blank") #{language.MOVIE_LINE}
 
     a#down
       img(src="/img/arrow-down.png") 
@@ -35,34 +35,42 @@ block content
             .range
           form.editor-invert-control
             input#editor-invert-control-white(type="radio", name="invert", value="0", checked)
-            label(for="editor-invert-control-white") White
+            label(for="editor-invert-control-white") #{language.WHITE}
 
             input#editor-invert-control-black(type="radio", name="invert", value="1")
-            label(for="editor-invert-control-black") Black
+            label(for="editor-invert-control-black") #{language.BLACK}
 
           form.editor-types
             input#control-photo(type="radio", name="group", value="photo")
-            label(for="control-photo") Image
+            label(for="control-photo") #{language.IMAGE}
 
             input#control-contrast(type="radio", name="group", value="contrast")
-            label(for="control-contrast") Contrast
+            label(for="control-contrast") #{language.CONTRAST}
 
             input#control-invert(type="radio", name="group", value="invert")
-            label(for="control-invert") Logo Color
+            label(for="control-invert") #{language.LOGO_COLOR}
 
         form.editor-actions
           input#action-upload(type="file", accept="image/*")
-          .button.upload
-            img(src="/img/btn-addphoto-big.png")
+          .button.upload 
+            img(src="/img/icon-camera.png") 
+            |#{language.ADD_PHOTO}
+            //img(src="/img/btn-addphoto-big.png")
               
-          a.donthave(href="#") I Don't Have A Photo
+          a.donthave(href="#") #{language.DONTHAVE}
           
-          .button.share
-            img(src="#{url}/img/btn-share.png")
-          .button.download
-            img(src="#{url}/img/btn-download.png")
-          .button.restart(href="/?skip=1")
-            img(src="#{url}/img/btn-restart2.png")
+          .button.share 
+            img(src="/img/icon-share.png") 
+            |#{language.SHARE}
+            //img(src="#{url}/img/btn-share.png")
+          .button.download 
+            img(src="/img/icon-download.png") 
+            |#{language.DOWNLOAD}
+            //img(src="#{url}/img/btn-download.png")
+          .button.restart(href="/?skip=1") 
+            img(src="/img/icon-restart.png") 
+            |#{language.START_OVER}
+            //img(src="#{url}/img/btn-restart2.png")
 
       #share-popup-src.share-popup
         a.close
@@ -94,8 +102,8 @@ block content
                       p!= post.text
 
   #legal
-    a(href="http://www.beatsbydre.com/support/privacy-policy.html", target="_blank") Privacy
-    a(href="http://www.beatsbydre.com/support/terms-of-use.html", target="_blank") Terms
+    a(href="#{language.PRIVACY_URL}", target="_blank") #{language.PRIVACY}
+    a(href="#{language.TERMS_URL}", target="_blank") #{language.TERMS}
 
   a#beats-logo(href="http://beatsbydre.com")
     img(src="#{url}/img/beats-logo.png")

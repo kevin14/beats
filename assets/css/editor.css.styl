@@ -56,21 +56,48 @@ html, body
 
     cursor pointer !important
     display inline-block
-    //background url(/img/button-bg.jpg) 100% 100%
+    background url(/img/bg-back.png) 100% 100%
+    background-size cover
     //width (320/2)px
     //height (115/2)px
-    font-size 24px
-    letter-spacing 0.05em
-    line-height 0
+    color #fff
+    font-size 22px
+    letter-spacing 0.07em
+    padding 10px 20px
+    width 90%
+    //line-height 0
     //padding-top (@height/2)
-    text-align center
-    //border-radius 4px
+    //text-align center
+    border-radius 4px
     //color white
     text-transform uppercase
     &:hover
       opacity 0.9
     &:active
       opacity 0.5
+
+    img
+      height 20px
+      padding-right 10px
+      position relative
+      top 2px
+
+    @media (max-width: 500px)
+      font-size 16px
+      padding 8px 16px
+      top 0px
+
+      img
+        height 12px
+        padding-right 7px
+
+
+  .showanimation
+    padding 18px
+
+  .restart
+    background url(/img/bg-back-grey.png) 100% 100%
+
 
   $m-canvas-scale = 0.35
   $m-canvas-scale-small = 0.30
@@ -212,7 +239,7 @@ html, body
     opacity 0
     display block
     color #666
-    padding-top 15px
+    padding-top 20px
     text-transform uppercase
     font-size 20px
     text-decoration none
@@ -405,3 +432,13 @@ html.ios
   *::-webkit-input-placeholder
     color transparent
     opacity 0
+
+
+.lang-ja
+  .button
+    font-size 12px
+    padding 15px 20px
+    
+  .showanimation
+    font-size 16px
+    padding 18px

@@ -95,14 +95,21 @@ class Editor
     @logoFrame.scaleToHeight @canvas.height
     @logoFrame.center()
 
+    #if $("body").hasClass("lang-de") || $("body").hasClass("lang-fr")
+    #  logoTop = 590
+    #  fontSize = 260
+    #else
+    #  logoTop = 556
+    #  fontSize = 300
+
     @logoText = new fabric.IText INTRO_CITIES[0],
       originX: 'center'
       textAlign: 'center'
       fill: grimePattern
       left: @canvas.width/2
-      top: 556
+      top: logoTop
       lineHeight: 1
-      fontSize: 300
+      fontSize: fontSize
       fontFamily: 'knockout'
       editable: false
       cursorWidth: 8
