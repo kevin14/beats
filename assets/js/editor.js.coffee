@@ -99,8 +99,8 @@ class Editor
     #  logoTop = 590
     #  fontSize = 260
     #else
-    logoTop = 590
-    fontSize = 260
+    logoTop = 560
+    fontSize = 300
 
     @logoText = new fabric.IText INTRO_CITIES[0],
       originX: 'center'
@@ -110,7 +110,7 @@ class Editor
       top: logoTop
       lineHeight: 1
       fontSize: fontSize
-      fontFamily: 'Flaticon'
+      fontFamily: 'knockout'
       editable: false
       cursorWidth: 8
       cursorColor: '#ed1c24'
@@ -136,14 +136,8 @@ class Editor
       maxLength: 15
     @canvas.add @logoText
 
-
-    #@logoText.setSelectionStyles({
-    #  fontFamily: "Helvetica"
-    #  })
-
     @logoText.on 'changed', (e) =>
       newText = @logoText.text
-
       if newText != ""
         #$(".upload").show()
         #$(".donthave").show()
