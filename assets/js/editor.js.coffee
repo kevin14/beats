@@ -99,8 +99,8 @@ class Editor
     #  logoTop = 590
     #  fontSize = 260
     #else
-    #  logoTop = 556
-    #  fontSize = 300
+    logoTop = 556
+    fontSize = 300
 
     @logoText = new fabric.IText INTRO_CITIES[0],
       originX: 'center'
@@ -135,6 +135,11 @@ class Editor
       cursorDeltaY: -12
       maxLength: 15
     @canvas.add @logoText
+
+
+    #@logoText.setSelectionStyles({
+    #  fontFamily: "Helvetica"
+    #  })
 
     @logoText.on 'changed', (e) =>
       newText = @logoText.text
