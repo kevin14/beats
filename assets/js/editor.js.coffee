@@ -449,39 +449,51 @@ class Editor
       #@setMode('done').done =>
       @captureImageDeferred().done (blob)=>
         @cityText = @cityText.toTitleCase()
-        uploader = new Uploader(blob, @cityText)
-        uploader.start().done (shareUrl)=>
-          loader.resolve()
-          @permalink = window.location.origin + shareUrl
-          #console.log "Ready to share!", @permalink
+        #uploader = new Uploader(blob, @cityText)
+        #uploader.start().done (shareUrl)=>
+        loader.resolve()
+        @permalink = 'http://demandware.edgesuite.net/aany_prd/on/demandware.static/-/Sites-beats-CN-Library/default/dw3f9311aa/images/homepage/touts/powerbeats-2-tout-O.jpg'
+        #@permalink = window.location.origin + shareUrl
+        #console.log "Ready to share!", @permalink
 
-          $popup = $('#share-popup-src').addClass('ready')
+        $popup = $('#share-popup-src').addClass('ready')
 
-          #encodedData = (src) =>
-          cityText = @cityText
-          #  console.log("city text: " + cityText)
-          #  console.log(src.data)
-          #  (key)-> encodeURIComponent src.data(key).replace('{CITY}',cityText)
+        #encodedData = (src) =>
+        cityText = @cityText
+        #  console.log("city text: " + cityText)
+        #  console.log(src.data)
+        #  (key)-> encodeURIComponent src.data(key).replace('{CITY}',cityText)
 
-          $twitter = $popup.find 'a.twitter'
-          #td = encodedData $twitter
+        $twitter = $popup.find 'a.twitter'
+        #td = encodedData $twitter
 
-          twitterString = "I'm #StraightOutta {CITY}. Where you from? #BeatsByDre"
-          twitterString = encodeURIComponent twitterString.replace('{CITY}',cityText)
+        twitterString = "I'm #StraightOutta {CITY}. Where you from? #BeatsByDre"
+        twitterString = encodeURIComponent twitterString.replace('{CITY}',cityText)
 
-          url = "https://twitter.com/intent/tweet?text=#{twitterString}&url=#{encodeURI @permalink}"
-          $twitter.attr(href: url)
-          $twitter.click =>
-            @logActionToAnalytics 'share_twitter'
+        url = "https://twitter.com/intent/tweet?text=#{twitterString}&url=#{encodeURI @permalink}"
+        $twitter.attr(href: url)
+        $twitter.click =>
+          @logActionToAnalytics 'share_twitter'
 
-          $facebook = $popup.find 'a.facebook'
-          redir = window.location.origin + "/close.html"
-          url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
-          $facebook.attr(href: url)
-          $facebook.click =>
-            @logActionToAnalytics 'share_facebook'
+        $facebook = $popup.find 'a.facebook'
+        redir = window.location.origin + "/close.html"
+        url = "https://www.facebook.com/dialog/share?app_id=415295758676714&display=popup&href=#{encodeURI @permalink}&redirect_uri=#{encodeURI redir}"
+        $facebook.attr(href: url)
+        $facebook.click =>
+          @logActionToAnalytics 'share_facebook'
 
-          @popupSharing()
+        $weibo = $popup.find 'a.weibo'
+        #td = encodedData $weibo
+
+        weiboString = "I'm #StraightOutta {CITY}. Where you from? #BeatsByDre"
+        weiboString = encodeURIComponent twitterString.replace('{CITY}',cityText)
+
+        url = "http://v.t.sina.com.cn/share/share.php?title=#{weiboString}&pic=#{encodeURI @permalink}"
+        $weibo.attr(href: url)
+        $weibo.click =>
+          @logActionToAnalytics 'share_weibo'
+
+        @popupSharing()
 
   popupSharing: ->
     $.featherlight $('#share-popup-src'),

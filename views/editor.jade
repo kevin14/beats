@@ -55,28 +55,30 @@ block content
           .button.upload 
             img(src="/img/icon-camera.png") 
             |#{language.ADD_PHOTO}
-            //img(src="/img/btn-addphoto-big.png")
+            //img(src="/img/btn-addphoto-big_cn.png")
               
           a.donthave(href="#") #{language.DONTHAVE}
           
           .button.share 
             img(src="/img/icon-share.png") 
             |#{language.SHARE}
-            //img(src="#{url}/img/btn-share.png")
+            //img(src="#{url}/img/btn-share_cn.png")
           .button.download 
             img(src="/img/icon-download.png") 
             |#{language.DOWNLOAD}
-            //img(src="#{url}/img/btn-download.png")
+            //img(src="#{url}/img/btn-download_cn.png")
           .button.restart(href="/?skip=1") 
             img(src="/img/icon-restart.png") 
             |#{language.START_OVER}
-            //img(src="#{url}/img/btn-restart2.png")
+            //img(src="#{url}/img/btn-restart2_cn.png")
 
       #share-popup-src.share-popup
         a.close
-        a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
+        a.button.weibo(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
+          img(src="#{url}/img/btn-weibo_cn.png", height="45")
+        //a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
           img(src="#{url}/img/btn-twitter.png", height="45")
-        a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
+        //a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
           img(src="#{url}/img/btn-facebook.png", height="45")
 
   #bottom

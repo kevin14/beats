@@ -66,7 +66,7 @@ router.get('/', function(req, res, next) {
     }
 
     //这是我做的一个hack
-    currentLang = {};
+    currentLang = language.chineseSimplified;
     results= {};
 
     res.render('editor', { title: 'COMPTON', posts: results, language: currentLang });
