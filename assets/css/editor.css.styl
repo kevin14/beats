@@ -107,6 +107,7 @@ html, body
     height @width
     padding $canvas-border
     margin 0 auto
+    position relative
     @media (min-width: 341px) and (max-width: 500px)
       width ($canvas-size*$m-canvas-scale*2 + $canvas-border*2)
       height @width
@@ -124,6 +125,14 @@ html, body
       @media (max-width: 340px)
         transform-origin top left
         transform scale($m-canvas-scale-small, $m-canvas-scale-small)
+    .hide
+      opacity 0;
+      position absolute
+      bottom 0
+      left 0
+      width 100%
+      height 90px
+      display block
 
   .editor-controls
     //display none

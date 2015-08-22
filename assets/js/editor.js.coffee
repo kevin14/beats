@@ -99,8 +99,8 @@ class Editor
     #  logoTop = 590
     #  fontSize = 260
     #else
-    logoTop = 556
-    fontSize = 300
+    logoTop = 590
+    fontSize = 260
 
     @logoText = new fabric.IText INTRO_CITIES[0],
       originX: 'center'
@@ -110,7 +110,7 @@ class Editor
       top: logoTop
       lineHeight: 1
       fontSize: fontSize
-      fontFamily: 'knockout'
+      fontFamily: 'Flaticon'
       editable: false
       cursorWidth: 8
       cursorColor: '#ed1c24'
