@@ -13,13 +13,6 @@ html
     meta(property="og:title" content="Straight Outta Somewhere - Rep Your City")
     meta(property="og:description" content="We're all straight outta somewhere. Where you from?")
     meta(property="og:type" content="website")
-
-    meta(name="twitter:card" content="summary_large_image")
-    meta(name="twitter:site" content="@ComptonMovie")
-    meta(name="twitter:creator" content="@BeatsByDre")
-    meta(name="twitter:title" content="Straight Outta Somewhere - Rep Your City")
-    meta(name="twitter:description" content="We're all straight outta somewhere. Where you from?")
-    meta(name="twitter:image" content="http://www.straightouttasomewhere.com/img/icon.png")
       
     link(rel="stylesheet", href="/font/fonts.css")
     link(rel="icon", href="favicon.ico", type="image/x-icon")
@@ -30,15 +23,7 @@ html
   body(class="lang-#{language.CODE}")
     block content
 
-    script(language='JavaScript1.1' src='//pixel.mathtag.com/event/js?mt_id=807813&mt_adid=128442&v1=&v2=&v3=&s1=&s2=&s3=')
-    script.
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='https://www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-65589426-1','auto');ga('send','pageview');
-
+    
     != js("jquery/dist/jquery")
     != js("all")
     block scripts
