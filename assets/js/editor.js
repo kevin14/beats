@@ -123,8 +123,8 @@ Editor = (function() {
     this.canvas.add(this.logoFrame);
     this.logoFrame.scaleToHeight(this.canvas.height);
     this.logoFrame.center();
-    logoTop = 580;
-    fontSize = 300;
+    logoTop = 620;
+    fontSize = 200;
     this.logoText = new fabric.IText(INTRO_CITIES[0], {
       originX: 'center',
       textAlign: 'center',
@@ -133,7 +133,7 @@ Editor = (function() {
       top: logoTop,
       lineHeight: 1,
       fontSize: fontSize,
-      fontFamily: 'knockout',
+      fontFamily: 'knockout, Impact, Flaticon',
       editable: false,
       cursorWidth: 0,
       cursorColor: '#ed1c24',
