@@ -1,5 +1,6 @@
 var config = {};
 var dev = "__development__";
+// var dev = "production";
 
 /*
   en = english

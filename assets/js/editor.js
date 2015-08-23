@@ -72,6 +72,13 @@ Editor = (function() {
       }
     });
     $controls.find('input[type=file]').change(function() {
+      var obj = self.logoText;
+      obj.exitEditing();
+      obj.set('text', $itext.val());
+      //$(this).remove();
+      self.canvas.add(obj);
+      self.canvas.renderAll();
+      $itext.hide();
       return self.setPhoto.call(self, this.files[0]);
     });
     $controls.find('form.editor-invert-control').change(function() {
