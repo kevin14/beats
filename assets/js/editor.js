@@ -116,7 +116,7 @@ Editor = (function() {
     this.canvas.add(this.logoFrame);
     this.logoFrame.scaleToHeight(this.canvas.height);
     this.logoFrame.center();
-    logoTop = 560;
+    logoTop = 580;
     fontSize = 300;
     this.logoText = new fabric.IText(INTRO_CITIES[0], {
       originX: 'center',
@@ -159,13 +159,7 @@ Editor = (function() {
         self.canvas.remove(obj);
 
         // show input area
-        $itext.css({
-            'line-height': obj.lineHeight,
-            'font-family': obj.fontFamily,
-            'font-weight': obj.fontWeight,
-            'font-style': obj.fontStyle
-        })
-        .val(obj.text)
+        $itext.val(obj.text)
         .appendTo($(self.canvas.wrapperEl).closest('.canvas-outer'));
 
         // text submit event
@@ -178,6 +172,10 @@ Editor = (function() {
             // self.canvas.renderAll();
             var newText = $(this).val();
             if (newText !== "") {
+              var len = newText.length;
+              $(this).removeClass('itext-5 itext-6');
+              if (len === 5) $(this).addClass('itext-5');
+              if (len >= 6) $(this).addClass('itext-6');
               $(".upload").addClass("showanimation");
               $(".donthave").animate({
                 opacity: 1

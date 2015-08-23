@@ -15,11 +15,11 @@
 }
 @font-face {
     font-family: "Flaticon";
-    src: url("mhei-prc-medium.eot");
-    src: url("mhei-prc-medium.eot#iefix") format("embedded-opentype"),
-    url("mhei-prc-medium.woff") format("woff"),
-    url("mhei-prc-medium.ttf") format("truetype"),
-    url("mhei-prc-medium.svg") format("svg");
+    src: url("mheiprc-xbold.eot");
+    src: url("mheiprc-xbold.eot#iefix") format("embedded-opentype"),
+    url("mheiprc-xbold.woff") format("woff"),
+    url("mheiprc-xbold.ttf") format("truetype"),
+    url("mheiprc-xbold.svg") format("svg");
     font-weight: normal;
     font-style: normal;
 }

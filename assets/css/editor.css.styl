@@ -14,7 +14,7 @@ html, body
   border 0
   margin 0
   padding 0
-  font-family 'Flaticon', Impact, sans-serif
+  font-family Impact, 'Flaticon',  sans-serif
   letter-spacing $base-letter-spacing
 
 #share-popup-src
@@ -71,6 +71,7 @@ html, body
     border-radius 4px
     //color white
     text-transform uppercase
+    font-family SimHei
     &:hover
       opacity 0.9
     &:active
@@ -108,6 +109,7 @@ html, body
     padding $canvas-border
     margin 0 auto
     position relative
+    
     @media (min-width: 341px) and (max-width: 500px)
       width ($canvas-size*$m-canvas-scale*2 + $canvas-border*2)
       height @width
@@ -115,6 +117,45 @@ html, body
         width ($canvas-size*$m-canvas-scale-small*2 + $canvas-border*2)
         height @width
 
+    .itext
+      background transparent
+      position absolute
+      z-index 2
+      left 0
+      bottom 0
+      line-height 1
+      font-family 'Flaticon'
+      font-size 40px
+      font-weight normal
+      color #fff
+      height 130px
+      text-align center
+      width 100%
+      outline none
+      border none
+      font-size 90px
+      padding 0 15px;
+      cursor url($url/img/intro/intro-bg1.jpg)
+      @media (min-width: 341px) and (max-width: 500px)
+        height 100px
+        font-size 67px
+      @media (max-width: 340px)
+        height 80px
+        font-size 57px
+
+    .itext-5
+      font-size 75px
+      @media (min-width: 341px) and (max-width: 500px)
+        font-size 53px
+      @media (max-width: 340px)
+        font-size 45px
+
+    .itext-6
+      font-size 63px
+      @media (min-width: 341px) and (max-width: 500px)
+        font-size 43px
+      @media (max-width: 340px)
+        font-size 37px
 
     .canvas-container
       transform scale(0.5, 0.5)
@@ -125,14 +166,6 @@ html, body
       @media (max-width: 340px)
         transform-origin top left
         transform scale($m-canvas-scale-small, $m-canvas-scale-small)
-    .hide
-      opacity 0;
-      position absolute
-      bottom 0
-      left 0
-      width 100%
-      height 90px
-      display block
 
   .editor-controls
     //display none
@@ -452,20 +485,3 @@ html.ios
   .showanimation
     font-size 16px
     padding 18px
-.itext
-  background transparent
-  position absolute
-  z-index 2
-  left 21px
-  bottom 7px
-  line-height 1
-  font-family knockout
-  font-size 40px
-  font-weight normal
-  color #fff
-  height 121px
-  text-align center
-  width 392px
-  outline none
-  font-size 80px
-  cursor url($url/img/intro/intro-bg1.jpg)
