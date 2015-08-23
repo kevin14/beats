@@ -90,7 +90,6 @@ function reactToKeypress(isDeletion) {
             playAudio();
     }
 
-
 }
 
 function playAudio() {

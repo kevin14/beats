@@ -27,12 +27,12 @@ if(dev.indexOf("development") != -1) {
 } else {
   process.env.NODE_ENV = 'production';
   config = {
-      baseUrl: "http://www.straightouttasomewhere.com",
+      baseUrl: "http://localhost:8080",
       awsAccess: "__________",
       awsSecret: "__________",
       s3bucket: "soc-assets",
       s3CMSbucket: "soc-assets-cms",
-      mongoURL: '__________',
+      mongoURL: 'mongodb://localhost',
       fbId: "__________",
       language: language,
       port: 8080
