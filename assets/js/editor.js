@@ -616,10 +616,31 @@ Editor = (function() {
           $weibo = $popup.find('a.weibo');
           weiboString = "I'm #StraightOutta {CITY}. Where you from? #BeatsByDre";
           weiboString = encodeURIComponent(twitterString.replace('{CITY}', cityText));
-          url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(_this.permalink));
-          $weibo.attr({
-            href: url
-          });
+          // url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(_this.permalink));
+          // $weibo.attr({
+          //   href: url
+          // });
+          //file uploading...
+          // console.log(blob,'111111')
+          console.log(blob)
+          var form = new FormData();
+          form.append('image',blob);
+          $.ajax({
+            method:'POST',
+            data:form,
+            processData: false,
+            contentType: false,
+            url:'/uploads',
+            type:'JSON',
+            success:function(data){
+              var imageUrl = data.url;
+              url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(imageUrl));
+              $('.weibo').attr({
+                href: url
+              });
+            }
+          })
+
           $weibo.click(function() {
             return _this.logActionToAnalytics('share_weibo');
           });

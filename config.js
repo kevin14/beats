@@ -15,7 +15,7 @@ var language = "cs";
 
 if(dev.indexOf("development") != -1) {
   config = {
-      baseUrl: "https://straightouttabeta.herokuapp.com",
+      baseUrl: "http://localhost:3001",
       awsAccess: "__________",
       awsSecret: "__________",
       s3bucket: "soc-assets",
