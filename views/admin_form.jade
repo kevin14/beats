@@ -157,7 +157,7 @@ block content
     
     (function() {
         var input_element = document.getElementById("files");
-        input_element.onchange = s3_upload;
+        input_element.onchange = upload;
     })();
 
 
@@ -184,6 +184,23 @@ block content
                 alert("upload error: " + status);
             }
         });
+    }
+
+    function upload(){
+      var form = new FormData();
+      form.append('image',$('#files')[0].files[0]);
+          $.ajax({
+            method:'POST',
+            data:form,
+            processData: false,
+            contentType: false,
+            url:'/uploads',
+            type:'JSON',
+            success:function(data){
+              var imageUrl = data.url;
+              $(".background-image").val(imageUrl);
+            }
+          })
     }
 
     

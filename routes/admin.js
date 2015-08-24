@@ -28,7 +28,7 @@ router.get("/content", function(req, res) {
       } else {
         n = Math.floor(n / perPage);
       }
-
+      console.log(posts)
       if(posts) {
           res.render("admin_content", {title: "Compton Admin", posts: posts, page: 1, count: n});
       }

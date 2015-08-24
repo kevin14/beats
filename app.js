@@ -7,6 +7,18 @@ var bodyParser = require('body-parser');
 var autoprefixer = require('autoprefixer-stylus');
 var stylus = require('stylus');
 var connectAssets = require('connect-assets');
+var multer  = require('multer')
+var imageName = '';
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/uploads')
+  },
+  filename: function (req, file, cb) {
+    imageName = (new Date().getTime())+Math.floor(Math.random()*100000)+'.jpg';
+    cb(null, imageName)
+  }
+})
+var uploads = multer({storage:storage});
 
 var auth = require('http-auth');
 
@@ -74,7 +86,14 @@ var basic = auth.basic({
 
 var authMiddleware = auth.connect(basic);
 
+app.post('/uploads', uploads.single('image'), function (req, res, next) {
 
+  res.send({
+    url:config.baseUrl+'/uploads/'+imageName
+  })
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+})
 app.use('/', routes);
 app.use('/upload', upload);
 app.use('/s', share);

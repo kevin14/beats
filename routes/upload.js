@@ -10,6 +10,17 @@ router.get("/", function(req, res) {
     res.send("hi");
 });
 
+router.post('/', function(req, res) {
+
+    res.header('Access-Control-Allow-Origin', '*');
+
+    var files = req.files;
+    var opt = req.body;
+    res.send({
+        link: '/uploads/' + files.file.name
+    })
+});
+
 router.post("/save", function(req, res) {
     // id
     // image url
