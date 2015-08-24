@@ -385,7 +385,7 @@ Editor = (function() {
   Editor.prototype.initializeIntroMode = function(deferred) {
     this.typeTextSeries(INTRO_CITIES).always((function(_this) {
       return function() {
-        $('#slides').delay(100).fadeOut(600, function() {
+        $('#slides').delay(1000).fadeOut(1600, function() {
           return $(this).remove();
         });
         return _this.setMode('text').done(function() {
@@ -498,7 +498,7 @@ Editor = (function() {
       return;
     }
     text = this.typeTextSeriesArray.shift();
-    delay = 500;
+    delay = 1000;
     if (text != null) {
       return window.setTimeout((function(_this) {
         return function() {

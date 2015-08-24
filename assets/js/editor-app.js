@@ -52,7 +52,7 @@ function editorFunctions() {
     e.preventDefault();
 
     var videoId = $(this).data("video");
-    ga('send', 'event', {'eventCategory': "button", 'eventAction': "videoPlay", 'eventLabel': videoId});
+    // ga('send', 'event', {'eventCategory': "button", 'eventAction': "videoPlay", 'eventLabel': videoId});
     var html = '<div class="video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe></div>';
     //html = "hey";
     $.featherlight(html, {});
@@ -178,6 +178,6 @@ var hostname = window.location.hostname;
 jQuery("#bottom a").click(function(e){
   if(jQuery(this).attr("href").indexOf(hostname)== -1){
     //alert(jQuery(this).attr("href"));
-    ga('send', 'event', {'eventCategory': "Outbound Links", 'eventAction': "OnClick", 'eventLabel': jQuery(this).attr("href")});
+    // ga('send', 'event', {'eventCategory': "Outbound Links", 'eventAction': "OnClick", 'eventLabel': jQuery(this).attr("href")});
   }
 });
