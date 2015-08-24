@@ -132,6 +132,7 @@ html, body
       width 100%
       outline none
       border none
+      text-transform uppercase
       font-size 90px
       padding 0 25px;
       @media (min-width: 341px) and (max-width: 500px)
@@ -173,7 +174,7 @@ html, body
     padding 0 10px
     transition .5s
     transition-delay 0s
-    width 400px
+    width 440px
 
     .editor-image-controls
       display none
@@ -234,8 +235,9 @@ html, body
 
     label
       display inline-block
-      margin-left 25px
+      margin-left 16px
       vertical-align middle
+      font-family SimHei,STHeiTi
       &:first-of-type
         margin-left 0
       @media (max-width: 500px)
@@ -246,18 +248,18 @@ html, body
       display inline-block
       content ''
       vertical-align middle
-      height 26px
-      width 26px
-      margin-right 8px
-      background-size 100px 26px
+      height 18px
+      width 18px
+      margin-right 5px
+      background-size 63px 16px
       background-repeat no-repeat
-      background-position left center
+      background-position 0 0
       @media (max-width: 500px)
         height 13px
         width 13px
         background-size 50px 13px
     input[type=radio]:checked + label:before
-      background-position -50px 0
+      background-position -31px 0
       @media (max-width: 500px)
         background-position -25px 0
 
@@ -283,9 +285,10 @@ html, body
     color #666
     padding-top 20px
     text-transform uppercase
-    font-size 16px
+    font-size 14px
     text-decoration none
-    letter-spacing 2px
+    letter-spacing 0
+    font-family SimHei,STHeiTi
 
     &:hover
       color #999
@@ -479,11 +482,23 @@ html.ios
 
 .lang-ja, .lang-cs, .lang-ct
   .button
-    font-size 15px
+    font-size 13px
     padding 14px 15px
+    font-family SimHei,STHeiTi
     img
-      //height 12px
+      height 16px
+      padding-right 3px
+      position relative
+      top 4px
 
   .showanimation
     font-size 16px
     padding 18px
+.editor .editor-actions .upload img
+  height 16px
+  position relative
+  padding-right 9px
+  top 3px
+.editor .editor-actions .upload
+  font-size 14px
+  padding 18px
