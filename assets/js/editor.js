@@ -62,6 +62,7 @@ Editor = (function() {
         var obj = self.logoText;
         obj.exitEditing();
         var val = $itext.val();
+        val = val.trim();
         if (getLength(val) > 10) {
           obj.set('fontSize', 140);
           obj.set('top',650);
@@ -93,7 +94,7 @@ Editor = (function() {
     $controls.find('input[type=file]').change(function() {
       var obj = self.logoText;
       obj.exitEditing();
-      obj.set('text', $itext.val());
+      obj.set('text', $itext.val().trim());
       //$(this).remove();
       self.canvas.add(obj);
       self.canvas.renderAll();
@@ -208,7 +209,7 @@ Editor = (function() {
             // self.canvas.add(obj);
             // self.canvas.renderAll();
             if (willChange) {
-              var value = $(this).val();
+              var value = $(this).val().trim();
               if (value !== "") {
                 $(this).removeClass('itext-5 itext-6');
                 // if (len === 5) $(this).addClass('itext-5');
@@ -233,6 +234,7 @@ Editor = (function() {
                 });
               }
               lastValue = value;
+              $(this).val(value.toUpperCase())
             }else{
               $(this).val(lastValue);
             }
@@ -243,7 +245,7 @@ Editor = (function() {
 
         // focus on text
         setTimeout(function() {
-            $itext.focus();
+            $itext.val(' ').focus();
         }, 10);
     });
     this.canvas.add(this.logoText);
