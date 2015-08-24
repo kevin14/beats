@@ -1,5 +1,19 @@
 var Editor, GrayscaleContrastFilter;
 
+function getLength(str){
+  var length = 0;
+  var regx = /[a-zA-z0-9]/
+  var strArr = str.split('');
+  strArr.forEach(function(key,index){
+    if (regx.test(key)) {
+      length ++;
+    }else{
+      length +=2;
+    }
+  })
+  return length;
+}
+
 Editor = (function() {
   var INTRO_CITIES, PROFANITIES;
   var $itext;
@@ -47,6 +61,11 @@ Editor = (function() {
       return function() {
         var obj = self.logoText;
         obj.exitEditing();
+        var val = $itext.val();
+        if (getLength(val) >= 10) {
+          obj.set('fontSize', 140);
+          obj.set('top',650);
+        };
         obj.set('text', $itext.val());
         //$(this).remove();
         self.canvas.add(obj);
@@ -171,27 +190,52 @@ Editor = (function() {
 
         // text submit event
             // submit text by ENTER key
-        $itext.on('input', function(e) {
+        var willChange = true;
+        var lastValue = '';
+
+        $itext.off('keydown').on('keydown',function(e){
+            console.log(getLength($(this).val()))
+          if (getLength($(this).val()) > 11 && e.keyCode != 8) {
+              willChange = false;
+            }else{
+              willChange = true;
+            }
+        })
+
+        $itext.off('input').on('input', function(e) {
             // obj.exitEditing();
             // obj.set('text', $(this).val());
             //$(this).remove();
             // self.canvas.add(obj);
             // self.canvas.renderAll();
-            var newText = $(this).val();
-            if (newText !== "") {
-              var len = newText.length;
-              $(this).removeClass('itext-5 itext-6');
-              if (len === 5) $(this).addClass('itext-5');
-              if (len >= 6) $(this).addClass('itext-6');
-              $(".upload").addClass("showanimation");
-              $(".donthave").animate({
-                opacity: 1
-              }, function(e) {});
-            } else {
-              $(".upload").removeClass("showanimation");
-              $(".donthave").animate({
-                opacity: 0
-              });
+            if (willChange) {
+              var value = $(this).val();
+              if (value !== "") {
+                $(this).removeClass('itext-5 itext-6');
+                // if (len === 5) $(this).addClass('itext-5');
+                // if (len >= 6) $(this).addClass('itext-6');
+                var len = getLength(value);
+                if (len >= 8) {
+                  $(this).addClass('itext-5');
+                };
+
+                if (len >= 10) {
+                  $(this).addClass('itext-6');
+                };
+
+                $(".upload").addClass("showanimation");
+                $(".donthave").animate({
+                  opacity: 1
+                }, function(e) {});
+              } else {
+                $(".upload").removeClass("showanimation");
+                $(".donthave").animate({
+                  opacity: 0
+                });
+              }
+              lastValue = value;
+            }else{
+              $(this).val(lastValue);
             }
         });
 
@@ -622,7 +666,7 @@ Editor = (function() {
           // });
           //file uploading...
           // console.log(blob,'111111')
-          console.log(blob)
+
           var form = new FormData();
           form.append('image',blob);
           $.ajax({
@@ -638,12 +682,13 @@ Editor = (function() {
               $('.weibo').attr({
                 href: url
               });
+              $('.weibo').click(function() {
+                return _this.logActionToAnalytics('share_weibo');
+              });
             }
           })
 
-          $weibo.click(function() {
-            return _this.logActionToAnalytics('share_weibo');
-          });
+          
           return _this.popupSharing();
         };
       })(this));
