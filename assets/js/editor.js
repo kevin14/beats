@@ -62,7 +62,7 @@ Editor = (function() {
         var obj = self.logoText;
         obj.exitEditing();
         var val = $itext.val();
-        if (getLength(val) >= 10) {
+        if (getLength(val) > 10) {
           obj.set('fontSize', 140);
           obj.set('top',650);
         };
@@ -193,13 +193,13 @@ Editor = (function() {
         var willChange = true;
         var lastValue = '';
 
-        $itext.off('keydown').on('keydown',function(e){
-          if (getLength($(this).val()) > 11 && e.keyCode != 8) {
-              willChange = false;
-            }else{
-              willChange = true;
-            }
-        })
+        // $itext.off('keydown').on('keydown',function(e){
+        //   if (getLength($(this).val()) > 11 && e.keyCode != 8) {
+        //       willChange = false;
+        //     }else{
+        //       willChange = true;
+        //     }
+        // })
 
         $itext.off('input').on('input', function(e) {
             // obj.exitEditing();
@@ -214,7 +214,7 @@ Editor = (function() {
                 // if (len === 5) $(this).addClass('itext-5');
                 // if (len >= 6) $(this).addClass('itext-6');
                 var len = getLength(value);
-                if (len >= 8) {
+                if (len > 8) {
                   $(this).addClass('itext-5');
                 };
 
@@ -244,7 +244,7 @@ Editor = (function() {
         // focus on text
         setTimeout(function() {
             $itext.focus();
-        }, 1);
+        }, 10);
     });
     this.canvas.add(this.logoText);
     this.logoText.on('changed', (function(_this) {
@@ -385,7 +385,7 @@ Editor = (function() {
   Editor.prototype.initializeIntroMode = function(deferred) {
     this.typeTextSeries(INTRO_CITIES).always((function(_this) {
       return function() {
-        $('#slides').delay(1000).fadeOut(1600, function() {
+        $('#slides').delay(100).fadeOut(600, function() {
           return $(this).remove();
         });
         return _this.setMode('text').done(function() {
@@ -498,7 +498,7 @@ Editor = (function() {
       return;
     }
     text = this.typeTextSeriesArray.shift();
-    delay = 1000;
+    delay = 800;
     if (text != null) {
       return window.setTimeout((function(_this) {
         return function() {
