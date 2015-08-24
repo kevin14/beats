@@ -194,7 +194,6 @@ Editor = (function() {
         var lastValue = '';
 
         $itext.off('keydown').on('keydown',function(e){
-            console.log(getLength($(this).val()))
           if (getLength($(this).val()) > 11 && e.keyCode != 8) {
               willChange = false;
             }else{
