@@ -18,7 +18,7 @@ Editor = (function() {
   var INTRO_CITIES, PROFANITIES;
   var $itext;
 
-  INTRO_CITIES = ["INGLEWOOD", "BROOKLYN", "COLLEGE PARK", "COMPTON"];
+  INTRO_CITIES = ["北京", "遵义", "开封"];
 
   PROFANITIES = /fuck|fcking|nigger|nigga|asshole|cocksucker|blowjob|clit|gangbang|wetback|faggot/i;
 
