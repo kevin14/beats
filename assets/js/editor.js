@@ -13,7 +13,14 @@ function getLength(str){
   })
   return length;
 }
-
+fontSpy('Flaticon', {
+  seccess: function(){
+    alert("success");
+  },
+  failure: function() {
+    alert("My Icons failed to load");
+  }
+});
 Editor = (function() {
   var INTRO_CITIES, PROFANITIES;
   var $itext;

@@ -1,0 +1,27 @@
+{
+  "name": "jQuery-FontSpy",
+  "version": "3.0.0",
+  "main": [
+    "jQuery-FontSpy.js"
+  ],
+  "keywords": [
+    "jQuery",
+    "javascript",
+    "typography"
+  ],
+  "ignore": [
+    "styles",
+    "index.htm"
+  ],
+  "homepage": "https://github.com/patrickmarabeas/jQuery-FontSpy.js",
+  "_release": "3.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.0",
+    "commit": "2cfefee1f8d95d1a460091cdbe25462b9b5d8ed1"
+  },
+  "_source": "git://github.com/patrickmarabeas/jQuery-FontSpy.js.git",
+  "_target": "~3.0.0",
+  "_originalSource": "fontspy",
+  "_direct": true
+}
