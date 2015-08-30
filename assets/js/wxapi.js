@@ -2,6 +2,7 @@ var Wxapi = {};
 Wxapi.canUse = false;
 var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
+	alert(data);
 	var place =  (data && data.place) || '中国',
 		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/icon.png';
 	var wxData = {
@@ -14,7 +15,6 @@ Wxapi.setShare = function(data){
 		cancel: function () {  
 		}	
 	}
-	alert("aaa");
 	var wxDataTimeline = {
 		title: '#StaightOutta#城市发声行动，我是#StraightOutta# ' + place+ '，你来自哪里？',
 		link: ROOT,

@@ -14,11 +14,9 @@ function getLength(str) {
     return length;
 }
 fontSpy('Flaticon', {
-    seccess: function() {
-        alert("success");
+    success: function() {
     },
     failure: function() {
-        alert("My Icons failed to load");
     }
 });
 Editor = (function() {
