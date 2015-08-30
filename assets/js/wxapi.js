@@ -2,7 +2,7 @@ var Wxapi = {};
 Wxapi.canUse = false;
 var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
-	alert(data);
+	console.log(data);
 	var place =  (data && data.place) || '中国',
 		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/icon.png';
 	var wxData = {
@@ -57,7 +57,7 @@ Wxapi.getCfg = function(){
 			]
 		});
 		wx.ready(function () {
-			Wxapi.setShare();
+			Wxapi.setShare({});
 		});
 	});
 }
