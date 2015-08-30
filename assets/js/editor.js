@@ -690,7 +690,6 @@ Editor = (function() {
                         success: function(data) {
                             var imageUrl = data.url;
                             url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&url=http://www.straightoutta.cn/" + "&pic=" + (encodeURI(imageUrl));
-                            console.log(url);
                             $('.weibo').attr({
                                 href: url
                             });

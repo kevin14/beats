@@ -2,8 +2,8 @@ var Wxapi = {};
 Wxapi.canUse = false;
 var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
-	var place =  data.place || '中国',
-		imgUrl = data.imgUrl || 'http://straightoutta.cn/img/icon.png';
+	var place =  (data && data.place) || '中国',
+		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/icon.png';
 	var wxData = {
 		title: '#StaightOutta#我们都来自某一个地方',
 		link: ROOT,
@@ -57,11 +57,7 @@ Wxapi.getCfg = function(){
 			]
 		});
 		wx.ready(function () {
-			alert('yes');
 			Wxapi.setShare();
-		});
-		wx.error(function(res){
-			alert(res);
 		});
 	});
 }
