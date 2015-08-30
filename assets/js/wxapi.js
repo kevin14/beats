@@ -60,6 +60,9 @@ Wxapi.getCfg = function(){
 			alert('yes');
 			Wxapi.setShare();
 		});
+		wx.error(function(res){
+			alert(res);
+		});
 	});
 }
 Wxapi.getCfg();
