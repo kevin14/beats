@@ -75,12 +75,19 @@ block content
 
       #share-popup-src.share-popup
         a.close
-        a.button.weibo(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
+        a.button.weibo(href="#", target="share", data-popwidth="550", data-popheight="420")
           img(src="#{url}/img/btn-weibo_cn.png", height="45")
+        a.button.weixin(href="javascript:;", target="share", data-popwidth="550", data-popheight="420")
+          img(src="#{url}/img/btn-weixin_cn.png", height="45")
         //a.button.twitter(href="#", target="share", data-text="I'm #StraightOutta {CITY}. Where you from? #BeatsByDre", data-popwidth="550", data-popheight="420")
           img(src="#{url}/img/btn-twitter.png", height="45")
         //a.button.facebook(href="#", target="share", data-popwidth="555", data-popheight="355")
           img(src="#{url}/img/btn-facebook.png", height="45")
+
+      #share-popup-weixin
+        img.popupBg(src="#{url}/img/popup-weixin.png", width="100%")
+        a.button.know(href="javascript:;", data-popwidth="550", data-popheight="420")
+          img(src="#{url}/img/btn-know_cn.png", height="45")
 
   #bottom
     ul.cf

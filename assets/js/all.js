@@ -6,8 +6,8 @@
 //= require featherlight/release/featherlight.min
 //= require inkjet/dist/inkjet
 //= require fastclick/lib/fastclick
-
 //= require utils
 //= require editor
 //= require uploader
 //= require editor-app
+//= require wxapi
