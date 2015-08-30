@@ -673,7 +673,7 @@ Editor = (function() {
                     //file uploading...
                     // console.log(blob,'111111')
                     $weixin = $popup.find('a.weixin');
-                    // if (!Wxapi.canUse) $weixin.hide();
+                    if (!Wxapi.canUse) $weixin.hide();
 
                     $('.weixin').click(function() {
                         _this.popupWeixin();

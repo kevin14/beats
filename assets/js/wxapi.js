@@ -14,7 +14,7 @@ Wxapi.setShare = function(data){
 		cancel: function () {  
 		}	
 	}
-
+	alert("aaa");
 	var wxDataTimeline = {
 		title: '#StaightOutta#城市发声行动，我是#StraightOutta# ' + place+ '，你来自哪里？',
 		link: ROOT,
@@ -57,6 +57,7 @@ Wxapi.getCfg = function(){
 			]
 		});
 		wx.ready(function () {
+			alert('yes');
 			Wxapi.setShare();
 		});
 	});
