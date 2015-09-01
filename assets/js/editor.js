@@ -689,14 +689,7 @@ Editor = (function() {
                             $('.weibo').attr({
                                 href: url
                             });
-                            $('.weibo').click(function(e) {
-                                var $this, h, w;
-                                e.preventDefault();
-                                $this = $(this);
-                                w = $this.data('popwidth');
-                                h = $this.data('popheight');
-                                return window.open($(this).attr('href'), "share", "width=" + w + ",height=" + h + ",centerscreen=true");
-                            });
+                            
                             Wxapi.setShare({
                                 place: cityText,
                                 imgUrl: imageUrl
@@ -714,10 +707,9 @@ Editor = (function() {
 
     Editor.prototype.popupSharing = function() {
         if (!Wxapi.canUse) {
-            // var $weibo = $('.share-popup').find('.weibo');
-            // window.open($weibo.attr('href'), "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
-            // this.isSharingBusy = false;
-            $('.weibo').click();
+            var $weibo = $('.share-popup').find('.weibo');
+            window.open($weibo.attr('href'), "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
+            this.isSharingBusy = false;
             return this.logActionToAnalytics('share_weibo');
         } else{
             return this.popupWeixin();
