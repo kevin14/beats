@@ -664,10 +664,7 @@ Editor = (function() {
                     $weibo = $popup.find('a.weibo');
                     weiboString = "未来有无限可能，但我们都有一个不变的起点！我是#StraightOutta#{CITY}，你来自哪里？@BeatsbyDre";
                     weiboString = encodeURIComponent(weiboString.replace('{CITY}', cityText));
-                    _this.weiboUrl = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(_this.permalink));
-                    // $weibo.attr({
-                    //   href: url
-                    // });
+                    
                     //file uploading...
                     // console.log(blob,'111111')
                     // $weixin = $popup.find('a.weixin');
@@ -685,15 +682,21 @@ Editor = (function() {
                         contentType: false,
                         url: '/uploads',
                         type: 'JSON',
+                        async: false,
                         success: function(data) {
                             var imageUrl = data.url;
-                            // url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&url=http://www.straightoutta.cn/" + "&pic=" + (encodeURI(imageUrl));
-                            // $('.weibo').attr({
-                            //     href: url
-                            // });
-                            // $('.weibo').click(function() {
-                            //     return _this.logActionToAnalytics('share_weibo');
-                            // });
+                            url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&url=http://www.straightoutta.cn/" + "&pic=" + (encodeURI(imageUrl));
+                            $('.weibo').attr({
+                                href: url
+                            });
+                            $('.weibo').click(function(e) {
+                                var $this, h, w;
+                                e.preventDefault();
+                                $this = $(this);
+                                w = $this.data('popwidth');
+                                h = $this.data('popheight');
+                                return window.open($(this).attr('href'), "share", "width=" + w + ",height=" + h + ",centerscreen=true");
+                            });
                             Wxapi.setShare({
                                 place: cityText,
                                 imgUrl: imageUrl
@@ -711,8 +714,10 @@ Editor = (function() {
 
     Editor.prototype.popupSharing = function() {
         if (!Wxapi.canUse) {
-            window.open(this.weiboUrl, "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
-            this.isSharingBusy = false;
+            // var $weibo = $('.share-popup').find('.weibo');
+            // window.open($weibo.attr('href'), "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
+            // this.isSharingBusy = false;
+            $('.weibo').click();
             return this.logActionToAnalytics('share_weibo');
         } else{
             return this.popupWeixin();
