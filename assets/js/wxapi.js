@@ -2,7 +2,7 @@ var Wxapi = {};
 Wxapi.canUse = false;
 var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
-	var place =  (data && data.place) || '中国',
+	var place =  (data && data.place) || '',
 		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/icon.png';
 	var wxData = {
 		title: '#StaightOutta#我们都来自某一个地方',

@@ -664,18 +664,18 @@ Editor = (function() {
                     $weibo = $popup.find('a.weibo');
                     weiboString = "未来有无限可能，但我们都有一个不变的起点！我是#StraightOutta#{CITY}，你来自哪里？@BeatsbyDre";
                     weiboString = encodeURIComponent(weiboString.replace('{CITY}', cityText));
-                    // url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(_this.permalink));
+                    _this.weiboUrl = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&pic=" + (encodeURI(_this.permalink));
                     // $weibo.attr({
                     //   href: url
                     // });
                     //file uploading...
                     // console.log(blob,'111111')
-                    $weixin = $popup.find('a.weixin');
-                    if (!Wxapi.canUse) $weixin.hide();
+                    // $weixin = $popup.find('a.weixin');
+                    // if (!Wxapi.canUse) $weixin.hide();
 
-                    $('.weixin').click(function() {
-                        _this.popupWeixin();
-                    });
+                    // $('.weixin').click(function() {
+                    //     _this.popupWeixin();
+                    // });
                     var form = new FormData();
                     form.append('image', blob);
                     $.ajax({
@@ -687,53 +687,63 @@ Editor = (function() {
                         type: 'JSON',
                         success: function(data) {
                             var imageUrl = data.url;
-                            url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&url=http://www.straightoutta.cn/" + "&pic=" + (encodeURI(imageUrl));
-                            $('.weibo').attr({
-                                href: url
-                            });
-                            $('.weibo').click(function() {
-                                return _this.logActionToAnalytics('share_weibo');
-                            });
+                            // url = "http://v.t.sina.com.cn/share/share.php?title=" + weiboString + "&url=http://www.straightoutta.cn/" + "&pic=" + (encodeURI(imageUrl));
+                            // $('.weibo').attr({
+                            //     href: url
+                            // });
+                            // $('.weibo').click(function() {
+                            //     return _this.logActionToAnalytics('share_weibo');
+                            // });
                             Wxapi.setShare({
                                 place: cityText,
                                 imgUrl: imageUrl
                             });
+                            _this.popupSharing();
                         }
                     })
 
 
-                    return _this.popupSharing();
+                    // return _this.popupSharing();
                 };
             })(this));
         }
     };
 
     Editor.prototype.popupSharing = function() {
-        return $.featherlight($('#share-popup-src'), {
-            variant: 'featherlight-share',
-            afterOpen: function() {
-                return $('.share-popup').find('.weibo').click(function(e) {
-                    var $this, h, w;
-                    e.preventDefault();
-                    $this = $(this);
-                    w = $this.data('popwidth');
-                    h = $this.data('popheight');
-                    return window.open($(this).attr('href'), "share", "width=" + w + ",height=" + h + ",centerscreen=true");
-                });
-            },
+        if (!Wxapi.canUse) {
+            window.open(this.weiboUrl, "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
+            this.isSharingBusy = false;
+            return this.logActionToAnalytics('share_weibo');
+        } else{
+            return this.popupWeixin();
+        }
+        // return $.featherlight($('#share-popup-src'), {
+        //     variant: 'featherlight-share',
+        //     afterOpen: function() {
+        //         return $('.share-popup').find('.weibo').click(function(e) {
+        //             var $this, h, w;
+        //             e.preventDefault();
+        //             $this = $(this);
+        //             w = $this.data('popwidth');
+        //             h = $this.data('popheight');
+        //             return window.open($(this).attr('href'), "share", "width=" + w + ",height=" + h + ",centerscreen=true");
+        //         });
+        //     },
+        //     afterClose: (function(_this) {
+        //         return function() {
+        //             return _this.isSharingBusy = false;
+        //         };
+        //     })(this)
+        // });
+    };
+    Editor.prototype.popupWeixin = function() {
+        var _this = this;
+        return $.featherlight($('#share-popup-weixin'), {
+            variant: 'featherlight-weixin',
+            closeOnClick: 'anywhere',
             afterClose: (function(_this) {
                 return function() {
                     return _this.isSharingBusy = false;
-                };
-            })(this)
-        });
-    };
-    Editor.prototype.popupWeixin = function() {
-        return $.featherlight($('#share-popup-weixin'), {
-            variant: 'featherlight-weixin',
-            otherClose: '.know',
-            afterClose: (function(_this) {
-                return function() {
                 };
             })(this)
         });
