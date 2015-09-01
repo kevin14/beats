@@ -3,7 +3,7 @@ Wxapi.canUse = false;
 var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
 	var place =  (data && data.place) || '',
-		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/icon.png';
+		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/weixinShare-icon.png';
 	var wxData = {
 		title: '#StaightOutta#我们都来自某一个地方',
 		link: ROOT,
