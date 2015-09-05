@@ -6,7 +6,7 @@ Wxapi.setShare = function(data){
 		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/weixinShare-icon.jpg';
 	var wxData = {
 		title: '#StaightOutta#我们都来自某一个地方',
-		link: ROOT + '?imgUrl=' + imgUrl,
+		link: ROOT + 'newPage?imgUrl=' + imgUrl,
 		imgUrl: imgUrl, 
 		desc:'来跟我一起，为你的城市发声！',
 		success: function () { 
@@ -16,7 +16,7 @@ Wxapi.setShare = function(data){
 	}
 	var wxDataTimeline = {
 		title: '#StaightOutta#城市发声行动，我是#StraightOutta# ' + place+ '，你来自哪里？',
-		link: ROOT + '?imgUrl=' + imgUrl,
+		link: ROOT + 'newPage?imgUrl=' + imgUrl,
 		imgUrl:imgUrl, 
 		success: function () { 
 		},
