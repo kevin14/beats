@@ -154,7 +154,7 @@ Editor = (function() {
             evented: false
         });
         this.canvas.add(this.logoFrame);
-        this.logoFrame.scaleToHeight(this.canvas.height);
+        // this.logoFrame.scaleToHeight(this.canvas.height);
         this.logoFrame.center();
         logoTop = 620;
         fontSize = 200;

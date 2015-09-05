@@ -104,9 +104,9 @@ language.chineseSimplified = {
   TWITTER: "Twitter",
   FACEBOOK: "Facebook",
   PRIVACY: "隐私保护",
-  PRIVACY_URL: "http://www.beatsbydre.com/support/privacy-policy.html",
+  PRIVACY_URL: "http://cn.beatsbydre.com/支持/privacy-policy.html",
   TERMS: "使用条款",
-  TERMS_URL: "http://www.beatsbydre.com/support/terms-of-use.html"
+  TERMS_URL: "http://cn.beatsbydre.com/支持/terms-of-use.html"
 };
 language.chineseTraditional = {
   CODE: "ct",
