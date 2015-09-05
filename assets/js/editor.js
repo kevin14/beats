@@ -492,6 +492,7 @@ Editor = (function() {
 
     Editor.prototype.focusTextField = function() {
         var ref, ref1;
+        $('.itext').trigger('focus');
         if (((ref = this.canvas.getActiveObject()) != null ? ref.type : void 0) === 'i-text' && ((ref1 = this.logoText) != null ? ref1.isEditing : void 0)) {
             return $('.itext').trigger('focus');
         } else {
