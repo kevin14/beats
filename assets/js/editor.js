@@ -400,11 +400,11 @@ Editor = (function() {
             return function() {
                 $('#slides').delay(100).fadeOut(600, function() {
                     $(this).remove();
+                    _this.logoText.setText('');
+                    _this.logoText.set({
+                        editable: true
+                    });
                     return _this.setMode('text').done(function() {
-                        _this.logoText.setText('');
-                        _this.logoText.set({
-                            editable: true
-                        });
                         return _this.focusTextField();
                     });
                 });
