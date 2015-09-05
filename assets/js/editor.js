@@ -399,15 +399,16 @@ Editor = (function() {
         this.typeTextSeries(INTRO_CITIES).always((function(_this) {
             return function() {
                 $('#slides').delay(100).fadeOut(600, function() {
-                    return $(this).remove();
-                });
-                return _this.setMode('text').done(function() {
-                    _this.logoText.setText('');
-                    _this.logoText.set({
-                        editable: true
+                    $(this).remove();
+                    return _this.setMode('text').done(function() {
+                        _this.logoText.setText('');
+                        _this.logoText.set({
+                            editable: true
+                        });
+                        return _this.focusTextField();
                     });
-                    return _this.focusTextField();
                 });
+                
             };
         })(this));
         return deferred != null ? deferred.resolve() : void 0;
