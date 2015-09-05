@@ -62,6 +62,9 @@ Editor = (function() {
                 return location.href = "/?skip=1";
             };
         })(this));
+        $('#download-img .iconClose').on('click', function(){
+            $('#download-img').fadeOut();
+        });
         $controls.find('.donthave').click((function(_this) {
             return function() {
                 var obj = self.logoText;
@@ -79,6 +82,7 @@ Editor = (function() {
                 $itext.hide();
 
                 $(".donthave").hide();
+                _this.logActionToAnalytics('have no photo');
                 return _this.setMode('nophoto').done(function() {});
             };
         })(this));
@@ -248,7 +252,7 @@ Editor = (function() {
 
             // focus on text
             setTimeout(function() {
-                $itext.val(' ').focus();
+                $itext.val('').focus();
             }, 10);
         });
         this.canvas.add(this.logoText);
@@ -614,11 +618,29 @@ Editor = (function() {
     };
 
     Editor.prototype.downloadLocal = function() {
-        this.logActionToAnalytics('download');
+        this.logActionToAnalytics('downloads');
         $(".editor-image-controls").slideUp();
-        return this.captureImageDeferred().done(function(blob) {
-            return saveAs(blob, 'StraightOuttaSomewhere.jpg');
-        });
+        var isPhone = false;
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            isPhone = true;
+        }
+        var _this = this;
+        if (isPhone){
+            $('#mobile-download').fadeIn(200, function(){
+                $('#mobile-download').delay(2000).fadeOut(function(){
+                    return _this.captureImageDeferred().done(function(blob) {
+                        $('#imgOutter img').attr('src', URL.createObjectURL(blob));
+                        $('#download-img').fadeIn(200);
+                    });
+                });
+                
+            });
+        }else{
+            return this.captureImageDeferred().done(function(blob) {
+                return saveAs(blob, 'StraightOuttaSomewhere.jpg');
+            });
+        }
+        
     };
 
     Editor.prototype.share = function() {
@@ -629,7 +651,6 @@ Editor = (function() {
             this.isSharingBusy = true;
         }
         $(".editor-image-controls").slideUp();
-        this.logActionToAnalytics('share');
         if (this.permalink != null) {
             return this.popupSharing();
         } else {
@@ -710,7 +731,7 @@ Editor = (function() {
             var $weibo = $('.share-popup').find('.weibo');
             window.open($weibo.attr('href'), "share", "width=" + 550 + ",height=" + 420 + ",centerscreen=true");
             this.isSharingBusy = false;
-            return this.logActionToAnalytics('share_weibo');
+            return this.logActionToAnalytics('share weibo');
         } else{
             return this.popupWeixin();
         }
@@ -735,6 +756,7 @@ Editor = (function() {
     };
     Editor.prototype.popupWeixin = function() {
         var _this = this;
+        this.logActionToAnalytics('share wechat');
         return $.featherlight($('#share-popup-weixin'), {
             variant: 'featherlight-weixin',
             closeOnClick: 'anywhere',
@@ -750,7 +772,7 @@ Editor = (function() {
         if (fileDescriptor == null) {
             return;
         }
-        this.logActionToAnalytics('add-photo');
+        this.logActionToAnalytics('add photo');
         loader = this.getLoader();
         reader = new FileReader();
         reader.onload = (function(_this) {

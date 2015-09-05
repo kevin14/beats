@@ -48,7 +48,9 @@ block content
             label(for="control-contrast") #{language.CONTRAST}
 
             input#control-invert(type="radio", name="group", value="invert")
-            label(for="control-invert") #{language.LOGO_COLOR}
+            label(for="control-invert")
+              span.logoFont(style="font-family:'Helvetica'") LOGO
+              |颜色
 
         form.editor-actions
           input#action-upload(type="file", accept="image/*")
@@ -87,6 +89,12 @@ block content
         img.popupBg(src="#{url}/img/popup-weixin.png", width="100%")
         a.button.know(href="javascript:;", data-popwidth="550", data-popheight="420")
           img(src="#{url}/img/btn-know_cn.png", height="45")
+  #mobile-download
+    img(src="#{url}/img/mobile-download.png")
+  #download-img
+    span.iconClose
+    #imgOutter
+      img(src="")
 
   #bottom
     ul.cf

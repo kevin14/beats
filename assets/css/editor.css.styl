@@ -459,7 +459,7 @@ html, body
 
   @media (max-width: 500px)
     .slide
-      background-position 57% 0%
+      background-position 70% 0%
 
 .showanimation
   opacity 1 !important
@@ -496,8 +496,8 @@ html.ios
     padding 14px 15px
     font-family SimHei,STHeiTi
     @media (max-width:500px)
-      font-size 10px
-      padding 12px 12px
+      font-size 12px
+      padding 11px 11px
 
     img
       height 16px
@@ -538,4 +538,53 @@ html.ios
         height 45px !important
         width auto !important
 
+
+#mobile-download 
+  display none
+  width 100%
+  height 100%
+  position absolute
+  top 0
+  left 0
+  z-index 9999
+  background-color rgba(0, 0, 0, 0.9) !important
+  img
+    position absolute
+    width 240px
+    height 64px
+    left 50%
+    top 50%
+    margin-left -120px
+    margin-top -32px
+#download-img
+  display none
+  width 100%
+  height 100%
+  position absolute
+  top 0
+  left 0
+  z-index 9999
+  background-color rgba(0, 0, 0, 0.9) !important
+  #imgOutter
+    width 80%
+    height 80vw
+    border 3px solid #fff
+    position relative
+    margin 120px auto 0
+
+    img
+      width 100%
+      position absolute
+      top 0
+      left 0
     
+  .iconClose
+    width 30px
+    height 30px
+    position absolute 
+    right 20px
+    top 20px
+    background url($url/img/icon-close.png)
+    background-size 100%
+
+

@@ -1,0 +1,46 @@
+$base-letter-spacing = 0.05em
+$url = ""
+html, body
+  margin 0px
+  padding 0px
+  font-size 13px
+  line-height 16px
+
+  border 0px
+  font-family Impact, 'Flaticon',  sans-serif
+  letter-spacing $base-letter-spacing
+
+  background-color #000
+  background-image url($url/img/bg-black4.jpg)
+  background-repeat no-repeat
+  background-position top center
+  background-attachment fixed
+  background-size cover
+
+  @media (max-width: 500px)
+    background-attachment inherit
+    background-size inherit
+
+body
+  text-align center
+#beats-logo
+  position absolute
+  top 15px
+  left 15px
+  z-index 999
+  img
+    width 35px
+#mainImg
+  width 80%
+  max-width 400px
+  display block
+  margin 100px auto 0
+.join 
+  margin-top 20px
+  display inline-block
+  img
+    height 45px
+    width auto
+    margin 0 auto
+
+

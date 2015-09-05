@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    != LRScript
+    title Straight Outta Somewhere - Rep Your City
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1", user-scalable="no")
+    link(rel='stylesheet', href='/assets/newPage.css')
+
+  body
+    - var url = ""
+    a#beats-logo(href="http://beatsbydre.com")
+      img(src="#{url}/img/beats-logo.png")
+    img#mainImg(src="")
+
+    a.button.join(href="http://straightoutta.cn/")
+      img(src="#{url}/img/btn-join_cn.png", height="45")
+  script(src="/js/bower_components/jquery/dist/jquery.min.js")
+  script(src='/assets/newPage.js')
+    
+  

@@ -30,7 +30,7 @@ var routes = require('./routes/index');
 var upload = require('./routes/upload');
 var share = require('./routes/share');
 var admin = require('./routes/admin');
-
+var newPage = require('./routes/newPage');
 var locale = require("locale");
 // zh_cn  (simplified)
 // zh_tw, zh_hk  (traditional)
@@ -98,6 +98,7 @@ app.use('/', routes);
 app.use('/upload', upload);
 app.use('/s', share);
 app.use('/share', share);
+app.use('/newPage', newPage);
 app.use('/admin', authMiddleware, admin);
 
 // catch 404 and forward to error handler
