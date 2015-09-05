@@ -4,9 +4,12 @@ var ROOT = 'http://straightoutta.cn/';
 Wxapi.setShare = function(data){
 	var place =  (data && data.place) || '',
 		imgUrl = (data && data.imgUrl) || 'http://straightoutta.cn/img/weixinShare-icon.jpg';
+	if (data && data.imgUrl){
+		ROOT = ROOT + 'newPage?imgUrl=' + imgUrl;
+	}
 	var wxData = {
 		title: '#StaightOutta#我们都来自某一个地方',
-		link: ROOT + 'newPage?imgUrl=' + imgUrl,
+		link: ROOT,
 		imgUrl: imgUrl, 
 		desc:'来跟我一起，为你的城市发声！',
 		success: function () { 
@@ -16,7 +19,7 @@ Wxapi.setShare = function(data){
 	}
 	var wxDataTimeline = {
 		title: '#StaightOutta#城市发声行动，我是#StraightOutta# ' + place+ '，你来自哪里？',
-		link: ROOT + 'newPage?imgUrl=' + imgUrl,
+		link: ROOT,
 		imgUrl:imgUrl, 
 		success: function () { 
 		},
