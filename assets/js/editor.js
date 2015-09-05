@@ -63,7 +63,11 @@ Editor = (function() {
             };
         })(this));
         $('#download-img .iconClose').on('click', function(){
-            $('#download-img').fadeOut();
+            $('#mobile-download').fadeOut(100, function(){
+                $('#download-img').hide();
+                $('#mDownloadText').show();
+            });
+            
         });
         $controls.find('.donthave').click((function(_this) {
             return function() {
@@ -627,7 +631,7 @@ Editor = (function() {
         var _this = this;
         if (isPhone){
             $('#mobile-download').fadeIn(200, function(){
-                $('#mobile-download').delay(2000).fadeOut(function(){
+                $('#mDownloadText').delay(2000).fadeOut(function(){
                     return _this.captureImageDeferred().done(function(blob) {
                         $('#imgOutter img').attr('src', URL.createObjectURL(blob));
                         $('#download-img').fadeIn(200);
