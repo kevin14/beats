@@ -118,7 +118,7 @@ function showEditor() {
     e.preventDefault();
 
     var videoId = $(this).data("video");
-    var html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+    var html = '<iframe width="560" height="315" src="http://minisite.letv.com/tuiguang/index.shtml?typeFrom=beats&ref=beats&ark=100&vid='+videoId+'" frameborder="0" allowfullscreen></iframe>';
     $.featherlight(html, {});
 
 
