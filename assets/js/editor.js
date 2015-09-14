@@ -621,7 +621,10 @@ Editor = (function() {
     };
 
     Editor.prototype.logActionToAnalytics = function(label) {
-        return typeof ga === "function" ? ga('send', 'event', 'action', label) : void 0;
+        if(typeof ga === "function"){
+            ga('send', 'event', 'action', label);
+            ga('cn.send', 'event', 'action', label)
+        }
     };
 
     Editor.prototype.downloadLocal = function() {
