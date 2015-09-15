@@ -51,8 +51,9 @@ function editorFunctions() {
   $(".video-link").click(function(e){
     e.preventDefault();
     ga('send', 'event', 'action', 'videoplay');
+    ga('cn.send', 'event', 'action', 'videoplay');
     var videoId = $(this).data("video");
-    // ga('send', 'event', {'eventCategory': "button", 'eventAction': "videoPlay", 'eventLabel': videoId});
+    //ga('send', 'event', {'eventCategory': "button", 'eventAction': "videoPlay", 'eventLabel': videoId});
     //var html = '<div class="video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" frameborder="0" allowfullscreen></iframe></div>';
     var html = '<div class="video-container"><iframe width="560" height="315" src="http://minisite.letv.com/tuiguang/index.shtml?typeFrom=beats&ref=beats&ark=100&autoReplay=0&continuration=0&picEndUrl=http://xxx.com&vid='+videoId+'" frameborder="0" allowfullscreen></iframe></div>';
     //html = "hey";
